@@ -215,7 +215,6 @@ var currentDate = new Date();var _default =
     if (this.userInfo) {
       this.queryBookcase();
     } else {
-      uni.hideNavigationBarLoading();
       uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
     }
   },
@@ -259,7 +258,6 @@ var currentDate = new Date();var _default =
           _this.result = data.data;
         }
       }).finally(function () {
-        uni.hideNavigationBarLoading();
         uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
       });
     } } };exports.default = _default;

@@ -27,7 +27,6 @@
         watch: {
             url: {
                 handler(newVal, oldVal) {
-                    debugger
                     this.imageSrc = newVal
                 },
                 immediate: true

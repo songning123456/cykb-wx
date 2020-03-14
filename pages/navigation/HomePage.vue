@@ -52,7 +52,6 @@
             queryHomePage (type) {
                 if (type === 'first') {
                     this.page.index = 0
-                    uni.showNavigationBarLoading()
                 } else {
                     ++this.page.index
                 }
@@ -70,7 +69,6 @@
                     }
                 }).finally(() => {
                     if (type === 'first') {
-                        uni.hideNavigationBarLoading()
                         uni.stopPullDownRefresh()//得到数据后停止下拉刷新
                     }
                 })

@@ -145,7 +145,6 @@ var _default =
   watch: {
     url: {
       handler: function handler(newVal, oldVal) {
-        debugger;
         this.imageSrc = newVal;
       },
       immediate: true } },

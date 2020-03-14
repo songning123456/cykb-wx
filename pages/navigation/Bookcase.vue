@@ -64,7 +64,6 @@
             if (this.userInfo) {
                 this.queryBookcase()
             } else {
-                uni.hideNavigationBarLoading()
                 uni.stopPullDownRefresh()//得到数据后停止下拉刷新
             }
         },
@@ -108,7 +107,6 @@
                         this.result = data.data
                     }
                 }).finally(() => {
-                    uni.hideNavigationBarLoading()
                     uni.stopPullDownRefresh()//得到数据后停止下拉刷新
                 })
             }

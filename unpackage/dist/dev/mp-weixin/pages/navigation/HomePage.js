@@ -220,7 +220,6 @@ var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/catego
 //
 //
 var _default = { name: 'HomePage', data: function data() {return { page: { index: 0, size: 20 }, result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;if (type === 'first') {this.page.index = 0;
-        uni.showNavigationBarLoading();
       } else {
         ++this.page.index;
       }
@@ -238,7 +237,6 @@ var _default = { name: 'HomePage', data: function data() {return { page: { index
         }
       }).finally(function () {
         if (type === 'first') {
-          uni.hideNavigationBarLoading();
           uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
         }
       });
