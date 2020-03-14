@@ -1,0 +1,4 @@
+<template>
+    <view class="inset-login login-image full-size">
+        <button class="cu-btn block bg-red margin-tb-sm lg" open-type="getUserInfo" @getuserinfo="loginWx"
+                withCredentials="true">

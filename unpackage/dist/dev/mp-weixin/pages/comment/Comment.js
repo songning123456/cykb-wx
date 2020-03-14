@@ -133,66 +133,101 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
-{
-  name: "Comment",
-  data: function data() {
-    return {
-      CustomBar: this.CustomBar,
-      form: {
-        advice: '',
-        concat: '' } };
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
-  },
-  methods: {
-    submitBtn: function submitBtn() {
-      if (!this.form.advice) {
-        uni.showToast({
-          title: '请提供建议',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
+var _regular = _interopRequireDefault(__webpack_require__(/*! ../../util/regular */ 87));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { name: 'Comment', data: function data() {return { display: { content: '请描述您的问题', contact: '您的联系方式' }, form: { content: '', contact: '' }, loading: false };}, methods: { submitBtn: function submitBtn() {var _this = this;if (!this.form.content) {uni.showToast({ title: this.display.content, icon: 'none', duration: 2000 });return;}if (!this.form.contact) {uni.showToast({ title: this.display.contact,
           icon: 'none',
           duration: 2000 });
 
         return;
       }
-      if (!this.form.concat) {
+      if (!_regular.default.wx.test(this.form.contact) && !_regular.default.qq.test(this.form.contact) && !_regular.default.phone.test(this.form.contact)) {
         uni.showToast({
-          title: '请提供联系方式',
+          title: '请留下正确联系方式',
           icon: 'none',
           duration: 2000 });
 
         return;
       }
-      // todo 发送请求
+      this.loading = true;
+      var params = {
+        condition: {
+          content: this.form.content,
+          contact: this.form.contact } };
+
+
+      _request.default.post('/comments/publishComment', params).then(function (data) {
+        if (data.status === 200) {
+          uni.showToast({
+            title: '意见反馈成功',
+            duration: 2000 });
+
+          _this.form = {
+            content: '',
+            contact: '' };
+
+        }
+      }).finally(function () {
+        _this.loading = false;
+      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

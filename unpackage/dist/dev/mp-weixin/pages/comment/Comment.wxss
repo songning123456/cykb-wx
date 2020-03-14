@@ -38,4 +38,7 @@
   -webkit-justify-content: center;
           justify-content: center;
 }
+.comment .bottom-bar button.data-v-59b19e02 {
+    width: 300rpx;
+}
 

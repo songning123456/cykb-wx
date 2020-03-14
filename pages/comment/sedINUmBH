@@ -101,7 +101,7 @@
 <style lang="scss" scoped>
     .comment {
         .cu-form-group {
-            margin: 1upx 30upx;
+            margin: 1 upx 30 upx;
             background: unset;
             border: 0.08px solid #cccccc;
         }
@@ -114,7 +114,7 @@
             justify-content: center;
 
             button {
-                width: 300upx;
+                width: 300 upx;
             }
         }
     }

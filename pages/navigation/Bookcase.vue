@@ -114,17 +114,23 @@
 
 <style lang="scss" scoped>
     .book-case {
-        .cu-item {
-            justify-content: unset;
-            padding-right: unset;
-            .cu-avatar {
-                float: left;
-                left: 15upx;
-            }
-            .content {
-                float: left;
-                left: 155upx;
-                width: calc(100% - 160upx - 20upx);
+
+        .cu-list {
+            overflow: auto;
+
+            .cu-item {
+                justify-content: unset;
+                padding-right: unset;
+                background: unset;
+                .cu-avatar {
+                    float: left;
+                    left: 15upx;
+                }
+                .content {
+                    float: left;
+                    left: 155upx;
+                    width: calc(100% - 160upx - 20upx);
+                }
             }
         }
     }

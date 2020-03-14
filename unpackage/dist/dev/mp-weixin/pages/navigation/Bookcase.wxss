@@ -24,19 +24,23 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.book-case .cu-item.data-v-65f116c7 {
-  -webkit-box-pack: unset;
-  -webkit-justify-content: unset;
-          justify-content: unset;
-  padding-right: unset;
+.book-case .cu-list.data-v-65f116c7 {
+  overflow: auto;
 }
-.book-case .cu-item .cu-avatar.data-v-65f116c7 {
-    float: left;
-    left: 15rpx;
+.book-case .cu-list .cu-item.data-v-65f116c7 {
+    -webkit-box-pack: unset;
+    -webkit-justify-content: unset;
+            justify-content: unset;
+    padding-right: unset;
+    background: unset;
 }
-.book-case .cu-item .content.data-v-65f116c7 {
-    float: left;
-    left: 155rpx;
-    width: calc(100% - 160rpx - 20rpx);
+.book-case .cu-list .cu-item .cu-avatar.data-v-65f116c7 {
+      float: left;
+      left: 15rpx;
+}
+.book-case .cu-list .cu-item .content.data-v-65f116c7 {
+      float: left;
+      left: 155rpx;
+      width: calc(100% - 160rpx - 20rpx);
 }
 

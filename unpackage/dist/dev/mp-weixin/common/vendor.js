@@ -9824,6 +9824,22 @@ convertDate;exports.default = _default;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
 
+/***/ }),
+
+/***/ 87:
+/*!******************************************!*\
+  !*** C:/project/cykb-wx/util/regular.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var regular = {};
+regular.wx = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/;
+regular.qq = /^[1-9]\d{4,9}$/;
+regular.phone = /^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57]|17[678])[0-9]{8}$/;var _default =
+regular;exports.default = _default;
+
 /***/ })
 
 }]);

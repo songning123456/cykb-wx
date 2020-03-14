@@ -135,7 +135,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../util/request */
 //
 //
 //
-var _default = { name: "InsetLogin", methods: { loginWx: function loginWx() {var _this = this;uni.login({ success: function success(response2) {// 获取用户信息
+var _default = { name: 'InsetLogin', methods: { loginWx: function loginWx() {var _this = this;uni.login({ success: function success(response2) {// 获取用户信息
           uni.getUserInfo({ provider: 'weixin',
             success: function success(response3) {
               uni.showLoading({
