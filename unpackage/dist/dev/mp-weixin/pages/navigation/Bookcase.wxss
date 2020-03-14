@@ -24,26 +24,29 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.book-case.data-v-65f116c7 {
-  overflow: hidden;
-}
 .book-case .cu-list.data-v-65f116c7 {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 .book-case .cu-list .cu-item.data-v-65f116c7 {
-      -webkit-box-pack: unset;
-      -webkit-justify-content: unset;
-              justify-content: unset;
-      padding-right: unset;
-      background: unset;
+    -webkit-box-pack: unset;
+    -webkit-justify-content: unset;
+            justify-content: unset;
+    padding-right: unset;
+    background: unset;
 }
 .book-case .cu-list .cu-item .cu-avatar.data-v-65f116c7 {
-        float: left;
-        left: 15rpx;
+      float: left;
+      left: 15rpx;
 }
 .book-case .cu-list .cu-item .content.data-v-65f116c7 {
-        float: left;
-        left: 155rpx;
-        width: calc(100% - 160rpx - 20rpx);
+      float: left;
+      left: 155rpx;
+      width: calc(100% - 160rpx - 20rpx);
+}
+.data-v-65f116c7::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+  display: none;
 }
 

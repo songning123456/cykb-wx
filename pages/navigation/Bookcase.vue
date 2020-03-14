@@ -1,12 +1,11 @@
 <template>
-    <view class="book-case full-size">
-        <view v-if="userInfo" class="cu-list full-size menu-avatar global-bg-color">
-            <view class="cu-item global-bg-color"
+    <view class="book-case">
+        <view v-if="userInfo" class="cu-list full-size menu-avatar">
+            <view class="cu-item"
                   v-for="(item,index) in result" :key="index"
                   :class="modalName==='move-box-'+ index?'move-cur':''"
                   @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"
                   :data-target="'move-box-' + index">
-<!--                <view class="cu-avatar radius xl" :style="'background-image: url(' + item.coverUrl + ')'"></view>-->
                 <uni-image :url="item.coverUrl" class="cu-avatar radius xl"></uni-image>
                 <view class="content">
                     <view class="text-black text-df">{{item.title}}</view>
@@ -21,7 +20,7 @@
                     <view class="bg-red">删除</view>
                 </view>
             </view>
-            <view class="cu-item global-bg-color">
+            <view class="cu-item">
                 <view class="cu-avatar radius lg add-image"></view>
                 <view class="content">
                     <view class="text-black text-bold" @tap="navChange">收藏小说</view>
@@ -119,7 +118,6 @@
 
 <style lang="scss" scoped>
     .book-case {
-        overflow: hidden;
 
         .cu-list {
             overflow-y: auto;
@@ -141,5 +139,11 @@
                 }
             }
         }
+    }
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        color: transparent;
+        display: none;
     }
 </style>
