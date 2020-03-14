@@ -4,10 +4,10 @@
             <view class="cu-card article no-card" v-for="(item, index) in result" :key="index">
                 <view class="cu-item shadow">
                     <view class="content">
-                        <image class="image-size" :src="convertCoverUrl(item.coverUrl)"></image>
+                        <uni-image class="image-size" :url="convertCoverUrl(item.coverUrl)"></uni-image>
                         <view class="desc">
                             <view class="title text-cut text-shadow">{{item.title}}</view>
-                            <view class="text-content">{{item.introduction}}</view>
+                            <view class="text-content">{{convertIntroduction(item.introduction)}}</view>
                             <view>
                                 <view class="cu-tag bg-red light sm round">{{item.author}}</view>
                                 <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex,
@@ -83,6 +83,15 @@
             },
             convertCategory (sex, category) {
                 return Category[sex][category]
+            },
+            convertIntroduction(introduction) {
+                let result = '';
+                if (introduction) {
+                    result = introduction;
+                } else {
+                    result = '暂无简介...';
+                }
+                return result;
             }
         }
 
@@ -105,14 +114,17 @@
                         padding: 0 15upx;
 
                         .image-size {
+                            width: 240upx;
                             margin-top: 18upx;
                             height: 8em;
+                            margin-right: 20upx;
+                            border-radius: 6upx;
                         }
 
                         .title {
                             padding: unset;
                             height: 60upx;
-                            line-height: 60upx;
+                            line-height: 72upx;
                         }
                     }
                 }

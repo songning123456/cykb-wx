@@ -115,13 +115,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   var l0 = _vm.__map(_vm.result, function(item, index) {
     var m0 = _vm.convertCoverUrl(item.coverUrl)
-    var m1 = _vm.convertCategory(item.sex, item.category)
-    var m2 = _vm.convertSex(item.sex)
+    var m1 = _vm.convertIntroduction(item.introduction)
+    var m2 = _vm.convertCategory(item.sex, item.category)
+    var m3 = _vm.convertSex(item.sex)
     return {
       $orig: _vm.__get_orig(item),
       m0: m0,
       m1: m1,
-      m2: m2
+      m2: m2,
+      m3: m3
     }
   })
 
@@ -249,6 +251,15 @@ var _default = { name: 'HomePage', data: function data() {return { page: { index
     },
     convertCategory: function convertCategory(sex, category) {
       return _category.default[sex][category];
+    },
+    convertIntroduction: function convertIntroduction(introduction) {
+      var result = '';
+      if (introduction) {
+        result = introduction;
+      } else {
+        result = '暂无简介...';
+      }
+      return result;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
