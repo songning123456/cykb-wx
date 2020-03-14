@@ -1,43 +1,14 @@
 {
   "pages": [
-    {
-      "path": "pages/navigation/HomePage",
-      "style": {
-        "navigationBarTitleText": "首页",
-        "navigationBarBackgroundColor": "#e54d42"
-      }
-    },
-    {
-      "path": "pages/navigation/Classify",
-      "style": {
-        "navigationBarTitleText": "分类",
-        "navigationBarBackgroundColor": "#e54d42"
-      }
-    },
-    {
-      "path": "pages/navigation/Search",
-      "style": {
-        "navigationBarTitleText": "搜索",
-        "navigationBarBackgroundColor": "#e54d42"
-      }
-    },
-    {
-      "path": "pages/navigation/Bookcase",
-      "style": {
-        "navigationBarTitleText": "书架",
-        "navigationBarBackgroundColor": "#e54d42"
-      }
-    },
-    {
-      "path": "pages/navigation/My",
-      "style": {
-        "navigationBarTitleText": "我的",
-        "navigationBarBackgroundColor": "#e54d42"
-      }
-    }
+    "pages/navigation/HomePage",
+    "pages/navigation/Classify",
+    "pages/navigation/Search",
+    "pages/navigation/Bookcase",
+    "pages/navigation/My"
   ],
-  "globalStyle": {
-    "navigationBarTextStyle": "#ffffff",
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "畅游看吧",
     "navigationBarBackgroundColor": "#f7f6f2",
     "backgroundColor": "#f7f6f2"
@@ -79,5 +50,6 @@
         "text": "我的"
       }
     ]
-  }
+  },
+  "usingComponents": {}
 }
