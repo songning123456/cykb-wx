@@ -4,7 +4,8 @@
       "path": "pages/navigation/HomePage",
       "style": {
         "navigationBarTitleText": "首页",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "enablePullDownRefresh": true
       }
     },
     {
@@ -25,13 +26,28 @@
       "path": "pages/navigation/Bookcase",
       "style": {
         "navigationBarTitleText": "书架",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "enablePullDownRefresh": true
       }
     },
     {
       "path": "pages/navigation/My",
       "style": {
         "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#e54d42"
+      }
+    },
+    {
+      "path": "pages/comment/Comment",
+      "style": {
+        "navigationBarTitleText": "意见反馈",
+        "navigationBarBackgroundColor": "#e54d42"
+      }
+    },
+    {
+      "path": "pages/login/Login",
+      "style": {
+        "navigationBarTitleText": "登录",
         "navigationBarBackgroundColor": "#e54d42"
       }
     }

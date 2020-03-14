@@ -4,7 +4,9 @@
     "pages/navigation/Classify",
     "pages/navigation/Search",
     "pages/navigation/Bookcase",
-    "pages/navigation/My"
+    "pages/navigation/My",
+    "pages/comment/Comment",
+    "pages/login/Login"
   ],
   "subPackages": [],
   "window": {

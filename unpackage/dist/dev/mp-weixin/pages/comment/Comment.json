@@ -1,6 +1,5 @@
 {
-  "navigationBarTitleText": "首页",
+  "navigationBarTitleText": "意见反馈",
   "navigationBarBackgroundColor": "#e54d42",
-  "enablePullDownRefresh": true,
   "usingComponents": {}
 }

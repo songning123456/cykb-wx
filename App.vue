@@ -16,4 +16,5 @@
     @import "colorui/main.css";
     @import "colorui/icon.css";
     @import "style/global.css";
+    @import "style/base64.css";
 </style>
