@@ -8,7 +8,7 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.9.2",
-	"appid": "wxa0c6ab139ce8d933",
+	"appid": "touristappid",
 	"projectname": "cykb-wx",
 	"condition": {
 		"search": {
