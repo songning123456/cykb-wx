@@ -1,5 +1,5 @@
 <template>
-    <view class="home-page full-screen">
+    <view class="home-page">
         <view class="cu-list full-size">
             <view class="cu-card article no-card" v-for="(item, index) in result" :key="index">
                 <view class="cu-item shadow">

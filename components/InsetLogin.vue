@@ -1,5 +1,5 @@
 <template>
-    <view class="inset-login full-screen login-image">
+    <view class="inset-login login-image full-size">
         <button class="cu-btn block bg-red margin-tb-sm lg" open-type="getUserInfo" @getuserinfo="loginWx"
                 withCredentials="true">
             一键登录
@@ -40,6 +40,7 @@
                                             data: result
                                         });
                                         this.$store.commit('SET_USERINFO', data.data[0]);
+                                        this.$emit('userInfo', data.data[0]);
                                     } else {
                                         console.error('获取用户信息失败1');
                                         uni.showToast({
@@ -78,6 +79,8 @@
 
 <style lang="scss" scoped>
     .inset-login {
+        width: 100%;
+        height: 100%;
         .cu-btn {
             width: 400upx;
             position: absolute;

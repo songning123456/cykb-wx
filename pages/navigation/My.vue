@@ -1,5 +1,5 @@
 <template>
-    <view class="my full-screen">
+    <view class="my full-size">
         <view class="cu-card case no-card">
             <view class="cu-item shadow">
                 <view class="image text-center">
