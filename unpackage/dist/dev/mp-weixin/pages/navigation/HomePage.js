@@ -188,6 +188,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
 var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
@@ -213,9 +215,9 @@ var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/catego
 //
 //
 //
-var _default = { name: "HomePage", data: function data() {return { page: { index: 0, size: 20 }, result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;
-      if (type === 'first') {
-        this.page.index = 0;
+//
+//
+var _default = { name: 'HomePage', data: function data() {return { page: { index: 0, size: 20 }, result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;if (type === 'first') {this.page.index = 0;
         uni.showNavigationBarLoading();
       } else {
         ++this.page.index;

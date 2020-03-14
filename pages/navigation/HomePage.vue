@@ -10,7 +10,9 @@
                             <view class="text-content">{{item.introduction}}</view>
                             <view>
                                 <view class="cu-tag bg-red light sm round">{{item.author}}</view>
-                                <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex, item.category)}}</view>
+                                <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex,
+                                    item.category)}}
+                                </view>
                                 <view class="cu-tag bg-yellow light sm round">{{convertSex(item.sex)}}</view>
                             </view>
                         </view>
@@ -22,13 +24,13 @@
 </template>
 
 <script>
-    import request from '../../util/request';
-    import common from '../../util/common';
-    import Category from '../../util/category';
+    import request from '../../util/request'
+    import common from '../../util/common'
+    import Category from '../../util/category'
 
     export default {
-        name: "HomePage",
-        data() {
+        name: 'HomePage',
+        data () {
             return {
                 page: {
                     index: 0,
@@ -37,50 +39,50 @@
                 result: []
             }
         },
-        onLoad() {
-            uni.startPullDownRefresh();
+        onLoad () {
+            uni.startPullDownRefresh()
         },
-        onReachBottom() {
-            this.queryHomePage('more');
+        onReachBottom () {
+            this.queryHomePage('more')
         },
-        onPullDownRefresh() {
-            this.queryHomePage('first');
+        onPullDownRefresh () {
+            this.queryHomePage('first')
         },
         methods: {
-            queryHomePage(type) {
+            queryHomePage (type) {
                 if (type === 'first') {
-                    this.page.index = 0;
-                    uni.showNavigationBarLoading();
+                    this.page.index = 0
+                    uni.showNavigationBarLoading()
                 } else {
-                    ++this.page.index;
+                    ++this.page.index
                 }
                 let params = {
                     recordStartNo: this.page.index,
                     pageRecordNum: this.page.size
-                };
+                }
                 request.post('/novels/homePage', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         if (type === 'first') {
-                            this.result = data.data;
+                            this.result = data.data
                         } else {
-                            this.result = this.result.concat(data.data);
+                            this.result = this.result.concat(data.data)
                         }
                     }
                 }).finally(() => {
                     if (type === 'first') {
-                        uni.hideNavigationBarLoading();
-                        uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+                        uni.hideNavigationBarLoading()
+                        uni.stopPullDownRefresh()//得到数据后停止下拉刷新
                     }
-                });
+                })
             },
-            convertCoverUrl(url) {
-                return common.getCover(url);
+            convertCoverUrl (url) {
+                return common.getCover(url)
             },
-            convertSex(sex) {
+            convertSex (sex) {
                 return common.getSex(sex)
             },
-            convertCategory(sex, category) {
-                return Category[sex][category];
+            convertCategory (sex, category) {
+                return Category[sex][category]
             }
         }
 

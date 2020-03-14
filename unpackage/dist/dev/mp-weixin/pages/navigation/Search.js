@@ -137,7 +137,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 var _default =
 {
-  name: "Search" };exports.default = _default;
+  name: 'Search' };exports.default = _default;
 
 /***/ })
 

@@ -9,47 +9,47 @@
 </template>
 
 <script>
-    import Category from "../../util/category";
-    import request from '../../util/request';
+    import Category from '../../util/category'
+    import request from '../../util/request'
 
     export default {
-        name: "Classify",
-        data() {
+        name: 'Classify',
+        data () {
             return {
                 sex: 'male',
                 result: []
             }
         },
-        onLoad() {
-            uni.startPullDownRefresh();
+        onLoad () {
+            uni.startPullDownRefresh()
         },
-        onPullDownRefresh() {
-            this.queryClassify();
+        onPullDownRefresh () {
+            this.queryClassify()
         },
         methods: {
-            convertCategory(arg0) {
-                return Category[this.sex][arg0];
+            convertCategory (arg0) {
+                return Category[this.sex][arg0]
             },
-            convertTotal(arg0) {
+            convertTotal (arg0) {
                 let result = arg0;
-                (result || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
-                result = '共' + result + '部';
-                return result;
+                (result || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+                result = '共' + result + '部'
+                return result
             },
-            queryClassify() {
+            queryClassify () {
                 let params = {
                     condition: {
                         sex: this.sex
                     }
-                };
+                }
                 request.post('/novels/classify', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        this.result = data.data;
+                        this.result = data.data
                     }
                 }).finally(() => {
-                    uni.hideNavigationBarLoading();
-                    uni.stopPullDownRefresh();//得到数据后停止下拉刷新
-                });
+                    uni.hideNavigationBarLoading()
+                    uni.stopPullDownRefresh()//得到数据后停止下拉刷新
+                })
             }
         }
     }
@@ -58,6 +58,7 @@
 <style lang="scss" scoped>
     .classify {
         background: unset;
+
         .cu-avatar {
             margin: auto;
         }

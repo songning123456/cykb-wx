@@ -158,7 +158,6 @@ var _default = { name: 'InsetLogin', methods: { loginWx: function loginWx() {var
                     data: result });
 
                   _this.$store.commit('SET_USERINFO', data.data[0]);
-                  _this.$emit('userInfo', data.data[0]);
                 } else {
                   console.error('获取用户信息失败1');
                   uni.showToast({

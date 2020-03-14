@@ -32,49 +32,53 @@
 </template>
 
 <script>
-    import InsetLogin from "../../components/InsetLogin";
-    import request from '../../util/request';
-    import convertDate from '../../util/convertDate';
+    import InsetLogin from '../../components/InsetLogin'
+    import request from '../../util/request'
+    import convertDate from '../../util/convertDate'
 
-    let currentDate = new Date();
+    let currentDate = new Date()
 
     export default {
-        name: "Bookcase",
-        components: {InsetLogin},
-        data() {
+        name: 'Bookcase',
+        components: { InsetLogin },
+        data () {
             return {
                 modalName: '',
                 listTouchStart: 0,
                 listTouchDirection: null,
-                userInfo: this.$store.state.userInfo,
                 // 假数据
                 result: []
             }
         },
-        onLoad() {
-            if (this.userInfo) {
-                uni.startPullDownRefresh();
+        computed: {
+            userInfo() {
+                return this.$store.state.userInfo;
             }
         },
-        onPullDownRefresh() {
+        onLoad () {
             if (this.userInfo) {
-                this.queryBookcase();
+                uni.startPullDownRefresh()
+            }
+        },
+        onPullDownRefresh () {
+            if (this.userInfo) {
+                this.queryBookcase()
             } else {
-                uni.hideNavigationBarLoading();
-                uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+                uni.hideNavigationBarLoading()
+                uni.stopPullDownRefresh()//得到数据后停止下拉刷新
             }
         },
         methods: {
             // ListTouch触摸开始
-            touchStart(e) {
+            touchStart (e) {
                 this.listTouchStart = e.touches[0].pageX
             },
             // ListTouch计算方向
-            touchMove(e) {
+            touchMove (e) {
                 this.listTouchDirection = e.touches[0].pageX - this.listTouchStart > 0 ? 'right' : 'left'
             },
             // ListTouch计算滚动
-            touchEnd(e) {
+            touchEnd (e) {
                 if (this.listTouchDirection === 'left') {
                     this.modalName = e.currentTarget.dataset.target
                 } else {
@@ -82,31 +86,31 @@
                 }
                 this.listTouchDirection = null
             },
-            navChange() {
+            navChange () {
                 uni.switchTab({
-                    url:"/pages/navigation/Classify",
-                });
+                    url: '/pages/navigation/Classify',
+                })
             },
-            getUserInfo(arg0) {
-                this.userInfo = arg0;
+            getUserInfo (arg0) {
+                this.userInfo = arg0
             },
-            convertDate(updateTime) {
-                return convertDate.convertZh(currentDate, updateTime);
+            convertDate (updateTime) {
+                return convertDate.convertZh(currentDate, updateTime)
             },
-            queryBookcase() {
+            queryBookcase () {
                 let params = {
                     condition: {
                         uniqueId: this.userInfo.uniqueId
                     }
-                };
-                request.post("/relation/bookcase", params).then(data => {
+                }
+                request.post('/relation/bookcase', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        this.result = data.data;
+                        this.result = data.data
                     }
                 }).finally(() => {
-                    uni.hideNavigationBarLoading();
-                    uni.stopPullDownRefresh();//得到数据后停止下拉刷新
-                });
+                    uni.hideNavigationBarLoading()
+                    uni.stopPullDownRefresh()//得到数据后停止下拉刷新
+                })
             }
         }
     }
@@ -122,10 +126,12 @@
                 justify-content: unset;
                 padding-right: unset;
                 background: unset;
+
                 .cu-avatar {
                     float: left;
                     left: 15upx;
                 }
+
                 .content {
                     float: left;
                     left: 155upx;

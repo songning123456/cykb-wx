@@ -173,7 +173,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: "Classify", data: function data() {return { sex: 'male', result: [] };}, onLoad: function onLoad() {
+var _default = { name: 'Classify', data: function data() {return { sex: 'male', result: [] };}, onLoad: function onLoad() {
     uni.startPullDownRefresh();
   },
   onPullDownRefresh: function onPullDownRefresh() {

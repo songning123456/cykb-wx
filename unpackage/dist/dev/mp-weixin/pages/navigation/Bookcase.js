@@ -190,18 +190,22 @@ var _convertDate2 = _interopRequireDefault(__webpack_require__(/*! ../../util/co
 var currentDate = new Date();var _default =
 
 {
-  name: "Bookcase",
+  name: 'Bookcase',
   components: { InsetLogin: InsetLogin },
   data: function data() {
     return {
       modalName: '',
       listTouchStart: 0,
       listTouchDirection: null,
-      userInfo: this.$store.state.userInfo,
       // 假数据
       result: [] };
 
   },
+  computed: {
+    userInfo: function userInfo() {
+      return this.$store.state.userInfo;
+    } },
+
   onLoad: function onLoad() {
     if (this.userInfo) {
       uni.startPullDownRefresh();
@@ -235,7 +239,7 @@ var currentDate = new Date();var _default =
     },
     navChange: function navChange() {
       uni.switchTab({
-        url: "/pages/navigation/Classify" });
+        url: '/pages/navigation/Classify' });
 
     },
     getUserInfo: function getUserInfo(arg0) {
@@ -250,7 +254,7 @@ var currentDate = new Date();var _default =
           uniqueId: this.userInfo.uniqueId } };
 
 
-      _request.default.post("/relation/bookcase", params).then(function (data) {
+      _request.default.post('/relation/bookcase', params).then(function (data) {
         if (data.status === 200 && data.total > 0) {
           _this.result = data.data;
         }
