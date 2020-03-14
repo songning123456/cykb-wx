@@ -9682,6 +9682,88 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
+/***/ 70:
+/*!*****************************************!*\
+  !*** C:/project/cykb-wx/util/common.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var common = {};
+common.getSex = function (sex) {
+  var result = '';
+  switch (sex) {
+    case 'male':
+      result = '男频';
+      break;
+    case 'female':
+      result = '女频';
+      break;
+    default:
+      result = '未知';
+      break;}
+
+  return result;
+};
+common.getCover = function (url) {
+  var result = '';
+  if (url) {
+    result = url;
+  } else {
+    var param = (Math.random() + '').slice(2, 3);
+    result = 'https://ossweb-img.qq.com/images/lol/web201310/skin/big1000' + param + '.jpg';
+  }
+  return result;
+};var _default =
+common;exports.default = _default;
+
+/***/ }),
+
+/***/ 71:
+/*!*******************************************!*\
+  !*** C:/project/cykb-wx/util/category.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var category = {
+  'male': {
+    'xuanhuan': '玄幻',
+    'qihuan': '奇幻',
+    'wuxia': '武侠',
+    'xianxia': '仙侠',
+    'dushi': '都市',
+    'zhichang': '职场',
+    'xianshi': '现实',
+    'lishi': '历史',
+    'junshi': '军事',
+    'youxi': '游戏',
+    'tiyu': '体育',
+    'kehuan': '科幻',
+    'xuanyi': '悬疑',
+    'qingxiaoshuo': '轻小说',
+    'tongren': '同人' },
+
+  'female': {
+    'gudaiyanqing': '古代言情',
+    'xiandaiyanqing': '现代言情',
+    'xuanhuanyanqing': '玄幻言情',
+    'xuanyituili': '悬疑推理',
+    'langmanqingchun': '浪漫青春',
+    'xianxiaqiyuan': '仙侠奇缘',
+    'kehuankongjian': '科幻空间',
+    'youxijingji': '游戏竞技',
+    'qingxiaoshuo': '轻小说',
+    'xianshishenghuo': '现实生活' } };var _default =
+
+
+
+category;exports.default = _default;
+
+/***/ }),
+
 /***/ 8:
 /*!*****************************************************!*\
   !*** C:/project/cykb-wx/pages.json?{"type":"stat"} ***!

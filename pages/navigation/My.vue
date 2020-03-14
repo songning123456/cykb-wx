@@ -74,9 +74,9 @@
             sexClazz() {
                 let clazz = '';
                 if (this.userInfo.gender) {
-                    if (this.userInfo.gender === '1') {
+                    if (this.userInfo.gender === 1) {
                         clazz = 'cuIcon-male bg-blue';
-                    } else if (this.userInfo.gender === '2') {
+                    } else if (this.userInfo.gender === 2) {
                         clazz = 'cuIcon-female bg-pink';
                     }
                 }
