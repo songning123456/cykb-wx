@@ -7,6 +7,12 @@
                     this.$store.commit('SET_USERINFO', JSON.parse(data.data))
                 }
             })
+            uni.getStorage({
+                key: 'sortType',
+                success: data => {
+                    this.$store.commit('SET_SORTTYPE', data.data)
+                }
+            })
         },
         onShow: function () {
             console.log('App Show')

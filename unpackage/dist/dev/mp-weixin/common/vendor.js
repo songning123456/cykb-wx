@@ -1687,11 +1687,15 @@ var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 16));function
 _vue.default.use(_vuex.default);
 var store = new _vuex.default.Store({
   state: {
-    userInfo: null },
+    userInfo: null,
+    sortType: '最近阅读' },
 
   mutations: {
     SET_USERINFO: function SET_USERINFO(state, userInfo) {
       state.userInfo = userInfo;
+    },
+    SET_SORTTYPE: function SET_SORTTYPE(state, sortType) {
+      state.sortType = sortType;
     } },
 
   actions: {} });var _default =

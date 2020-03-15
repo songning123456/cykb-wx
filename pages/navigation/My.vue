@@ -46,13 +46,32 @@
                             <view>{{item.title}}</view>
                         </view>
                         <view class="action" v-if="item.icon === 'switch'">
-                            <switch @change='nightModeBtn' :checked="isDark" :class="{'checked': isDark}" class="red"></switch>
+                            <switch @change='nightModeBtn' :checked="isDark" :class="{'checked': isDark}"
+                                    class="red"></switch>
+                        </view>
+                        <view class="action" v-if="item.icon === 'text'">
+                            <text class="text-gray">{{sortType}}</text>
                         </view>
                     </view>
                 </view>
             </view>
         </view>
-
+        <view class="cu-modal bottom-modal" :class="{'show': sortModal}" @tap="hideSortModal">
+            <view class="cu-dialog" @tap.stop="">
+                <view class="cu-bar bg-white justify-end">
+                    <view class="content">请选择排序方式</view>
+                </view>
+                <view class="cu-list menu">
+                    <view class="cu-item no-bg-color" v-for="(item, index) in sorts" :key="index" @tap="sortBtn"
+                          :data-sort="item.title">
+                        <view class="content">
+                            <text :class="[item.icon, sortType === item.title ? 'text-red' : 'text-grey']"></text>
+                            <text :class="sortType === item.title ? 'text-red' : 'text-grey'">{{item.title}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 
@@ -67,6 +86,7 @@
                 isDark: false,
                 shareModal: false,
                 settingModal: false,
+                sortModal: false,
                 clipboard: '我正在用畅游看吧读免费百万小说。下载地址：git@github.com:songning123456/cykb-wx.git',
                 displayInfo: [
                     {
@@ -92,16 +112,33 @@
                         title: '退出登录',
                         type: 'exit'
                     }, {
+                        icon: 'text',
+                        title: '书架排序',
+                        type: 'sort'
+                    }, {
                         icon: 'switch',
                         title: '夜间模式',
                         type: 'nightMode'
                     }
+                ],
+                sorts: [
+                    {
+                        icon: 'cuIcon-read',
+                        title: '最近阅读'
+                    },
+                    {
+                        icon: 'cuIcon-time',
+                        title: '更新时间'
+                    },
                 ]
             }
         },
         computed: {
             userInfo () {
                 return this.$store.state.userInfo
+            },
+            sortType () {
+                return this.$store.state.sortType
             },
             sexClazz () {
                 let clazz = ''
@@ -156,9 +193,20 @@
                             uni.hideLoading()
                         }
                         break
+                    case 'sort':
+                        this.sortModal = true
+                        break
                     case 'nightMode':
                         break
                 }
+            },
+            sortBtn (e) {
+                this.$store.commit('SET_SORTTYPE', e.currentTarget.dataset.sort)
+                uni.setStorage({
+                    key: 'sortType',
+                    data: e.currentTarget.dataset.sort
+                })
+                this.sortModal = false
             },
             nightModeBtn (e) {
                 this.isDark = e.detail.value
@@ -177,6 +225,9 @@
             },
             hideSettingModal () {
                 this.settingModal = false
+            },
+            hideSortModal () {
+                this.sortModal = false
             },
             wxBtn () {
                 uni.login({

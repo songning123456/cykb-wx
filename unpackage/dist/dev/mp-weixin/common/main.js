@@ -107,6 +107,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.commit('SET_USERINFO', JSON.parse(data.data));
       } });
 
+    uni.getStorage({
+      key: 'sortType',
+      success: function success(data) {
+        _this.$store.commit('SET_SORTTYPE', data.data);
+      } });
+
   },
   onShow: function onShow() {
     console.log('App Show');

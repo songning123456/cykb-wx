@@ -27,7 +27,7 @@
                 </view>
             </view>
         </view>
-        <inset-login v-else @userInfo="getUserInfo"></inset-login>
+        <inset-login v-else></inset-login>
     </view>
 </template>
 
@@ -51,13 +51,27 @@
             }
         },
         computed: {
-            userInfo() {
-                return this.$store.state.userInfo;
+            userInfo () {
+                return this.$store.state.userInfo
+            },
+            sortType () {
+                return this.$store.state.sortType
             }
         },
         onLoad () {
             if (this.userInfo) {
                 uni.startPullDownRefresh()
+            }
+        },
+        watch: {
+            // 主要用于 一开始未登录，后来登录；重新加载数据
+            userInfo (newVal, oldVal) {
+                if (newVal && !oldVal) {
+                    uni.startPullDownRefresh()
+                }
+            },
+            sortType (newVal, oldVal) {
+                this.queryBookcase()
             }
         },
         onPullDownRefresh () {
@@ -90,16 +104,14 @@
                     url: '/pages/navigation/Classify',
                 })
             },
-            getUserInfo (arg0) {
-                this.userInfo = arg0
-            },
             convertDate (updateTime) {
                 return convertDate.convertZh(currentDate, updateTime)
             },
             queryBookcase () {
                 let params = {
                     condition: {
-                        uniqueId: this.userInfo.uniqueId
+                        uniqueId: this.userInfo.uniqueId,
+                        sortType: this.sortType
                     }
                 }
                 request.post('/relation/bookcase', params).then(data => {
@@ -138,6 +150,7 @@
             }
         }
     }
+
     ::-webkit-scrollbar {
         width: 0;
         height: 0;

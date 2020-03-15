@@ -204,6 +204,9 @@ var currentDate = new Date();var _default =
   computed: {
     userInfo: function userInfo() {
       return this.$store.state.userInfo;
+    },
+    sortType: function sortType() {
+      return this.$store.state.sortType;
     } },
 
   onLoad: function onLoad() {
@@ -211,6 +214,17 @@ var currentDate = new Date();var _default =
       uni.startPullDownRefresh();
     }
   },
+  watch: {
+    // 主要用于 一开始未登录，后来登录；重新加载数据
+    userInfo: function userInfo(newVal, oldVal) {
+      if (newVal && !oldVal) {
+        uni.startPullDownRefresh();
+      }
+    },
+    sortType: function sortType(newVal, oldVal) {
+      this.queryBookcase();
+    } },
+
   onPullDownRefresh: function onPullDownRefresh() {
     if (this.userInfo) {
       this.queryBookcase();
@@ -241,16 +255,14 @@ var currentDate = new Date();var _default =
         url: '/pages/navigation/Classify' });
 
     },
-    getUserInfo: function getUserInfo(arg0) {
-      this.userInfo = arg0;
-    },
     convertDate: function convertDate(updateTime) {
       return _convertDate2.default.convertZh(currentDate, updateTime);
     },
     queryBookcase: function queryBookcase() {var _this = this;
       var params = {
         condition: {
-          uniqueId: this.userInfo.uniqueId } };
+          uniqueId: this.userInfo.uniqueId,
+          sortType: this.sortType } };
 
 
       _request.default.post('/relation/bookcase', params).then(function (data) {
