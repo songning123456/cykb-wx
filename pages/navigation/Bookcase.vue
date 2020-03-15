@@ -3,7 +3,7 @@
         <view v-if="userInfo" class="cu-list full-size menu-avatar">
             <view class="cu-item"
                   v-for="(item,index) in result" :key="index"
-                  :class="modalName==='move-box-'+ index?'move-cur':''"
+                  :class="[(modalName==='move-box-'+ index && sortType === '最近阅读') ? 'move-cur' : '', (modalName==='move-box-'+ index && sortType === '更新时间') ? 'move-no-top-cur':'']"
                   @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"
                   :data-target="'move-box-' + index">
                 <uni-image :url="item.coverUrl" class="cu-avatar radius xl"></uni-image>
@@ -15,8 +15,8 @@
                         <text class="text-cut">{{item.latestChapter}}</text>
                     </view>
                 </view>
-                <view class="move">
-                    <view class="bg-grey">置顶</view>
+                <view class="move" :class="{'move-no-top':sortType === '更新时间'}">
+                    <view class="bg-grey" v-if="sortType === '最近阅读'">置顶</view>
                     <view class="bg-red">删除</view>
                 </view>
             </view>
@@ -147,14 +147,15 @@
                     left: 155upx;
                     width: calc(100% - 160upx - 20upx);
                 }
+
+                .move-no-top {
+                    width: 140upx;
+                }
+            }
+
+            .move-no-top-cur {
+                transform: translateX(-140rpx);
             }
         }
-    }
-
-    ::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-        color: transparent;
-        display: none;
     }
 </style>

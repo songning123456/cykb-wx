@@ -43,10 +43,11 @@
       left: 155rpx;
       width: calc(100% - 160rpx - 20rpx);
 }
-.data-v-65f116c7::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  color: transparent;
-  display: none;
+.book-case .cu-list .cu-item .move-no-top.data-v-65f116c7 {
+      width: 140rpx;
+}
+.book-case .cu-list .move-no-top-cur.data-v-65f116c7 {
+    -webkit-transform: translateX(-140rpx);
+            transform: translateX(-140rpx);
 }
 
