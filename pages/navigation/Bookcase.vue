@@ -1,5 +1,5 @@
 <template>
-    <view class="book-case">
+    <view class="book-case" :class="{'full-size': !userInfo}">
         <view v-if="userInfo" class="cu-list full-size menu-avatar">
             <view class="cu-item"
                   v-for="(item,index) in result" :key="index"

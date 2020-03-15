@@ -28,4 +28,7 @@
   -webkit-transform: scale(1);
           transform: scale(1);
 }
+.my .cu-modal switch.data-v-f3eb5c4c::after, .my .cu-modal switch.data-v-f3eb5c4c::before {
+    content: unset;
+}
 

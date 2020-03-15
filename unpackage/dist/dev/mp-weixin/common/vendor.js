@@ -1687,7 +1687,7 @@ var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 16));function
 _vue.default.use(_vuex.default);
 var store = new _vuex.default.Store({
   state: {
-    userInfo: '' },
+    userInfo: null },
 
   mutations: {
     SET_USERINFO: function SET_USERINFO(state, userInfo) {
@@ -8762,6 +8762,12 @@ common.getCover = function (url) {
     result = 'https://ossweb-img.qq.com/images/lol/web201310/skin/big1000' + param + '.jpg';
   }
   return result;
+};
+common.sleep = function (milliSeconds) {
+  var startTime = new Date().getTime();
+  while (new Date().getTime() < startTime + milliSeconds) {
+    // ...
+  }
 };var _default =
 common;exports.default = _default;
 
