@@ -1,5 +1,5 @@
 <template>
-    <image @load="imageLoad" @error="imageErr" :src="imageSrc" :mode="mode"></image>
+    <image @load="imageLoad" @error="imageErr" :src="imageSrc" :mode="mode" :lazy-load="true"></image>
 </template>
 
 <script>
@@ -46,6 +46,7 @@
     image {
         width: 100%;
         height: 100%;
+        background-color: white;
     }
 
 </style>
