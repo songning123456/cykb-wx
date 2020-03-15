@@ -12,8 +12,7 @@
       "path": "pages/navigation/Classify",
       "style": {
         "navigationBarTitleText": "分类",
-        "navigationBarBackgroundColor": "#e54d42",
-        "enablePullDownRefresh": true
+        "navigationBarBackgroundColor": "#e54d42"
       }
     },
     {

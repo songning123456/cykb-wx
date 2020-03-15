@@ -27,10 +27,13 @@
 .classify.data-v-05436a32 {
   background: unset;
 }
-.classify .cu-avatar.data-v-05436a32 {
-    margin: auto;
+.classify .cu-list.data-v-05436a32 {
+    background: unset;
 }
-.classify .classify-margin.data-v-05436a32 {
-    margin: 3px 0;
+.classify .cu-list .cu-avatar.data-v-05436a32 {
+      margin: auto;
+}
+.classify .cu-list .classify-margin.data-v-05436a32 {
+      margin: 3px 0;
 }
 
