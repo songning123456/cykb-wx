@@ -55,6 +55,14 @@
         "navigationBarBackgroundColor": "#e54d42",
         "disableScroll": true
       }
+    },
+    {
+      "path": "pages/result/SearchResult",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationBarBackgroundColor": "#e54d42",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {

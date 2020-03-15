@@ -6,7 +6,8 @@
     "pages/navigation/Bookcase",
     "pages/navigation/My",
     "pages/comment/Comment",
-    "pages/login/Login"
+    "pages/login/Login",
+    "pages/result/SearchResult"
   ],
   "subPackages": [],
   "window": {

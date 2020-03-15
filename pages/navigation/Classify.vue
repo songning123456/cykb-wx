@@ -9,7 +9,7 @@
             </view>
         </scroll-view>
         <view class="cu-list grid col-3">
-            <view class="cu-item" v-for="(item,index) in result" :key="index">
+            <view class="cu-item" v-for="(item,index) in result" :key="index" @tap="searchBtn(item.category)">
                 <view class="cu-avatar lg radius" :class="'category-' +tabCur + '-' + item.category"></view>
                 <view class="classify-margin text-black text-df">{{convertCategory(item.category)}}</view>
                 <view class="text-gray text-sm">{{convertTotal(item.total)}}</view>
@@ -81,6 +81,15 @@
                     if (this.firstEnter) {
                         this.firstEnter = false
                     }
+                })
+            },
+            searchBtn (category) {
+                let params = {
+                    sex: this.tabCur,
+                    category: category
+                }
+                uni.navigateTo({
+                    url: '/pages/result/SearchResult?params=' + JSON.stringify(params)
                 })
             }
         }
