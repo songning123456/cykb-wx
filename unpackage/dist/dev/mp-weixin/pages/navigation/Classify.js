@@ -203,8 +203,14 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'Classify', data: function data() {return { tabCur: 'male', sexTabs: [{ icon: 'cuIcon-male text-blue', sex: 'male' }, { icon: 'cuIcon-female text-pink', sex: 'female' }], result: [] };}, onTabItemTap: function onTabItemTap() {
+var _default = { name: 'Classify', data: function data() {return { tabCur: 'male', sexTabs: [{ icon: 'cuIcon-male text-blue', sex: 'male' }, { icon: 'cuIcon-female text-pink', sex: 'female' }], result: [], firstEnter: true };},
+  onLoad: function onLoad() {
     this.queryClassify();
+  },
+  onTabItemTap: function onTabItemTap() {
+    if (!this.firstEnter) {
+      this.queryClassify();
+    }
   },
   methods: {
     tabSelect: function tabSelect(e) {
@@ -232,6 +238,10 @@ var _default = { name: 'Classify', data: function data() {return { tabCur: 'male
       _request.default.post('/novels/classify', params).then(function (data) {
         if (data.status === 200 && data.total > 0) {
           _this.result = data.data;
+        }
+      }).finally(function () {
+        if (_this.firstEnter) {
+          _this.firstEnter = false;
         }
       });
     } } };exports.default = _default;

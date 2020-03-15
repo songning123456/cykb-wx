@@ -10,14 +10,14 @@
                 <view class="content">
                     <view class="text-black text-df">{{item.title}}</view>
                     <view class="text-grey text-sm">{{item.author}}</view>
-                    <view class="text-gray text-xs">
+                    <view class="text-gray text-xs text-cut">
                         <text class="margin-right-xs">{{convertDate(item.updateTime)}} ·</text>
-                        <text class="text-cut">{{item.latestChapter}}</text>
+                        <text>{{item.latestChapter}}</text>
                     </view>
                 </view>
                 <view class="move" :class="{'move-no-top':sortType === '更新时间'}">
-                    <view class="bg-grey" v-if="sortType === '最近阅读'">置顶</view>
-                    <view class="bg-red">删除</view>
+                    <view class="bg-grey" v-if="sortType === '最近阅读'" @tap="topBtn(item.novelsId)">置顶</view>
+                    <view class="bg-red" @tap="deleteBtn(item.novelsId, index)">删除</view>
                 </view>
             </view>
             <view class="cu-item">
@@ -120,6 +120,52 @@
                     }
                 }).finally(() => {
                     uni.stopPullDownRefresh()//得到数据后停止下拉刷新
+                })
+            },
+            topBtn (novelsId) {
+                let params = {
+                    condition: {
+                        uniqueId: this.userInfo.uniqueId,
+                        novelsId: novelsId
+                    }
+                }
+                uni.showLoading({
+                    title: '等待中',
+                    mask: true
+                })
+                request.post('/relation/topBookcase', params).then(data => {
+                    if (data.status === 200) {
+                        let temp = []
+                        this.result.forEach(item => {
+                            if (item.novelsId === novelsId) {
+                                temp.unshift(item)
+                            } else {
+                                temp.push(item)
+                            }
+                        })
+                        this.result = temp
+                    }
+                }).finally(() => {
+                    uni.hideLoading()
+                })
+            },
+            deleteBtn (novelsId, index) {
+                let params = {
+                    condition: {
+                        uniqueId: this.userInfo.uniqueId,
+                        novelsId: novelsId
+                    }
+                }
+                uni.showLoading({
+                    title: '删除中',
+                    mask: true
+                })
+                request.post('/relation/deleteBookcase', params).then(data => {
+                    if (data.status === 200) {
+                        this.result.splice(index, 1)
+                    }
+                }).finally(() => {
+                    uni.hideLoading()
                 })
             }
         }

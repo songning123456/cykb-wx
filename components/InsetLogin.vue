@@ -21,7 +21,8 @@
                             provider: 'weixin',
                             success: response3 => {
                                 uni.showLoading({
-                                    title: '登陆中'
+                                    title: '登陆中',
+                                    mask: true
                                 })
                                 let params = {
                                     condition: {

@@ -272,6 +272,52 @@ var currentDate = new Date();var _default =
       }).finally(function () {
         uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
       });
+    },
+    topBtn: function topBtn(novelsId) {var _this2 = this;
+      var params = {
+        condition: {
+          uniqueId: this.userInfo.uniqueId,
+          novelsId: novelsId } };
+
+
+      uni.showLoading({
+        title: '等待中',
+        mask: true });
+
+      _request.default.post('/relation/topBookcase', params).then(function (data) {
+        if (data.status === 200) {
+          var temp = [];
+          _this2.result.forEach(function (item) {
+            if (item.novelsId === novelsId) {
+              temp.unshift(item);
+            } else {
+              temp.push(item);
+            }
+          });
+          _this2.result = temp;
+        }
+      }).finally(function () {
+        uni.hideLoading();
+      });
+    },
+    deleteBtn: function deleteBtn(novelsId, index) {var _this3 = this;
+      var params = {
+        condition: {
+          uniqueId: this.userInfo.uniqueId,
+          novelsId: novelsId } };
+
+
+      uni.showLoading({
+        title: '删除中',
+        mask: true });
+
+      _request.default.post('/relation/deleteBookcase', params).then(function (data) {
+        if (data.status === 200) {
+          _this3.result.splice(index, 1);
+        }
+      }).finally(function () {
+        uni.hideLoading();
+      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

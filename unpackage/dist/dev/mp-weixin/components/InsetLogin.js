@@ -139,7 +139,8 @@ var _default = { name: 'InsetLogin', methods: { loginWx: function loginWx() {var
           uni.getUserInfo({ provider: 'weixin',
             success: function success(response3) {
               uni.showLoading({
-                title: '登陆中' });
+                title: '登陆中',
+                mask: true });
 
               var params = {
                 condition: {

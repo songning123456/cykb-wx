@@ -38,11 +38,17 @@
                         sex: 'female'
                     }
                 ],
-                result: []
+                result: [],
+                firstEnter: true
             }
         },
-        onTabItemTap() {
-            this.queryClassify();
+        onLoad () {
+            this.queryClassify()
+        },
+        onTabItemTap () {
+            if (!this.firstEnter) {
+                this.queryClassify()
+            }
         },
         methods: {
             tabSelect (e) {
@@ -70,6 +76,10 @@
                 request.post('/novels/classify', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.result = data.data
+                    }
+                }).finally(() => {
+                    if (this.firstEnter) {
+                        this.firstEnter = false
                     }
                 })
             }

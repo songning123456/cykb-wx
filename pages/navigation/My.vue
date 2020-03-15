@@ -181,7 +181,8 @@
                 switch (type) {
                     case 'exit':
                         uni.showLoading({
-                            title: '注销中'
+                            title: '注销中',
+                            mask: true
                         })
                         try {
                             uni.clearStorageSync()
@@ -237,7 +238,8 @@
                             provider: 'weixin',
                             success: response3 => {
                                 uni.showLoading({
-                                    title: '登陆中'
+                                    title: '登陆中',
+                                    mask: true
                                 })
                                 let params = {
                                     condition: {

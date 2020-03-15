@@ -316,7 +316,8 @@ var _default = { name: 'My', data: function data() {return { isDark: false, shar
       switch (type) {
         case 'exit':
           uni.showLoading({
-            title: '注销中' });
+            title: '注销中',
+            mask: true });
 
           try {
             uni.clearStorageSync();
@@ -372,7 +373,8 @@ var _default = { name: 'My', data: function data() {return { isDark: false, shar
             provider: 'weixin',
             success: function success(response3) {
               uni.showLoading({
-                title: '登陆中' });
+                title: '登陆中',
+                mask: true });
 
               var params = {
                 condition: {
