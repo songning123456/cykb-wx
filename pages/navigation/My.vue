@@ -48,7 +48,7 @@
         data () {
             return {
                 shareModal: false,
-                clipboard: '我正在用畅游看吧读免费百万小说。下载地址：http://www.xxx.com',
+                clipboard: '我正在用畅游看吧读免费百万小说。下载地址：git@github.com:songning123456/cykb-wx.git',
                 displayInfo: [
                     {
                         icon: 'appreciate',

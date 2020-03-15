@@ -12,14 +12,16 @@
       "path": "pages/navigation/Classify",
       "style": {
         "navigationBarTitleText": "分类",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
       }
     },
     {
       "path": "pages/navigation/Search",
       "style": {
         "navigationBarTitleText": "搜索",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
       }
     },
     {
@@ -34,21 +36,24 @@
       "path": "pages/navigation/My",
       "style": {
         "navigationBarTitleText": "我的",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
       }
     },
     {
       "path": "pages/comment/Comment",
       "style": {
         "navigationBarTitleText": "意见反馈",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
       }
     },
     {
       "path": "pages/login/Login",
       "style": {
         "navigationBarTitleText": "登录",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
       }
     }
   ],
