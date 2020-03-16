@@ -8,7 +8,8 @@
     "pages/comment/Comment",
     "pages/login/Login",
     "pages/result/SearchResult",
-    "pages/settings/Settings"
+    "pages/settings/Settings",
+    "pages/bookdetail/BookDetail"
   ],
   "subPackages": [],
   "window": {

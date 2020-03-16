@@ -71,6 +71,14 @@
         "navigationBarBackgroundColor": "#e54d42",
         "disableScroll": true
       }
+    },
+    {
+      "path": "pages/bookdetail/BookDetail",
+      "style": {
+        "navigationBarTitleText": "书籍详情",
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
+      }
     }
   ],
   "globalStyle": {

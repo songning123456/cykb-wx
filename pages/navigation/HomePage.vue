@@ -1,7 +1,7 @@
 <template>
     <view class="home-page">
         <view class="cu-list full-size">
-            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index">
+            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index" @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
                         <uni-image class="image-size" :url="item.coverUrl"></uni-image>
@@ -84,6 +84,11 @@
             },
             convertIntroduction (introduction) {
                 return common.getIntroduction(introduction)
+            },
+            bookDetailBtn(novels) {
+                uni.navigateTo({
+                    url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
+                })
             }
         }
 

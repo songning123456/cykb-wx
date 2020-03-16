@@ -250,6 +250,11 @@ var _default = { name: 'HomePage', data: function data() {return { page: { index
     },
     convertIntroduction: function convertIntroduction(introduction) {
       return _common.default.getIntroduction(introduction);
+    },
+    bookDetailBtn: function bookDetailBtn(novels) {
+      uni.navigateTo({
+        url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
