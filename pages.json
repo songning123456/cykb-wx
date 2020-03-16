@@ -63,6 +63,14 @@
         "navigationBarBackgroundColor": "#e54d42",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/settings/Settings",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#e54d42",
+        "disableScroll": true
+      }
     }
   ],
   "globalStyle": {
