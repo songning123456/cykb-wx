@@ -105,6 +105,7 @@
 
             .cu-avatar {
                 margin: auto;
+                width: 78upx;
             }
 
             .classify-margin {

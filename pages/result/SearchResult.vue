@@ -116,7 +116,7 @@
                         padding: 0 15upx;
 
                         .image-size {
-                            width: 240upx;
+                            width: 180upx;
                             margin-top: 18upx;
                             height: 8em;
                             margin-right: 20upx;

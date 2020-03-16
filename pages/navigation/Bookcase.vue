@@ -6,7 +6,7 @@
                   :class="[(modalName==='move-box-'+ index && sortType === '最近阅读') ? 'move-cur' : '', (modalName==='move-box-'+ index && sortType === '更新时间') ? 'move-no-top-cur':'']"
                   @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"
                   :data-target="'move-box-' + index">
-                <uni-image :url="item.coverUrl" class="cu-avatar radius xl"></uni-image>
+                <uni-image :url="item.coverUrl" class="image-size cu-avatar radius xl"></uni-image>
                 <view class="content">
                     <view class="text-black text-df">{{item.title}}</view>
                     <view class="text-grey text-sm">{{item.author}}</view>
@@ -183,6 +183,10 @@
                 padding-right: unset;
                 background: unset;
 
+                .image-size {
+                    width: 105upx;
+                }
+
                 .cu-avatar {
                     float: left;
                     left: 15upx;
@@ -190,8 +194,8 @@
 
                 .content {
                     float: left;
-                    left: 155upx;
-                    width: calc(100% - 160upx - 20upx);
+                    left: 135upx;
+                    width: calc(100% - 140upx - 20upx);
                 }
 
                 .move-no-top {

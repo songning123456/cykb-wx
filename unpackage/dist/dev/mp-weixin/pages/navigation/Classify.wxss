@@ -32,6 +32,7 @@
 }
 .classify .cu-list .cu-avatar.data-v-05436a32 {
       margin: auto;
+      width: 78rpx;
 }
 .classify .cu-list .classify-margin.data-v-05436a32 {
       margin: 3px 0;

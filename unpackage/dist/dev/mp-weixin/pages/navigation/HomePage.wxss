@@ -38,7 +38,7 @@
         padding: 0 15rpx;
 }
 .home-page .cu-list .cu-card .cu-item .content .image-size.data-v-67bcfebc {
-          width: 240rpx;
+          width: 180rpx;
           margin-top: 18rpx;
           height: 8em;
           margin-right: 20rpx;

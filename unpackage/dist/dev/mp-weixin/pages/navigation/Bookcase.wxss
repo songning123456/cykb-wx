@@ -34,14 +34,17 @@
     padding-right: unset;
     background: unset;
 }
+.book-case .cu-list .cu-item .image-size.data-v-65f116c7 {
+      width: 105rpx;
+}
 .book-case .cu-list .cu-item .cu-avatar.data-v-65f116c7 {
       float: left;
       left: 15rpx;
 }
 .book-case .cu-list .cu-item .content.data-v-65f116c7 {
       float: left;
-      left: 155rpx;
-      width: calc(100% - 160rpx - 20rpx);
+      left: 135rpx;
+      width: calc(100% - 140rpx - 20rpx);
 }
 .book-case .cu-list .cu-item .move-no-top.data-v-65f116c7 {
       width: 140rpx;
