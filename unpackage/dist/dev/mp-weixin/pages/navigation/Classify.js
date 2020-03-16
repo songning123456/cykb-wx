@@ -251,7 +251,7 @@ var _default = { name: 'Classify', data: function data() {return { tabCur: 'male
         category: category };
 
       uni.navigateTo({
-        url: '/pages/result/SearchResult?params=' + JSON.stringify(params) });
+        url: '/pages/result/SearchResult?classify=' + JSON.stringify(params) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

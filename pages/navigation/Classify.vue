@@ -89,7 +89,7 @@
                     category: category
                 }
                 uni.navigateTo({
-                    url: '/pages/result/SearchResult?params=' + JSON.stringify(params)
+                    url: '/pages/result/SearchResult?classify=' + JSON.stringify(params)
                 })
             }
         }

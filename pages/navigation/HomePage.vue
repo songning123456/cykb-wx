@@ -4,7 +4,7 @@
             <view class="cu-card article no-card" v-for="(item, index) in result" :key="index">
                 <view class="cu-item shadow">
                     <view class="content">
-                        <uni-image class="image-size" :url="convertCoverUrl(item.coverUrl)"></uni-image>
+                        <uni-image class="image-size" :url="item.coverUrl"></uni-image>
                         <view class="desc">
                             <view class="title text-cut text-shadow">{{item.title}}</view>
                             <view class="text-content">{{convertIntroduction(item.introduction)}}</view>
@@ -34,7 +34,8 @@
             return {
                 page: {
                     index: 0,
-                    size: 20
+                    size: 20,
+                    total: 0
                 },
                 result: []
             }
@@ -43,7 +44,9 @@
             uni.startPullDownRefresh()
         },
         onReachBottom () {
-            this.queryHomePage('more')
+            if (this.page.index < Math.ceil(this.page.total / this.page.size)) {
+                this.queryHomePage('more')
+            }
         },
         onPullDownRefresh () {
             this.queryHomePage('first')
@@ -52,8 +55,6 @@
             queryHomePage (type) {
                 if (type === 'first') {
                     this.page.index = 0
-                } else {
-                    ++this.page.index
                 }
                 let params = {
                     recordStartNo: this.page.index,
@@ -61,11 +62,13 @@
                 }
                 request.post('/novels/homePage', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
+                        this.page.total = data.total;
                         if (type === 'first') {
                             this.result = data.data
                         } else {
                             this.result = this.result.concat(data.data)
                         }
+                        ++this.page.index
                     }
                 }).finally(() => {
                     if (type === 'first') {
@@ -73,23 +76,14 @@
                     }
                 })
             },
-            convertCoverUrl (url) {
-                return common.getCover(url)
-            },
             convertSex (sex) {
                 return common.getSex(sex)
             },
             convertCategory (sex, category) {
                 return Category[sex][category]
             },
-            convertIntroduction(introduction) {
-                let result = '';
-                if (introduction) {
-                    result = introduction;
-                } else {
-                    result = '暂无简介...';
-                }
-                return result;
+            convertIntroduction (introduction) {
+                return common.getIntroduction(introduction)
             }
         }
 

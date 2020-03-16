@@ -8767,6 +8767,15 @@ common.getCover = function (url) {
   }
   return result;
 };
+common.getIntroduction = function (introduction) {
+  var result = '';
+  if (introduction) {
+    result = introduction;
+  } else {
+    result = '暂无简介...';
+  }
+  return result;
+};
 common.sleep = function (milliSeconds) {
   var startTime = new Date().getTime();
   while (new Date().getTime() < startTime + milliSeconds) {
