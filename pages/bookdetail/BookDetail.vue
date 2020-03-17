@@ -18,7 +18,7 @@
             <view class="title text-center text-bold padding-top-xs">
                 <text>简介</text>
             </view>
-            <view class="content padding">
+            <view class="content padding introduction">
                 {{novels.introduction}}
             </view>
         </view>
@@ -35,7 +35,7 @@
                 <view class="content">作者还写过</view>
                 <view class="action text-gray">更多</view>
             </view>
-            <scroll-view scroll-x="true" class="author-books">
+            <scroll-view scroll-x="true" class="author-books margin-bottom-sm">
                 <block v-for="(item, index) in authorBooks" :key="index">
                     <view class="author-book" @tap="">
                         <view class="img">
@@ -45,10 +45,6 @@
                     </view>
                 </block>
             </scroll-view>
-            <view class="cu-item">
-                <view class="content">同类型推荐</view>
-                <view class="action text-gray">更多</view>
-            </view>
         </view>
         <view class="bottom-bar bg-white">
             <view class="btn-group cu-bar tabbar">
@@ -67,9 +63,14 @@
         name: 'BookDetail',
         data() {
             return {
-                novels: null,
-                authorBooks: [],
-                similarBooks: []
+                novels: {
+                    coverUrl: '',
+                    title: '',
+                    author: '',
+                    sex: 'male',
+                    category: ''
+                },
+                authorBooks: []
             }
         },
         onLoad(option) {
@@ -90,7 +91,11 @@
     .book-detail {
         .cu-card {
             width: 100%;
-            max-height: 360upx;
+
+            .introduction {
+                height: 300upx;
+                overflow: auto;
+            }
 
             .cu-item {
                 width: 100%;

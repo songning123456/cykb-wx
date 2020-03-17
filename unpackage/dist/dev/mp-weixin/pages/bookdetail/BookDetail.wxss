@@ -26,7 +26,10 @@
 /* 文章场景相关 */
 .book-detail .cu-card.data-v-268bf866 {
   width: 100%;
-  max-height: 360rpx;
+}
+.book-detail .cu-card .introduction.data-v-268bf866 {
+    height: 300rpx;
+    overflow: auto;
 }
 .book-detail .cu-card .cu-item.data-v-268bf866 {
     width: 100%;

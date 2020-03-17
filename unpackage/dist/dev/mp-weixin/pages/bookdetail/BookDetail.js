@@ -202,10 +202,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
 var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
@@ -264,11 +260,7 @@ var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/catego
 //
 //
 //
-//
-//
-//
-//
-var _default = { name: 'BookDetail', data: function data() {return { novels: null, authorBooks: [], similarBooks: [] };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];} } };exports.default = _default;
+var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', sex: 'male', category: '' }, authorBooks: [] };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];} } };exports.default = _default;
 
 /***/ }),
 
