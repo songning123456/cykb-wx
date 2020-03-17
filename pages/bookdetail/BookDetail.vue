@@ -38,10 +38,10 @@
             <scroll-view scroll-x="true" class="author-books margin-bottom-sm">
                 <block v-for="(item, index) in authorBooks" :key="index">
                     <view class="author-book" @tap="">
-                        <view class="img">
+                        <view class="avatar-img">
                             <uni-image :url="item.coverUrl" class="uni-image"></uni-image>
                         </view>
-                        <text class="item-title">{{item.title}}</text>
+                        <view class="text-cut text-center">{{item.title}}</view>
                     </view>
                 </block>
             </scroll-view>
@@ -58,10 +58,11 @@
 <script>
     import common from '../../util/common'
     import Category from '../../util/category'
+    import request from '../../util/request'
 
     export default {
         name: 'BookDetail',
-        data() {
+        data () {
             return {
                 novels: {
                     coverUrl: '',
@@ -73,16 +74,30 @@
                 authorBooks: []
             }
         },
-        onLoad(option) {
+        onLoad (option) {
             this.novels = JSON.parse(option.novels)
+            this.querySameAuthor()
         },
         methods: {
-            convertSex(sex) {
+            convertSex (sex) {
                 return common.getSex(sex)
             },
-            convertCategory(sex, category) {
+            convertCategory (sex, category) {
                 return Category[sex][category]
             },
+            querySameAuthor () {
+                let params = {
+                    condition: {
+                        author: this.novels.author
+                    }
+                }
+                request.post('/novels/sameAuthor', params).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        // this.authorBooks = data.data.filter(item => item.title === this.novels.title)
+                        this.authorBooks = [data.data[0], data.data[0], data.data[0], data.data[0],data.data[0],data.data[0],data.data[0],data.data[0],];
+                    }
+                })
+            }
         }
     }
 </script>
@@ -93,7 +108,7 @@
             width: 100%;
 
             .introduction {
-                height: 300upx;
+                max-height: 380upx;
                 overflow: auto;
             }
 
@@ -124,7 +139,6 @@
         .author-books {
             white-space: nowrap; // 滚动必须加的属性
             width: 100%;
-            height: 280upx;
             padding: 20upx;
             margin: 0 auto;
 
@@ -134,21 +148,17 @@
                 display: inline-block;
                 vertical-align: top;
 
-                .img {
+                .avatar-img {
                     display: inline-block;
+                    height: 220upx;
+                    width: 165upx;
+                    border-radius: 6upx;
+                    position: relative;
 
                     .uni-image {
-                        width: 170upx;
-                        height: 220upx;
-                        border-radius: 6upx;
+                        width: 100%;
+                        height: 100%;
                     }
-                }
-
-                .item-title {
-                    display: block; // 让字体换行
-                    width: 90%;
-                    font-size: 30upx;
-                    line-height: 40upx;
                 }
             }
         }
