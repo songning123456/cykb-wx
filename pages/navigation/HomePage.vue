@@ -1,7 +1,8 @@
 <template>
     <view class="home-page">
         <view class="cu-list full-size">
-            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index" @tap="bookDetailBtn(item)">
+            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index"
+                  @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
                         <uni-image class="image-size" :url="item.coverUrl"></uni-image>
@@ -32,11 +33,8 @@
         name: 'HomePage',
         data () {
             return {
-                page: {
-                    index: 0,
-                    size: 20,
-                    total: 0
-                },
+                pageSize: 20,
+                pageResult: [],
                 result: []
             }
         },
@@ -44,31 +42,33 @@
             uni.startPullDownRefresh()
         },
         onReachBottom () {
-            if (this.page.index < Math.ceil(this.page.total / this.page.size)) {
-                this.queryHomePage('more')
-            }
+            this.queryHomePage('more')
         },
         onPullDownRefresh () {
             this.queryHomePage('first')
         },
         methods: {
             queryHomePage (type) {
+                let params = Object.create(null)
+                params.pageRecordNum = this.pageSize
                 if (type === 'first') {
-                    this.page.index = 0
-                }
-                let params = {
-                    recordStartNo: this.page.index,
-                    pageRecordNum: this.page.size
+                    params.recordStartNo = 0
+                } else {
+                    if (this.pageResult.length > 0) {
+                        params.condition = Object.create(null)
+                        params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime
+                    } else {
+                        return
+                    }
                 }
                 request.post('/novels/homePage', params).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        this.page.total = data.total;
+                    if (data.status === 200) {
+                        this.pageResult = data.data
                         if (type === 'first') {
                             this.result = data.data
                         } else {
                             this.result = this.result.concat(data.data)
                         }
-                        ++this.page.index
                     }
                 }).finally(() => {
                     if (type === 'first') {
@@ -85,7 +85,7 @@
             convertIntroduction (introduction) {
                 return common.getIntroduction(introduction)
             },
-            bookDetailBtn(novels) {
+            bookDetailBtn (novels) {
                 uni.navigateTo({
                     url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
                 })

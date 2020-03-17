@@ -24,27 +24,27 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.home-page .cu-list.data-v-b195e6b2 {
+.home-page .cu-list.data-v-67bcfebc {
   overflow: auto;
 }
-.home-page .cu-list .cu-card.data-v-b195e6b2 {
+.home-page .cu-list .cu-card.data-v-67bcfebc {
     padding-bottom: 10rpx;
 }
-.home-page .cu-list .cu-card .cu-item.data-v-b195e6b2 {
+.home-page .cu-list .cu-card .cu-item.data-v-67bcfebc {
       padding: unset;
       background: unset;
 }
-.home-page .cu-list .cu-card .cu-item .content.data-v-b195e6b2 {
+.home-page .cu-list .cu-card .cu-item .content.data-v-67bcfebc {
         padding: 0 15rpx;
 }
-.home-page .cu-list .cu-card .cu-item .content .image-size.data-v-b195e6b2 {
+.home-page .cu-list .cu-card .cu-item .content .image-size.data-v-67bcfebc {
           width: 180rpx;
           margin-top: 18rpx;
           height: 8em;
           margin-right: 20rpx;
           border-radius: 6rpx;
 }
-.home-page .cu-list .cu-card .cu-item .content .title.data-v-b195e6b2 {
+.home-page .cu-list .cu-card .cu-item .content .title.data-v-67bcfebc {
           padding: unset;
           height: 60rpx;
           line-height: 72rpx;

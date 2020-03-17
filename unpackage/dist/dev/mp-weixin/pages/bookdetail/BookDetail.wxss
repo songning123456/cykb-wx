@@ -24,60 +24,60 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.book-detail .cu-card.data-v-268bf866 {
+.book-detail .cu-card.data-v-a9e476bc {
   width: 100%;
 }
-.book-detail .cu-card .introduction.data-v-268bf866 {
+.book-detail .cu-card .introduction.data-v-a9e476bc {
     height: 300rpx;
     overflow: auto;
 }
-.book-detail .cu-card .cu-item.data-v-268bf866 {
+.book-detail .cu-card .cu-item.data-v-a9e476bc {
     width: 100%;
     height: 100%;
 }
-.book-detail .cu-card .cu-item .image.data-v-268bf866 {
+.book-detail .cu-card .cu-item .image.data-v-a9e476bc {
       width: 100%;
       height: 100%;
       padding: 30rpx;
       box-sizing: border-box;
       margin: unset;
 }
-.book-detail .cu-card .cu-item .image .image-size.data-v-268bf866 {
+.book-detail .cu-card .cu-item .image .image-size.data-v-a9e476bc {
         width: 165rpx;
         height: 220rpx;
         border-radius: 6rpx;
 }
-.book-detail .cu-card .cu-item .image .cu-tag.data-v-268bf866 {
+.book-detail .cu-card .cu-item .image .cu-tag.data-v-a9e476bc {
         position: unset;
 }
-.book-detail .author-books.data-v-268bf866 {
+.book-detail .author-books.data-v-a9e476bc {
   white-space: nowrap;
   width: 100%;
   height: 280rpx;
   padding: 20rpx;
   margin: 0 auto;
 }
-.book-detail .author-books .author-book.data-v-268bf866 {
+.book-detail .author-books .author-book.data-v-a9e476bc {
     width: 24%;
     margin-right: 20rpx;
     display: inline-block;
     vertical-align: top;
 }
-.book-detail .author-books .author-book .img.data-v-268bf866 {
+.book-detail .author-books .author-book .img.data-v-a9e476bc {
       display: inline-block;
 }
-.book-detail .author-books .author-book .img .uni-image.data-v-268bf866 {
+.book-detail .author-books .author-book .img .uni-image.data-v-a9e476bc {
         width: 170rpx;
         height: 220rpx;
         border-radius: 6rpx;
 }
-.book-detail .author-books .author-book .item-title.data-v-268bf866 {
+.book-detail .author-books .author-book .item-title.data-v-a9e476bc {
       display: block;
       width: 90%;
       font-size: 30rpx;
       line-height: 40rpx;
 }
-.book-detail .bottom-bar.data-v-268bf866 {
+.book-detail .bottom-bar.data-v-a9e476bc {
   bottom: 0;
   position: fixed;
   width: 100%;

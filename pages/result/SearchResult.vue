@@ -33,11 +33,8 @@
         data () {
             return {
                 params: null,
-                page: {
-                    index: 0,
-                    size: 20,
-                    total: 0
-                },
+                pageSize: 20,
+                pageResult: [],
                 result: []
             }
         },
@@ -51,35 +48,37 @@
             uni.startPullDownRefresh()
         },
         onReachBottom () {
-            if (this.page.index < Math.ceil(this.page.total / this.page.size)) {
-                this.queryClassifyResult('more')
-            }
+            this.queryClassifyResult('more')
         },
         onPullDownRefresh () {
             this.queryClassifyResult('first')
         },
         methods: {
             queryClassifyResult (type) {
-                if (type === 'first') {
-                    this.page.index = 0
-                }
                 let params = {
-                    recordStartNo: this.page.index,
-                    pageRecordNum: this.page.size,
+                    pageRecordNum: this.pageSize,
                     condition: {
                         sex: this.params.sex,
                         category: this.params.category
                     }
                 }
+                if (type === 'first') {
+                    params.recordStartNo = 0
+                } else {
+                    if (this.pageResult.length > 0) {
+                        params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime
+                    } else {
+                        return
+                    }
+                }
                 request.post('/novels/classifyResult', params).then(data => {
-                    if (data.status === 200 && data.total > 0) {
-                        this.page.total = data.total;
+                    if (data.status === 200) {
+                        this.pageResult = data.data
                         if (type === 'first') {
                             this.result = data.data
                         } else {
                             this.result = this.result.concat(data.data)
                         }
-                        ++this.page.index
                     }
                 }).finally(() => {
                     if (type === 'first') {
