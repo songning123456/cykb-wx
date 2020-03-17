@@ -1674,9 +1674,9 @@ function normalizeComponent (
 /***/ }),
 
 /***/ 15:
-/*!*****************************************!*\
-  !*** C:/project/cykb-wx/store/store.js ***!
-  \*****************************************/
+/*!*************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/store/store.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8686,9 +8686,9 @@ internalMixin(Vue);
 /***/ }),
 
 /***/ 23:
-/*!******************************************!*\
-  !*** C:/project/cykb-wx/util/request.js ***!
-  \******************************************/
+/*!**************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/util/request.js ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8734,9 +8734,9 @@ request;exports.default = _default;
 /***/ }),
 
 /***/ 24:
-/*!*****************************************!*\
-  !*** C:/project/cykb-wx/util/common.js ***!
-  \*****************************************/
+/*!*************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/util/common.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8787,9 +8787,9 @@ common;exports.default = _default;
 /***/ }),
 
 /***/ 25:
-/*!*******************************************!*\
-  !*** C:/project/cykb-wx/util/category.js ***!
-  \*******************************************/
+/*!***************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/util/category.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8862,9 +8862,9 @@ module.exports = g;
 /***/ }),
 
 /***/ 4:
-/*!*************************************!*\
-  !*** C:/project/cykb-wx/pages.json ***!
-  \*************************************/
+/*!*********************************************!*\
+  !*** D:/WebStormProject/cykb-wx/pages.json ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8874,9 +8874,9 @@ module.exports = g;
 /***/ }),
 
 /***/ 48:
-/*!**********************************************!*\
-  !*** C:/project/cykb-wx/util/convertDate.js ***!
-  \**********************************************/
+/*!******************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/util/convertDate.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9822,9 +9822,9 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 /***/ }),
 
 /***/ 65:
-/*!******************************************!*\
-  !*** C:/project/cykb-wx/util/regular.js ***!
-  \******************************************/
+/*!**************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/util/regular.js ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9838,21 +9838,21 @@ regular;exports.default = _default;
 /***/ }),
 
 /***/ 7:
-/*!******************************************************!*\
-  !*** C:/project/cykb-wx/pages.json?{"type":"style"} ***!
-  \******************************************************/
+/*!**************************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/pages.json?{"type":"style"} ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/navigation/HomePage": { "navigationBarTitleText": "首页", "navigationBarBackgroundColor": "#e54d42", "enablePullDownRefresh": true }, "pages/navigation/Classify": { "navigationBarTitleText": "分类", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true }, "pages/navigation/Search": { "navigationBarTitleText": "搜索", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true }, "pages/navigation/Bookcase": { "navigationBarTitleText": "书架", "navigationBarBackgroundColor": "#e54d42", "enablePullDownRefresh": true }, "pages/navigation/My": { "navigationBarTitleText": "我的", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true }, "pages/comment/Comment": { "navigationBarTitleText": "意见反馈", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true }, "pages/login/Login": { "navigationBarTitleText": "登录", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true }, "pages/result/SearchResult": { "navigationBarTitleText": "", "navigationBarBackgroundColor": "#e54d42", "enablePullDownRefresh": true }, "pages/settings/Settings": { "navigationBarTitleText": "设置", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true }, "pages/bookdetail/BookDetail": { "navigationBarTitleText": "书籍详情", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true } }, "globalStyle": { "navigationBarTextStyle": "white", "navigationBarTitleText": "畅游看吧", "navigationBarBackgroundColor": "#f7f6f2", "backgroundColor": "#f7f6f2" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/navigation/HomePage": { "navigationBarTitleText": "首页", "navigationBarBackgroundColor": "#e54d42", "enablePullDownRefresh": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/navigation/Classify": { "navigationBarTitleText": "分类", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/navigation/Search": { "navigationBarTitleText": "搜索", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/navigation/Bookcase": { "navigationBarTitleText": "书架", "navigationBarBackgroundColor": "#e54d42", "enablePullDownRefresh": true, "usingComponents": { "inset-login": "/components/InsetLogin" }, "usingAutoImportComponents": {} }, "pages/navigation/My": { "navigationBarTitleText": "我的", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/comment/Comment": { "navigationBarTitleText": "意见反馈", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/login/Login": { "navigationBarTitleText": "登录", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/result/SearchResult": { "navigationBarTitleText": "", "navigationBarBackgroundColor": "#e54d42", "enablePullDownRefresh": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/settings/Settings": { "navigationBarTitleText": "设置", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/bookdetail/BookDetail": { "navigationBarTitleText": "书籍详情", "navigationBarBackgroundColor": "#e54d42", "disableScroll": true, "usingComponents": {}, "usingAutoImportComponents": {} } }, "globalStyle": { "navigationBarTextStyle": "white", "navigationBarTitleText": "畅游看吧", "navigationBarBackgroundColor": "#f7f6f2", "backgroundColor": "#f7f6f2" } };exports.default = _default;
 
 /***/ }),
 
 /***/ 8:
-/*!*****************************************************!*\
-  !*** C:/project/cykb-wx/pages.json?{"type":"stat"} ***!
-  \*****************************************************/
+/*!*************************************************************!*\
+  !*** D:/WebStormProject/cykb-wx/pages.json?{"type":"stat"} ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
