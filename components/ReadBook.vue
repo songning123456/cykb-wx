@@ -25,20 +25,6 @@
               :style="[{ transform: 'translate(' + set.translateX + 'upx, ' + set.translateY + 'upx)' },bookStyle]">
             <view class="pageText">{{ bookText }}</view>
         </view>
-        <!-- 底部电池部分 -->
-        <view class="footer" :style="bookStyle">
-            <view class="f-left">
-                <text class="iconfont icon-dianchi">
-                    <text class="icon-dianchi-center" :style="{ width: system.quantity + '%' }"></text>
-                </text>
-                <text class="time">{{ system.time }}</text>
-            </view>
-            <view class="f-center"></view>
-            <view class="f-right">
-                {{ scrollDirection === 'leftRight' ? page.pageNum : topPage.pageNum }}/{{ scrollDirection ===
-                'leftRight' ? page.pageCount : topPage.pageCount }}
-            </view>
-        </view>
     </view>
 </template>
 
@@ -65,6 +51,20 @@
                 default: function () {
                     return {}
                 }
+            }
+        },
+        computed: {
+            pageVal () {
+                return (this.scrollDirection === 'leftRight' ? this.page.pageNum : this.topPage.pageNum) + '/' + (this.scrollDirection ===
+                'leftRight' ? this.page.pageCount : this.topPage.pageCount);
+            }
+        },
+        watch: {
+            pageVal: {
+                handler(newVal, oldVal) {
+                    this.$emit('changePage', newVal);
+                },
+                immediate: true
             }
         },
         data () {
@@ -351,17 +351,17 @@
 
 <style lang="scss" scoped>
     .read-book {
-        width: 750upx;
+        width: 750 upx;
         height: 100%;
 
         .leftRight {
-            column-width: 750upx;
+            column-width: 750 upx;
             column-count: 1;
             width: auto;
             height: 100%;
             transition: transform 0.2s;
-            column-gap: 40upx;
-            padding: 20upx;
+            column-gap: 40 upx;
+            padding: 20 upx;
             box-sizing: border-box;
             word-wrap: break-word;
             margin-bottom: 10px;
@@ -370,49 +370,11 @@
 
         .topBottom {
             height: auto;
-            column-gap: 40upx;
-            padding: 20upx;
+            column-gap: 40 upx;
+            padding: 20 upx;
             box-sizing: border-box;
             word-wrap: break-word;
             margin-bottom: 10px;
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1px 15px 0;
-            font-size: 12px !important;
-            line-height: initial !important;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-
-            .f-left {
-                display: flex;
-                align-items: center;
-
-                .icon-dianchi {
-                    width: 13px;
-                    display: inline-block;
-                    position: relative;
-
-                    .icon-dianchi-center {
-                        height: 5px;
-                        background: #888;
-                        position: absolute;
-                        left: 9upx;
-                        top: 12upx;
-                        display: inline-block;
-                    }
-                }
-
-                .time {
-                    margin-left: 14px;
-                }
-            }
         }
 
         .mask {

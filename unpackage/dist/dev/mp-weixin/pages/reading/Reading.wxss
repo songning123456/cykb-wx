@@ -28,16 +28,6 @@
   width: 100%;
   height: 100%;
 }
-.reading .mask-top.data-v-9618b748 {
-    position: fixed;
-    height: 40rpx;
-    -webkit-transition: all 0.2s;
-    transition: all 0.2s;
-    width: 100%;
-    z-index: 1000;
-    margin: auto;
-    border-radius: 0 0 4px 4px;
-}
 .reading .mask-bottom.data-v-9618b748 {
     position: fixed;
     height: 300rpx;
@@ -115,5 +105,16 @@
         -webkit-box-align: center;
         -webkit-align-items: center;
                 align-items: center;
+}
+.reading .mask-bottom .v3.v-page.data-v-9618b748 {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        position: relative;
+}
+.reading .mask-bottom .v3.v-page .v-page-item.data-v-9618b748 {
+          position: absolute;
+          right: 0;
+          background-color: unset;
 }
 

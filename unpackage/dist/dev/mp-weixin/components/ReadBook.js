@@ -166,20 +166,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 var DLTime, timeInter;
 //非父子组件传值
@@ -203,6 +189,20 @@ var _default2 =
       default: function _default() {
         return {};
       } } },
+
+
+  computed: {
+    pageVal: function pageVal() {
+      return (this.scrollDirection === 'leftRight' ? this.page.pageNum : this.topPage.pageNum) + '/' + (this.scrollDirection ===
+      'leftRight' ? this.page.pageCount : this.topPage.pageCount);
+    } },
+
+  watch: {
+    pageVal: {
+      handler: function handler(newVal, oldVal) {
+        this.$emit('changePage', newVal);
+      },
+      immediate: true } },
 
 
   data: function data() {

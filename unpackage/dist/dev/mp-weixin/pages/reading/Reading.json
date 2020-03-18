@@ -1,5 +1,6 @@
 {
-  "navigationStyle": "custom",
+  "navigationBarTitleText": "",
+  "navigationBarBackgroundColor": "#f0f0f0",
   "usingComponents": {
     "uni-tag": "/components/UniTag",
     "uni-icon": "/components/UniIcon",
