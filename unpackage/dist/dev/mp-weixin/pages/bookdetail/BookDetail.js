@@ -202,6 +202,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
 var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
@@ -261,8 +265,11 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', sex: 'male', category: '' }, authorBooks: [] };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);this.querySameAuthor();}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];}, querySameAuthor: function querySameAuthor() {var _this = this;var params = { condition: { author: this.novels.author } };_request.default.post('/novels/sameAuthor', params).then(function (data) {if (data.status === 200 && data.total > 0) {// this.authorBooks = data.data.filter(item => item.title === this.novels.title)
-          _this.authorBooks = [data.data[0], data.data[0], data.data[0], data.data[0], data.data[0], data.data[0], data.data[0], data.data[0]];}});} } };exports.default = _default;
+//
+//
+//
+//
+var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', sex: 'male', category: '' }, authorBooks: [], showMore: true };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);this.querySameAuthor();}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];}, changeShowMore: function changeShowMore() {this.showMore = !this.showMore;}, querySameAuthor: function querySameAuthor() {var _this = this;var params = { condition: { author: this.novels.author } };_request.default.post('/novels/sameAuthor', params).then(function (data) {if (data.status === 200 && data.total > 0) {_this.authorBooks = data.data.filter(function (item) {return item.title !== _this.novels.title;});}});} } };exports.default = _default;
 
 /***/ }),
 
