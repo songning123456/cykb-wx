@@ -79,6 +79,12 @@
         "navigationBarBackgroundColor": "#e54d42",
         "disableScroll": true
       }
+    },
+    {
+      "path": "pages/reading/Reading",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {

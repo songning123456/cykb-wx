@@ -9,7 +9,8 @@
     "pages/login/Login",
     "pages/result/SearchResult",
     "pages/settings/Settings",
-    "pages/bookdetail/BookDetail"
+    "pages/bookdetail/BookDetail",
+    "pages/reading/Reading"
   ],
   "subPackages": [],
   "window": {
@@ -58,6 +59,5 @@
   },
   "usingComponents": {
     "uni-image": "/components/UniImage"
-  },
-  "sitemapLocation": "sitemap24.json"
+  }
 }

@@ -53,7 +53,7 @@
         <view class="bottom-bar bg-white">
             <view class="btn-group cu-bar tabbar">
                 <button class="cu-btn text-red line-red shadow">加入书架</button>
-                <button class="cu-btn bg-red shadow-blur">开始阅读</button>
+                <button class="cu-btn bg-red shadow-blur" @tap="startReading">开始阅读</button>
             </view>
         </view>
     </view>
@@ -109,6 +109,9 @@
                 uni.navigateTo({
                     url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
                 })
+            },
+            startReading() {
+                uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels)})
             }
         }
     }
