@@ -40,7 +40,7 @@
                 </view>
                 <scroll-view scroll-x="true" scroll-y="true" class="author-books margin-bottom-sm" v-show="showMore">
                     <block v-for="(item, index) in authorBooks" :key="index">
-                        <view class="author-book" @tap="">
+                        <view class="author-book" @tap="querySimilarBook(item)">
                             <view class="avatar-img">
                                 <uni-image :url="item.coverUrl" class="uni-image"></uni-image>
                             </view>
@@ -103,6 +103,11 @@
                     if (data.status === 200 && data.total > 0) {
                         this.authorBooks = data.data.filter(item => item.title !== this.novels.title)
                     }
+                })
+            },
+            querySimilarBook (novels) {
+                uni.navigateTo({
+                    url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
                 })
             }
         }

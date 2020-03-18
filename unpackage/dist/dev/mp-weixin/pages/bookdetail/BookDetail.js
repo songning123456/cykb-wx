@@ -144,7 +144,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -269,7 +269,8 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', sex: 'male', category: '' }, authorBooks: [], showMore: true };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);this.querySameAuthor();}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];}, changeShowMore: function changeShowMore() {this.showMore = !this.showMore;}, querySameAuthor: function querySameAuthor() {var _this = this;var params = { condition: { author: this.novels.author } };_request.default.post('/novels/sameAuthor', params).then(function (data) {if (data.status === 200 && data.total > 0) {_this.authorBooks = data.data.filter(function (item) {return item.title !== _this.novels.title;});}});} } };exports.default = _default;
+var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', sex: 'male', category: '' }, authorBooks: [], showMore: true };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);this.querySameAuthor();}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];}, changeShowMore: function changeShowMore() {this.showMore = !this.showMore;}, querySameAuthor: function querySameAuthor() {var _this = this;var params = { condition: { author: this.novels.author } };_request.default.post('/novels/sameAuthor', params).then(function (data) {if (data.status === 200 && data.total > 0) {_this.authorBooks = data.data.filter(function (item) {return item.title !== _this.novels.title;});}});}, querySimilarBook: function querySimilarBook(novels) {uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });} } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
