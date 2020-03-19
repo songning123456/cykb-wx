@@ -22,7 +22,7 @@
         </view>
         <!-- 小说文字内容部分 -->
         <view :class="scrollDirection === 'leftRight' ? 'leftRight' : 'topBottom'"
-              :style="[{ transform: 'translate(' + set.translateX + 'upx, ' + set.translateY + 'upx)' },bookStyle]">
+              :style="[{ transform: 'translate(' + set.translateX + 'rpx, ' + set.translateY + 'rpx)' },bookStyle]">
             <view class="pageText">{{ bookText }}</view>
         </view>
     </view>
@@ -351,17 +351,17 @@
 
 <style lang="scss" scoped>
     .read-book {
-        width: 750 upx;
+        width: 750rpx;
         height: 100%;
 
         .leftRight {
-            column-width: 750 upx;
+            column-width: 750rpx;
             column-count: 1;
             width: auto;
             height: 100%;
             transition: transform 0.2s;
-            column-gap: 40 upx;
-            padding: 20 upx;
+            column-gap: 40rpx;
+            padding: 20rpx;
             box-sizing: border-box;
             word-wrap: break-word;
             margin-bottom: 10px;
@@ -370,8 +370,8 @@
 
         .topBottom {
             height: auto;
-            column-gap: 40 upx;
-            padding: 20 upx;
+            column-gap: 40rpx;
+            padding: 20rpx;
             box-sizing: border-box;
             word-wrap: break-word;
             margin-bottom: 10px;

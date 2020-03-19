@@ -7,7 +7,7 @@
         </read-book>
 
         <!-- 遮罩层下部分 -->
-        <view class="mask-bottom" :style="{bottom:mask.showMask?0:-300+'upx','background':mask.background}">
+        <view class="mask-bottom" :style="{bottom:mask.showMask?0:-300+'rpx','background':mask.background}">
             <view class="v1">
                 <view class="slider-warp">
                     字体：
@@ -177,7 +177,7 @@
 
         .mask-bottom {
             position: fixed;
-            height: 300upx;
+            height: 300rpx;
             transition: all 0.2s;
             width: 100%;
             z-index: 1000;

@@ -25,12 +25,12 @@
 /* 透明度 */
 /* 文章场景相关 */
 .read-book.data-v-ff35f054 {
-  width: 750 upx;
+  width: 750rpx;
   height: 100%;
 }
 .read-book .leftRight.data-v-ff35f054 {
-    -webkit-column-width: 750 upx;
-            column-width: 750 upx;
+    -webkit-column-width: 750rpx;
+            column-width: 750rpx;
     -webkit-column-count: 1;
             column-count: 1;
     width: auto;
@@ -39,18 +39,18 @@
     transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
     transition: transform 0.2s, -webkit-transform 0.2s;
-    -webkit-column-gap: 40 upx;
-            column-gap: 40 upx;
-    padding: 20 upx;
+    -webkit-column-gap: 40rpx;
+            column-gap: 40rpx;
+    padding: 20rpx;
     box-sizing: border-box;
     word-wrap: break-word;
     margin-bottom: 10px;
 }
 .read-book .topBottom.data-v-ff35f054 {
     height: auto;
-    -webkit-column-gap: 40 upx;
-            column-gap: 40 upx;
-    padding: 20 upx;
+    -webkit-column-gap: 40rpx;
+            column-gap: 40rpx;
+    padding: 20rpx;
     box-sizing: border-box;
     word-wrap: break-word;
     margin-bottom: 10px;

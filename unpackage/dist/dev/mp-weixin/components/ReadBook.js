@@ -88,9 +88,9 @@ var render = function() {
       transform:
         "translate(" +
         _vm.set.translateX +
-        "upx, " +
+        "rpx, " +
         _vm.set.translateY +
-        "upx)"
+        "rpx)"
     },
     _vm.bookStyle
   ])
