@@ -24,95 +24,91 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.reading.data-v-9618b748 {
-  width: 100%;
-  height: 100%;
-}
 .reading .mask-bottom.data-v-9618b748 {
-    position: fixed;
-    height: 300 rpx;
-    -webkit-transition: all 0.2s;
-    transition: all 0.2s;
-    width: 100%;
-    z-index: 1000;
-    margin: auto;
-    border-radius: 10px 10px 0 0;
-    padding: 10px;
-    box-sizing: border-box;
+  position: fixed;
+  height: 300rpx;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  width: 100%;
+  z-index: 1000;
+  margin: auto;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+  box-sizing: border-box;
 }
 .reading .mask-bottom .v1.data-v-9618b748 {
-      width: 100%;
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+            align-items: center;
+}
+.reading .mask-bottom .v1 .slider-warp.data-v-9618b748 {
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+              flex: 1;
       -webkit-box-align: center;
       -webkit-align-items: center;
               align-items: center;
 }
-.reading .mask-bottom .v1 .slider-warp.data-v-9618b748 {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
+.reading .mask-bottom .v1 .slider-warp .slider.data-v-9618b748 {
         -webkit-box-flex: 1;
         -webkit-flex: 1;
                 flex: 1;
-        -webkit-box-align: center;
-        -webkit-align-items: center;
-                align-items: center;
-}
-.reading .mask-bottom .v1 .slider-warp .slider.data-v-9618b748 {
-          -webkit-box-flex: 1;
-          -webkit-flex: 1;
-                  flex: 1;
 }
 .reading .mask-bottom .v2.data-v-9618b748 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    -webkit-justify-content: space-around;
+            justify-content: space-around;
+    margin-top: 10px;
+}
+.reading .mask-bottom .v2 .v2-circle.data-v-9618b748 {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
-      width: 100%;
-      -webkit-justify-content: space-around;
-              justify-content: space-around;
-      margin-top: 10px;
-}
-.reading .mask-bottom .v2 .v2-circle.data-v-9618b748 {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-pack: center;
-        -webkit-justify-content: center;
-                justify-content: center;
-        -webkit-box-align: center;
-        -webkit-align-items: center;
-                align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+              justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+              align-items: center;
 }
 .reading .mask-bottom .v3.data-v-9618b748 {
-      margin-top: 10px;
+    margin-top: 10px;
 }
 .reading .mask-bottom .v3 .v3-item.data-v-9618b748 {
-        height: 30px;
-        padding: 0 30rpx;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-pack: center;
-        -webkit-justify-content: center;
-                justify-content: center;
-        -webkit-box-align: center;
-        -webkit-align-items: center;
-                align-items: center;
+      height: 30px;
+      padding: 0 30rpx;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+              justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+              align-items: center;
 }
 .reading .mask-bottom .v3.v-page.data-v-9618b748 {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        position: relative;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      position: relative;
 }
 .reading .mask-bottom .v3.v-page .v-page-item.data-v-9618b748 {
-          position: absolute;
-          right: 0;
-          background-color: unset;
+        position: absolute;
+        right: 0;
+        background-color: unset;
 }
 

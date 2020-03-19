@@ -29,8 +29,6 @@
 </template>
 
 <script>
-    let DLTime, timeInter
-    //非父子组件传值
 
     export default {
         name: 'ReadBook',
@@ -98,17 +96,6 @@
         mounted () {
             let that = this
             this.getSystemInfo()
-            // #ifdef APP-PLUS
-            //每分钟获取一次电量
-            this.dianliang()
-            DLTime = setInterval(() => {
-                this.dianliang()
-            }, 60000)
-            //每秒获取一次时间
-            timeInter = setInterval(() => {
-                this.getTimes()
-            }, 1000)
-            // #endif
 
             //监听字体改变时初始化页数
             uni.$off('lz-red-book-change')
@@ -304,42 +291,6 @@
                     // console.log('当前页数', page);
                     callback(page)
                 }).exec()
-            },
-
-            //获取系统电量
-            dianliang () {
-                var that = this
-                if (uni.getSystemInfoSync().platform !== 'ios') {
-                    var main = plus.android.runtimeMainActivity()
-                    var Intent = plus.android.importClass('android.content.Intent')
-                    var recevier = plus.android.implements('io.dcloud.feature.internal.reflect.BroadcastReceiver', {
-                        onReceive: function (context, intent) {
-                            var action = intent.getAction()
-                            if (action === Intent.ACTION_BATTERY_CHANGED) {
-                                var level = intent.getIntExtra('level', 0) //电量
-                                var voltage = intent.getIntExtra('voltage', 0) //电池电压
-                                var temperature = intent.getIntExtra('temperature', 0) //电池温度
-                                that.system.quantity = level //电量
-                            }
-                        }
-                    })
-                    var IntentFilter = plus.android.importClass('android.content.IntentFilter')
-                    var filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-                    main.registerReceiver(recevier, filter)
-                } else {
-                    var UIDevice = plus.ios.import('UIDevice')
-                    var dev = UIDevice.currentDevice()
-                    if (!dev.isBatteryMonitoringEnabled()) {
-                        dev.setBatteryMonitoringEnabled(true)
-                    }
-                    var level = dev.batteryLevel()
-                    that.system.quantity = level * 100
-                }
-            },
-            getTimes () {
-                var times = new Date()
-                this.system.time =
-                    (times.getHours() < 10 ? '0' + times.getHours() : times.getHours()) + ':' + (times.getMinutes() < 10 ? '0' + times.getMinutes() : times.getMinutes())
             },
             //点击中间位置
             clickCenter () {

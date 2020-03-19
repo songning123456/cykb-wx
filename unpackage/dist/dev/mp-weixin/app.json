@@ -59,6 +59,5 @@
   },
   "usingComponents": {
     "uni-image": "/components/UniImage"
-  },
-  "sitemapLocation": "sitemap90.json"
+  }
 }

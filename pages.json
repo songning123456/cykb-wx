@@ -84,7 +84,8 @@
       "path": "pages/reading/Reading",
       "style": {
         "navigationBarTitleText": "",
-        "navigationBarBackgroundColor": "#f0f0f0"
+        "navigationBarBackgroundColor": "#f0f0f0",
+        "backgroundColor": "#f0f0f0"
       }
     }
   ],

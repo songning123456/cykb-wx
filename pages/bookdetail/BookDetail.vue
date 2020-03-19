@@ -35,8 +35,8 @@
                 </view>
                 <view class="cu-item" @click="changeShowMore">
                     <view class="content">作者还写过</view>
-                    <view class="action text-gray">
-                        <text class="lg text-gray" :class="showMore?'cuIcon-unfold':'cuIcon-right'"></text></view>
+                    <view class="action text-gray" :class="{'rotate-90': showMore}">
+                        <text class="lg text-gray cuIcon-right"></text></view>
                 </view>
                 <scroll-view scroll-x="true" scroll-y="true" class="author-books margin-bottom-sm" v-show="showMore">
                     <block v-for="(item, index) in authorBooks" :key="index">

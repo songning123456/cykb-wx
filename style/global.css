@@ -19,3 +19,7 @@ page {
 .no-bg-color {
     background-color: unset !important;
 }
+
+.rotate-90 {
+    transform: rotate(90deg);
+}
