@@ -41,10 +41,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   var a0 = {
-    background: _vm.set.background,
-    "font-size": _vm.set.fontSize + "px",
-    "line-height": _vm.set.lineHeight + "px",
-    color: _vm.set.fontColor
+    background: _vm.style.background,
+    "font-size": _vm.style.fontSize + "px",
+    "line-height": _vm.style.lineHeight + "px",
+    color: _vm.style.fontColor
   }
   _vm.$mp.data = Object.assign(
     {},
@@ -142,7 +142,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 {
   name: 'Reading',
   components: { UniTag: UniTag, UniIcon: UniIcon, ReadBook: ReadBook },
@@ -153,14 +152,14 @@ __webpack_require__.r(__webpack_exports__);
         background: '#fff',
         backgroundIndex: 0 },
 
-      set: {
+      style: {
         background: '#f0f0f0', //页面背景颜色
         fontSize: 18, //字体大小
         lineHeight: 28, //字体间距
         fontColor: '#000', //字体颜色
         scrollDirection: 'leftRight' //滚动方向leftRight左右，上下topBottom
       },
-      arr: [
+      colorArr: [
       {
         background: '#f0f0f0', //背景色
         maskBg: '#fff', //遮罩层色
@@ -211,8 +210,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     //点击中间
     clickCenter: function clickCenter() {
-      var that = this;
-      that.mask.showMask = !that.mask.showMask;
+      this.mask.showMask = !this.mask.showMask;
     },
     //滚动到最后一页
     scrollEnd: function scrollEnd() {
@@ -228,30 +226,31 @@ __webpack_require__.r(__webpack_exports__);
     },
     //滑块设置字体间距或大小
     sliderChange: function sliderChange(e, type) {
-      var that = this;
       if (type === 'fontSize') {
         console.log('value 发生变化：' + e.detail.value);
-        that.set.fontSize = e.detail.value;
+        this.style.fontSize = e.detail.value;
       } else {
-        that.set.lineHeight = e.detail.value;
+        this.style.lineHeight = e.detail.value;
       }
       //重新计算页面页数
       uni.$emit('lz-red-book-change');
     },
     //修改滚动方向
     changeScrollDirection: function changeScrollDirection(text) {
-      var that = this;
-      that.set.scrollDirection = text;
+      this.style.scrollDirection = text;
       //重新计算页面页数
       uni.$emit('lz-red-book-change', 'changeScrollDirection');
     },
     //修改背景颜色
     changeBackground: function changeBackground(index) {
-      var that = this;
-      that.mask.backgroundIndex = index;
-      that.set.background = that.arr[index].background; //背景颜色
-      that.set.fontColor = that.arr[index].fontColor; //字体颜色
-      that.mask.background = that.arr[index].maskBg; //遮罩背景色
+      this.mask.backgroundIndex = index;
+      this.style.background = this.colorArr[index].background; //背景颜色
+      this.style.fontColor = this.colorArr[index].fontColor; //字体颜色
+      this.mask.background = this.colorArr[index].maskBg; //遮罩背景色
+      uni.setNavigationBarColor({
+        // 字体颜色 仅支持 #ffffff 和 #000000
+        frontColor: '#000000',
+        backgroundColor: this.colorArr[index].background });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

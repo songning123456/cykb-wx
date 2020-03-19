@@ -1,7 +1,7 @@
 <template>
-    <view class="reading" :style="{ height: set.screenHeight,background: set.background}">
-        <read-book :bookText="content_text" :scrollDirection="set.scrollDirection"
-                   :bookStyle="{ background:set.background,'font-size':set.fontSize+'px','line-height':set.lineHeight+'px','color':set.fontColor}"
+    <view class="reading" :style="{ height: style.screenHeight,background: style.background}">
+        <read-book :bookText="content_text" :scrollDirection="style.scrollDirection"
+                   :bookStyle="{ background:style.background,'font-size':style.fontSize+'px','line-height':style.lineHeight+'px','color':style.fontColor}"
                    @clickCenter="clickCenter" @scrollEnd="scrollEnd" @scrollStart="scrollStart"
                    @changePage="changePage">
         </read-book>
@@ -12,36 +12,35 @@
                 <view class="slider-warp">
                     字体：
                     <slider class="slider" block-size="20" activeColor="#FFCC33" :step="2" backgroundColor="#000000"
-                            block-color="#8A6DE9" :value="set.fontSize" @change="sliderChange($event,'fontSize')"
+                            block-color="#8A6DE9" :value="style.fontSize" @change="sliderChange($event,'fontSize')"
                             min="18" max="30"></slider>
                 </view>
                 <view class="slider-warp">
                     间距：
                     <slider class="slider" block-size="20" activeColor="#FFCC33" :step="2" backgroundColor="#000000"
-                            block-color="#8A6DE9" :value="set.lineHeight" @change="sliderChange($event,'padding')"
+                            block-color="#8A6DE9" :value="style.lineHeight" @change="sliderChange($event,'padding')"
                             min="26" max="50"></slider>
                 </view>
             </view>
             <view class="v1">
                 滚动方向：
-                <uni-tag text="左右" :inverted="set.scrollDirection==='topBottom'" type="primary"
+                <uni-tag text="左右" :inverted="style.scrollDirection==='topBottom'" type="primary"
                          @click="changeScrollDirection('leftRight')" size="small"/>
-                <uni-tag text="上下" :inverted="set.scrollDirection==='leftRight'" type="primary"
+                <uni-tag text="上下" :inverted="style.scrollDirection==='leftRight'" type="primary"
                          @click="changeScrollDirection('topBottom')" size="small"
                          style="color: #333333; margin-left: 10px;"/>
             </view>
             <view class="v2">
-                <view v-for="(item,index) in arr" :key="index" :class="mask.backgroundIndex===index?'color-warp':''"
-                      class="v1-color" @click="changeBackground(index)">
-                    <uni-icon type="smallcircle-filled" size="26" :color="item.color"></uni-icon>
+                <view v-for="(item, index) in colorArr" :key="index" class="v2-circle" :style="'background-color:' + item.background" @click="changeBackground(index)">
+                    <text class="cuIcon-check text-red" v-show="mask.backgroundIndex===index"></text>
                 </view>
             </view>
             <view class="v3 v-page">
-                <view class="v3-item">
-                    <uni-icon type="settings" size="20"></uni-icon>
+                <view class="v3-item" :style="'color:' + style.fontColor">
+                    <text class="cuIcon-sort"></text>
                     目录
                 </view>
-                <view class="v3-item v-page-item">
+                <view class="v3-item v-page-item" :style="'color:' + style.fontColor">
                     {{currentPage}}
                 </view>
             </view>
@@ -64,14 +63,14 @@
                     background: '#fff',
                     backgroundIndex: 0,
                 },
-                set: {
+                style: {
                     background: '#f0f0f0',//页面背景颜色
                     fontSize: 18,//字体大小
                     lineHeight: 28,//字体间距
                     fontColor: '#000',//字体颜色
                     scrollDirection: 'leftRight',//滚动方向leftRight左右，上下topBottom
                 },
-                arr: [
+                colorArr: [
                     {
                         background: '#f0f0f0',//背景色
                         maskBg: '#fff',//遮罩层色
@@ -122,8 +121,7 @@
             },
             //点击中间
             clickCenter () {
-                let that = this
-                that.mask.showMask = !that.mask.showMask
+                this.mask.showMask = !this.mask.showMask
             },
             //滚动到最后一页
             scrollEnd () {
@@ -139,31 +137,32 @@
             },
             //滑块设置字体间距或大小
             sliderChange (e, type) {
-                let that = this
                 if (type === 'fontSize') {
                     console.log('value 发生变化：' + e.detail.value)
-                    that.set.fontSize = e.detail.value
+                    this.style.fontSize = e.detail.value
                 } else {
-                    that.set.lineHeight = e.detail.value
+                    this.style.lineHeight = e.detail.value
                 }
                 //重新计算页面页数
                 uni.$emit('lz-red-book-change')
             },
             //修改滚动方向
             changeScrollDirection (text) {
-                let that = this
-                that.set.scrollDirection = text
+                this.style.scrollDirection = text
                 //重新计算页面页数
                 uni.$emit('lz-red-book-change', 'changeScrollDirection')
             },
             //修改背景颜色
             changeBackground (index) {
-                let that = this
-                that.mask.backgroundIndex = index
-                that.set.background = that.arr[index].background//背景颜色
-                that.set.fontColor = that.arr[index].fontColor//字体颜色
-                that.mask.background = that.arr[index].maskBg//遮罩背景色
-
+                this.mask.backgroundIndex = index
+                this.style.background = this.colorArr[index].background//背景颜色
+                this.style.fontColor = this.colorArr[index].fontColor//字体颜色
+                this.mask.background = this.colorArr[index].maskBg//遮罩背景色
+                uni.setNavigationBarColor({
+                    // 字体颜色 仅支持 #ffffff 和 #000000
+                    frontColor: '#000000',
+                    backgroundColor: this.colorArr[index].background,
+                })
             },
 
         }
@@ -177,7 +176,7 @@
 
         .mask-bottom {
             position: fixed;
-            height: 300rpx;
+            height: 300 rpx;
             transition: all 0.2s;
             width: 100%;
             z-index: 1000;
@@ -208,11 +207,10 @@
                 justify-content: space-around;
                 margin-top: 10px;
 
-                .color-warp {
-                    border: 1px solid #6d583b;
-                    border-radius: 50%;
+                .v2-circle {
                     width: 26px;
                     height: 26px;
+                    border-radius: 50%;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -223,9 +221,8 @@
                 margin-top: 10px;
 
                 .v3-item {
-                    width: 100px;
                     height: 30px;
-                    background: #f7f7f7;
+                    padding: 0 30rpx;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -234,6 +231,7 @@
                 &.v-page {
                     display: flex;
                     position: relative;
+
                     .v-page-item {
                         position: absolute;
                         right: 0;
