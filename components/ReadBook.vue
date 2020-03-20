@@ -180,7 +180,9 @@
                 if (that.scrollDirection === 'leftRight') {
                     that.computedPercentageRight((page) => {
                         console.log(page)
-                        that.page.pageNum = page
+                       if (page > 0) {
+                           that.page.pageNum = page
+                       }
                         if (page < 0) {
                             that.$emit('scrollStart')
                             that.page.pageNum = 1
@@ -227,7 +229,6 @@
                         if (page > that.topPage.pageCount || page === that.topPage.pageCount) {
                             that.topPage.pageNum = that.topPage.pageCount
                             that.$emit('scrollEnd')
-                            return
                         }
                         // that.set.translateY -= that.set.screenHeight;
                     })
@@ -248,7 +249,6 @@
                                 that.$emit('scrollStart')
                             }
                             that.set.translateY = 0
-                            return
                         }
                         // that.set.translateY += that.set.screenHeight;
                     })
