@@ -231,9 +231,9 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       novels: null,
       //正文
       chapterInfo: {},
-      currentChapterIndex: -1,
+      currentChapterId: null,
       directory: [],
-      scrollPosition: -1,
+      scrollPosition: 0,
       hasExist: false };
 
   },
@@ -267,6 +267,13 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       });
     }
   },
+  watch: {
+    currentChapterId: function currentChapterId(newVal, oldVal) {
+      if (newVal && oldVal) {
+        this.queryNewChapter();
+      }
+    } },
+
   methods: {
     existLoadBtn: function existLoadBtn() {var _this2 = this;
       var params = {
@@ -279,9 +286,9 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
         if (data.status === 200 && data.data.length) {
           _this2.chapterInfo = data.data[0];
           _this2.directory = data.listExt;
-          _this2.compareChapterIndex();
+          _this2.currentChapterId = _this2.chapterInfo.currentChapterId;
           _this2.$nextTick(function () {
-            _this2.scrollPosition = uni.getStorageSync(_this2.novels.novelsId + ':scrollTop') || -1;
+            _this2.scrollPosition = uni.getStorageSync(_this2.novels.novelsId + ':scrollTop') || 0;
           });
         }
       }).finally(function () {
@@ -298,19 +305,43 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
         if (data.status === 200 && data.data.length) {
           _this3.chapterInfo = data.data[0];
           _this3.directory = data.listExt;
-          _this3.compareChapterIndex();
+          _this3.currentChapterId = _this3.chapterInfo.currentChapterId;
         }
       }).finally(function () {
         uni.hideLoading();
       });
     },
-    compareChapterIndex: function compareChapterIndex() {
+    currentChapterIndex: function currentChapterIndex() {
       for (var i = 0, len = this.directory.length; i < len; i++) {
         if (this.directory[i].chapterId === this.chapterInfo.currentChapterId) {
-          this.currentChapterIndex = i;
-          break;
+          return i;
         }
       }
+    },
+    queryNewChapter: function queryNewChapter() {var _this4 = this;
+      var params = {
+        condition: {
+          novelsId: this.novels.novelsId,
+          chaptersId: this.currentChapterId } };
+
+
+      if (this.$store.state.userInfo) {
+        params.condition.uniqueId = this.$store.state.userInfo.uniqueId;
+      }
+      _request.default.post('/relation/readNewChapter', params).then(function (data) {
+        if (data.status === 200 && data.data.length) {
+          _this4.chapterInfo = data.data[0];
+          _this4.currentChapterId = _this4.chapterInfo.currentChapterId;
+          try {
+            uni.setStorageSync(_this4.novels.novelsId + ':scrollTop', 0);
+          } catch (e) {
+            // error
+          }
+          _this4.$nextTick(function () {
+            _this4.scrollPosition = 0;
+          });
+        }
+      });
     },
     //点击中间
     clickCenter: function clickCenter() {
@@ -323,14 +354,15 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       console.log('bottom:' + JSON.stringify(e));
     },
     scrollOn: function scrollOn(e) {
-      uni.setStorage({
-        key: this.novels.novelsId + ':scrollTop',
-        data: e.target.scrollTop });
-
+      try {
+        uni.setStorageSync(this.novels.novelsId + ':scrollTop', e.target.scrollTop);
+      } catch (e) {
+        // error
+      }
     },
     directoryBtn: function directoryBtn() {
       uni.navigateTo({
-        url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterIndex=' + this.currentChapterIndex });
+        url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.currentChapterId });
 
     },
     //滑块设置字体间距或大小

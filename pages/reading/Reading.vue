@@ -96,9 +96,9 @@
                 novels: null,
                 //正文
                 chapterInfo: {},
-                currentChapterIndex: -1,
+                currentChapterId: null,
                 directory: [],
-                scrollPosition: -1,
+                scrollPosition: 0,
                 hasExist: false
             }
         },
@@ -132,6 +132,13 @@
                 })
             }
         },
+        watch: {
+            currentChapterId(newVal, oldVal) {
+                if (newVal && oldVal) {
+                    this.queryNewChapter()
+                }
+            },
+        },
         methods: {
             existLoadBtn () {
                 let params = {
@@ -144,9 +151,9 @@
                     if (data.status === 200 && data.data.length) {
                         this.chapterInfo = data.data[0];
                         this.directory = data.listExt;
-                        this.compareChapterIndex();
+                        this.currentChapterId = this.chapterInfo.currentChapterId;
                         this.$nextTick(() => {
-                            this.scrollPosition = uni.getStorageSync(this.novels.novelsId + ':scrollTop') || -1
+                            this.scrollPosition = uni.getStorageSync(this.novels.novelsId + ':scrollTop') || 0
                         })
                     }
                 }).finally(() => {
@@ -163,19 +170,43 @@
                     if (data.status === 200 && data.data.length) {
                         this.chapterInfo = data.data[0];
                         this.directory = data.listExt;
-                        this.compareChapterIndex();
+                        this.currentChapterId = this.chapterInfo.currentChapterId;
                     }
                 }).finally(() => {
                     uni.hideLoading()
                 })
             },
-            compareChapterIndex() {
+            currentChapterIndex() {
                 for (let i = 0, len = this.directory.length; i< len; i++) {
                     if ( this.directory[i].chapterId === this.chapterInfo.currentChapterId) {
-                        this.currentChapterIndex = i;
-                        break;
+                        return i;
                     }
                 }
+            },
+            queryNewChapter() {
+                let params = {
+                    condition: {
+                        novelsId: this.novels.novelsId,
+                        chaptersId: this.currentChapterId
+                    }
+                }
+                if (this.$store.state.userInfo) {
+                    params.condition.uniqueId = this.$store.state.userInfo.uniqueId
+                }
+                request.post('/relation/readNewChapter', params).then(data => {
+                    if (data.status === 200 && data.data.length) {
+                        this.chapterInfo = data.data[0];
+                        this.currentChapterId = this.chapterInfo.currentChapterId;
+                        try {
+                            uni.setStorageSync(this.novels.novelsId + ':scrollTop', 0);
+                        } catch (e) {
+                            // error
+                        }
+                        this.$nextTick(() => {
+                            this.scrollPosition = 0
+                        })
+                    }
+                })
             },
             //点击中间
             clickCenter () {
@@ -188,14 +219,15 @@
                 console.log('bottom:' + JSON.stringify(e))
             },
             scrollOn (e) {
-                uni.setStorage({
-                    key: this.novels.novelsId + ':scrollTop',
-                    data: e.target.scrollTop
-                })
+                try {
+                    uni.setStorageSync(this.novels.novelsId + ':scrollTop', e.target.scrollTop);
+                } catch (e) {
+                    // error
+                }
             },
             directoryBtn() {
                 uni.navigateTo({
-                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterIndex=' + this.currentChapterIndex
+                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.currentChapterId
                 });
             },
             //滑块设置字体间距或大小

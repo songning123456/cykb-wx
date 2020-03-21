@@ -24,6 +24,18 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.directory .nav.data-v-42a3adbd {
+  position: fixed;
+  background: #f7f6f2;
+  z-index: 2;
+}
+.directory .fill.data-v-42a3adbd {
+  height: 94rpx;
+  width: 100%;
+}
+.directory .cu-item.data-v-42a3adbd {
+  background: unset;
+}
 .hover-class-style.data-v-42a3adbd {
   opacity: 0.9;
   background: #f7f7f7 !important;

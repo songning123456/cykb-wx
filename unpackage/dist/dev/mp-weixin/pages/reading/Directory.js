@@ -133,7 +133,16 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -152,18 +161,34 @@ var _default =
   data: function data() {
     return {
       directoryList: [],
-      currentChapterIndex: 0 };
+      currentChapterId: '',
+      tabCur: 'positive',
+      sortTabs: [
+      { key: 'positive', value: '正序' },
+      { key: 'reverse', value: '倒序' }] };
+
 
   },
   onLoad: function onLoad(option) {
     this.directoryList = JSON.parse(option.directory);
-    this.currentChapterIndex = option.currentChapterIndex;
-    debugger;
+    this.currentChapterId = option.currentChapterId;
   },
   methods: {
-    jumpChapterBtn: function jumpChapterBtn() {
+    jumpChapterBtn: function jumpChapterBtn(chapterId) {
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2]; //上一个页面
+      prevPage.$vm.currentChapterId = chapterId;
+      uni.navigateBack({
+        delta: 1 });
 
+    },
+    tabSelect: function tabSelect(e) {
+      if (this.tabCur !== e.currentTarget.dataset.sort) {
+        this.tabCur = e.currentTarget.dataset.sort;
+        this.directoryList.reverse();
+      }
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
