@@ -52,7 +52,7 @@
         </view>
         <view class="bottom-bar bg-white">
             <view class="btn-group cu-bar tabbar">
-                <button class="cu-btn text-red line-red shadow">加入书架</button>
+                <button class="cu-btn text-red line-red shadow" @tap="addBookcase">加入书架</button>
                 <button class="cu-btn bg-red shadow-blur" @tap="startReading">开始阅读</button>
             </view>
         </view>
@@ -110,12 +110,41 @@
                     url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
                 })
             },
-            startReading() {
+            addBookcase() {
                 if (this.$store.state.userInfo) {
-                    uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels)})
+                    let params = {
+                        condition: {
+                            novelsId: this.novels.novelsId,
+                            uniqueId: this.$store.state.userInfo.uniqueId
+                        }
+                    }
+                    uni.showLoading({ title: 'loading...', mask: true });
+                    request.post('/relation/isExist', params).then(data => {
+                        // 200 存在
+                        if (data.status === 200) {
+                            setTimeout(() => {
+                                uni.hideLoading();
+                                uni.showToast({ title: '书架已存在此书', duration: 1000, icon: 'none'})
+                            }, 1000);
+                        } else {
+                            request.post('/relation/insertBookcase', params).then(data => {
+                                uni.hideLoading();
+                                if (data.status === 200) {
+                                    uni.showToast({ title: '已添加至书架', duration: 1000})
+                                }
+                            }).catch(() => {
+                                uni.hideLoading();
+                            })
+                        }
+                    }).catch(() => {
+                        uni.hideLoading();
+                    });
                 } else {
-                    uni.navigateTo({ url: '/pages/login/Login?navigatePage=' + encodeURIComponent('/pages/reading/Reading?novels=' + JSON.stringify(this.novels))})
+                    uni.showToast({ title: '请先登录', duration: 1000, icon: 'none'})
                 }
+            },
+            startReading() {
+                uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels)})
             }
         }
     }

@@ -98,58 +98,71 @@
                 contentText: '',
                 // 目录
                 directory: '',
-                scrollPosition: -1
+                scrollPosition: -1,
+                hasExist: false
             }
         },
         onLoad (options) {
             this.novels = JSON.parse(options.novels)
-            uni.setNavigationBarTitle({
-                title: this.novels.title
-            })
-            this.loadBtn()
-        },
-        methods: {
-            loadBtn () {
-                uni.showLoading({
-                    title: '加载中',
-                    mask: true
-                })
+            uni.setNavigationBarTitle({ title: this.novels.title })
+            uni.showLoading({ title: '加载中', mask: true })
+            if (uni.getStorageSync('skin')) {
+                this.skin = JSON.parse(uni.getStorageSync('skin'))
+            }
+            this.setSkin();
+            if (!this.$store.state.userInfo) {
+                this.noExistLoadBtn();
+            } else {
                 let params = {
                     condition: {
                         novelsId: this.novels.novelsId,
-                        uniqueId: this.$store.state.userInfo.uniqueId,
-                        directory: true
+                        uniqueId: this.$store.state.userInfo.uniqueId
+                    }
+                }
+                request.post('/relation/isExist', params).then(data => {
+                    if (data.status === 200) {
+                        this.hasExist = true;
+                        this.existLoadBtn();
+                    } else {
+                        this.hasExist = false;
+                        this.noExistLoadBtn();
+                    }
+                }).catch(() => {
+                    uni.hideLoading();
+                })
+            }
+        },
+        methods: {
+            existLoadBtn () {
+                let params = {
+                    condition: {
+                        novelsId: this.novels.novelsId,
+                        uniqueId: this.$store.state.userInfo.uniqueId
                     }
                 }
                 request.post('/relation/beginReading', params).then(data => {
-                    if (data.status === 200) {
-                        if (data.data.length) {
-                            this.contentText = data.data[0].content
-                            this.$nextTick(() => {
-                                this.scrollPosition = uni.getStorageSync(this.novels.novelsId + ':scrollTop') || -1
-                            })
-                        }
-                        if (data.dataExt && data.dataExt.directory) {
-                            this.directory = data.dataExt.directory
-                        }
+                    if (data.status === 200 && data.data.length) {
+                        this.contentText = data.data[0].content
+                        this.$nextTick(() => {
+                            this.scrollPosition = uni.getStorageSync(this.novels.novelsId + ':scrollTop') || -1
+                        })
                     }
                 }).finally(() => {
                     uni.hideLoading()
                 })
-                if (uni.getStorageSync('skin')) {
-                    this.skin = JSON.parse(uni.getStorageSync('skin'))
+            },
+            noExistLoadBtn() {
+                let params = {
+                    condition: {
+                        novelsId: this.novels.novelsId
+                    }
                 }
-                let titleFontColor = '#000000'
-                if (this.skin.pageBgColor === '#333b3d') {
-                    titleFontColor = '#ffffff'
-                }
-                uni.setNavigationBarColor({
-                    // 字体颜色 仅支持 #ffffff 和 #000000
-                    frontColor: titleFontColor,
-                    backgroundColor: this.skin.pageBgColor,
-                })
-                uni.setBackgroundColor({
-                    backgroundColor: this.skin.pageBgColor
+                request('/chapters/unknownTop', params).then(data => {
+                    if (data.status === 200 && data.data.length) {
+                        this.contentText = data.data[0].content
+                    }
+                }).finally(() => {
+                    uni.hideLoading()
                 })
             },
             //点击中间
@@ -180,24 +193,27 @@
                     data: JSON.stringify(this.skin)
                 })
             },
+            setSkin() {
+                let titleFontColor = '#000000'
+                if (this.skin.pageBgColor === '#333b3d') {
+                    titleFontColor = '#ffffff'
+                }
+                uni.setNavigationBarColor({
+                    // 字体颜色 仅支持 #ffffff 和 #000000
+                    frontColor: titleFontColor,
+                    backgroundColor: this.skin.pageBgColor,
+                })
+                uni.setBackgroundColor({
+                    backgroundColor: this.skin.pageBgColor
+                })
+            },
             //修改背景颜色
             changeBackground (index) {
                 this.skin.currentSkinIndex = index
                 this.skin.pageBgColor = this.colorArr[index].pageBgColor//背景颜色
                 this.skin.fontColor = this.colorArr[index].fontColor//字体颜色
                 this.skin.maskBgColor = this.colorArr[index].maskBgColor//遮罩背景色
-                let titleFontColor = '#000000'
-                if (index === this.colorArr.length - 1) {
-                    titleFontColor = '#ffffff'
-                }
-                uni.setNavigationBarColor({
-                    // 字体颜色 仅支持 #ffffff 和 #000000
-                    frontColor: titleFontColor,
-                    backgroundColor: this.colorArr[index].pageBgColor,
-                })
-                uni.setBackgroundColor({
-                    backgroundColor: this.colorArr[index].pageBgColor
-                })
+                this.setSkin()
                 uni.setStorage({
                     key: 'skin',
                     data: JSON.stringify(this.skin)

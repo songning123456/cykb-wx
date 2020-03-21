@@ -173,59 +173,72 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       contentText: '',
       // 目录
       directory: '',
-      scrollPosition: -1 };
+      scrollPosition: -1,
+      hasExist: false };
 
   },
-  onLoad: function onLoad(options) {
+  onLoad: function onLoad(options) {var _this = this;
     this.novels = JSON.parse(options.novels);
-    uni.setNavigationBarTitle({
-      title: this.novels.title });
-
-    this.loadBtn();
-  },
-  methods: {
-    loadBtn: function loadBtn() {var _this = this;
-      uni.showLoading({
-        title: '加载中',
-        mask: true });
-
+    uni.setNavigationBarTitle({ title: this.novels.title });
+    uni.showLoading({ title: '加载中', mask: true });
+    if (uni.getStorageSync('skin')) {
+      this.skin = JSON.parse(uni.getStorageSync('skin'));
+    }
+    this.setSkin();
+    if (!this.$store.state.userInfo) {
+      this.noExistLoadBtn();
+    } else {
       var params = {
         condition: {
           novelsId: this.novels.novelsId,
-          uniqueId: this.$store.state.userInfo.uniqueId,
-          directory: true } };
+          uniqueId: this.$store.state.userInfo.uniqueId } };
+
+
+      _request.default.post('/relation/isExist', params).then(function (data) {
+        if (data.status === 200) {
+          _this.hasExist = true;
+          _this.existLoadBtn();
+        } else {
+          _this.hasExist = false;
+          _this.noExistLoadBtn();
+        }
+      }).catch(function () {
+        uni.hideLoading();
+      });
+    }
+  },
+  methods: {
+    existLoadBtn: function existLoadBtn() {var _this2 = this;
+      var params = {
+        condition: {
+          novelsId: this.novels.novelsId,
+          uniqueId: this.$store.state.userInfo.uniqueId } };
 
 
       _request.default.post('/relation/beginReading', params).then(function (data) {
-        if (data.status === 200) {
-          if (data.data.length) {
-            _this.contentText = data.data[0].content;
-            _this.$nextTick(function () {
-              _this.scrollPosition = uni.getStorageSync(_this.novels.novelsId + ':scrollTop') || -1;
-            });
-          }
-          if (data.dataExt && data.dataExt.directory) {
-            _this.directory = data.dataExt.directory;
-          }
+        if (data.status === 200 && data.data.length) {
+          _this2.contentText = data.data[0].content;
+          _this2.$nextTick(function () {
+            _this2.scrollPosition = uni.getStorageSync(_this2.novels.novelsId + ':scrollTop') || -1;
+          });
         }
       }).finally(function () {
         uni.hideLoading();
       });
-      if (uni.getStorageSync('skin')) {
-        this.skin = JSON.parse(uni.getStorageSync('skin'));
-      }
-      var titleFontColor = '#000000';
-      if (this.skin.pageBgColor === '#333b3d') {
-        titleFontColor = '#ffffff';
-      }
-      uni.setNavigationBarColor({
-        // 字体颜色 仅支持 #ffffff 和 #000000
-        frontColor: titleFontColor,
-        backgroundColor: this.skin.pageBgColor });
+    },
+    noExistLoadBtn: function noExistLoadBtn() {var _this3 = this;
+      var params = {
+        condition: {
+          novelsId: this.novels.novelsId } };
 
-      uni.setBackgroundColor({
-        backgroundColor: this.skin.pageBgColor });
 
+      (0, _request.default)('/chapters/unknownTop', params).then(function (data) {
+        if (data.status === 200 && data.data.length) {
+          _this3.contentText = data.data[0].content;
+        }
+      }).finally(function () {
+        uni.hideLoading();
+      });
     },
     //点击中间
     clickCenter: function clickCenter() {
@@ -255,24 +268,27 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
         data: JSON.stringify(this.skin) });
 
     },
+    setSkin: function setSkin() {
+      var titleFontColor = '#000000';
+      if (this.skin.pageBgColor === '#333b3d') {
+        titleFontColor = '#ffffff';
+      }
+      uni.setNavigationBarColor({
+        // 字体颜色 仅支持 #ffffff 和 #000000
+        frontColor: titleFontColor,
+        backgroundColor: this.skin.pageBgColor });
+
+      uni.setBackgroundColor({
+        backgroundColor: this.skin.pageBgColor });
+
+    },
     //修改背景颜色
     changeBackground: function changeBackground(index) {
       this.skin.currentSkinIndex = index;
       this.skin.pageBgColor = this.colorArr[index].pageBgColor; //背景颜色
       this.skin.fontColor = this.colorArr[index].fontColor; //字体颜色
       this.skin.maskBgColor = this.colorArr[index].maskBgColor; //遮罩背景色
-      var titleFontColor = '#000000';
-      if (index === this.colorArr.length - 1) {
-        titleFontColor = '#ffffff';
-      }
-      uni.setNavigationBarColor({
-        // 字体颜色 仅支持 #ffffff 和 #000000
-        frontColor: titleFontColor,
-        backgroundColor: this.colorArr[index].pageBgColor });
-
-      uni.setBackgroundColor({
-        backgroundColor: this.colorArr[index].pageBgColor });
-
+      this.setSkin();
       uni.setStorage({
         key: 'skin',
         data: JSON.stringify(this.skin) });
