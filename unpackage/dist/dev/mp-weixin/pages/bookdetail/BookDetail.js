@@ -286,7 +286,7 @@ var _default = { name: 'BookDetail', data: function data() {return { novels: { c
           uni.hideLoading();
         });
       } else {
-        uni.showToast({ title: '请先登录', duration: 1000, icon: 'none' });
+        uni.navigateTo({ url: '/pages/login/Login?navigatePage=back' });
       }
     },
     startReading: function startReading() {

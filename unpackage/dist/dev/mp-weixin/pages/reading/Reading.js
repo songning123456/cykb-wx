@@ -232,7 +232,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
           novelsId: this.novels.novelsId } };
 
 
-      (0, _request.default)('/chapters/unknownTop', params).then(function (data) {
+      _request.default.post('/chapters/unknownTop', params).then(function (data) {
         if (data.status === 200 && data.data.length) {
           _this3.contentText = data.data[0].content;
         }

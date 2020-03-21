@@ -177,11 +177,20 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: "Login", data: function data() {return { navigatePage: '' };},
+var _default = { name: "Login", data: function data() {return { operateType: '' };},
   onLoad: function onLoad(option) {
-    this.navigatePage = decodeURIComponent(option.navigatePage);
+    if (option.navigatePage === 'back') {
+      this.operateType = 'back';
+    }
   },
   methods: {
+    endOperation: function endOperation() {
+      if (this.operateType === 'back') {
+        uni.navigateBack({ //uni.navigateTo跳转的返回，默认1为返回上一级
+          delta: 1 });
+
+      }
+    },
     loginWx: function loginWx() {var _this = this;
       uni.login({
         success: function success(response2) {
@@ -210,7 +219,7 @@ var _default = { name: "Login", data: function data() {return { navigatePage: ''
                     data: result });
 
                   _this.$store.commit('SET_USERINFO', data.data[0]);
-                  uni.redirectTo({ url: _this.navigatePage });
+                  _this.endOperation();
                 } else {
                   console.error('获取用户信息失败1');
                   uni.showToast({

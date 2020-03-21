@@ -157,7 +157,7 @@
                         novelsId: this.novels.novelsId
                     }
                 }
-                request('/chapters/unknownTop', params).then(data => {
+                request.post('/chapters/unknownTop', params).then(data => {
                     if (data.status === 200 && data.data.length) {
                         this.contentText = data.data[0].content
                     }

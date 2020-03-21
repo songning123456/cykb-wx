@@ -13,13 +13,22 @@
         name: "Login",
         data() {
             return {
-                navigatePage: ''
+                operateType: ''
             }
         },
         onLoad(option) {
-            this.navigatePage = decodeURIComponent(option.navigatePage)
+            if (option.navigatePage === 'back') {
+                this.operateType = 'back'
+            }
         },
         methods: {
+            endOperation() {
+                if (this.operateType === 'back') {
+                    uni.navigateBack({  //uni.navigateTo跳转的返回，默认1为返回上一级
+                        delta: 1
+                    });
+                }
+            },
             loginWx () {
                 uni.login({
                     success: response2 => {
@@ -48,7 +57,7 @@
                                             data: result
                                         })
                                         this.$store.commit('SET_USERINFO', data.data[0])
-                                        uni.redirectTo({ url: this.navigatePage})
+                                        this.endOperation();
                                     } else {
                                         console.error('获取用户信息失败1')
                                         uni.showToast({
