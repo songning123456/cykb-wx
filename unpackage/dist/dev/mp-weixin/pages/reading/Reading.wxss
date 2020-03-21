@@ -24,9 +24,13 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.reading .scroll-content.data-v-9618b748 {
+  height: 100%;
+  padding: 0 16rpx;
+}
 .reading .mask-bottom.data-v-9618b748 {
   position: fixed;
-  height: 300rpx;
+  height: 270rpx;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
   width: 100%;
@@ -88,7 +92,7 @@
     margin-top: 10px;
 }
 .reading .mask-bottom .v3 .v3-item.data-v-9618b748 {
-      height: 30px;
+      height: 42px;
       padding: 0 30rpx;
       display: -webkit-box;
       display: -webkit-flex;
@@ -100,15 +104,7 @@
       -webkit-align-items: center;
               align-items: center;
 }
-.reading .mask-bottom .v3.v-page.data-v-9618b748 {
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      position: relative;
-}
-.reading .mask-bottom .v3.v-page .v-page-item.data-v-9618b748 {
-        position: absolute;
-        right: 0;
-        background-color: unset;
+.reading .mask-bottom .v3 .v3-item .cu-btn.data-v-9618b748 {
+        width: 300rpx;
 }
 

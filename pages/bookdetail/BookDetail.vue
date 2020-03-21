@@ -111,7 +111,11 @@
                 })
             },
             startReading() {
-                uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels)})
+                if (this.$store.state.userInfo) {
+                    uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels)})
+                } else {
+                    uni.navigateTo({ url: '/pages/login/Login?navigatePage=' + encodeURIComponent('/pages/reading/Reading?novels=' + JSON.stringify(this.novels))})
+                }
             }
         }
     }
