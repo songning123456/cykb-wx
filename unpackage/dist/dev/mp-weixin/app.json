@@ -10,7 +10,8 @@
     "pages/result/SearchResult",
     "pages/settings/Settings",
     "pages/bookdetail/BookDetail",
-    "pages/reading/Reading"
+    "pages/reading/Reading",
+    "pages/reading/Directory"
   ],
   "subPackages": [],
   "window": {

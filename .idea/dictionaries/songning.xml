@@ -2,6 +2,7 @@
   <dictionary name="songning">
     <words>
       <w>bookdetail</w>
+      <w>locationfill</w>
       <w>sorttype</w>
       <w>tabbar</w>
       <w>userinfo</w>

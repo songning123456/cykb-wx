@@ -2,7 +2,7 @@
     <view class="reading full-screen" :style="{background: skin.pageBgColor}">
         <scroll-view scroll-y="true" @scrolltoupper="scrollTop" @scrolltolower="scrollBottom" @scroll="scrollOn"
                      :scroll-top="scrollPosition" class="scroll-content">
-            <rich-text @click="clickCenter" :nodes="contentText"
+            <rich-text @click="clickCenter" :nodes="chapterInfo.content"
                        :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
             </rich-text>
         </scroll-view>
@@ -31,7 +31,7 @@
             </view>
             <view class="v3 v-page">
                 <view class="v3-item" :style="'color:' + skin.fontColor">
-                    <button class="cu-btn block line-red">
+                    <button class="cu-btn block line-red" @tap="directoryBtn">
                         <text class="cuIcon-sort"></text>
                         目录
                     </button>
@@ -95,9 +95,9 @@
                 ],
                 novels: null,
                 //正文
-                contentText: '',
-                // 目录
-                directory: '',
+                chapterInfo: {},
+                currentChapterIndex: -1,
+                directory: [],
                 scrollPosition: -1,
                 hasExist: false
             }
@@ -142,7 +142,9 @@
                 }
                 request.post('/relation/beginReading', params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.contentText = data.data[0].content
+                        this.chapterInfo = data.data[0];
+                        this.directory = data.listExt;
+                        this.compareChapterIndex();
                         this.$nextTick(() => {
                             this.scrollPosition = uni.getStorageSync(this.novels.novelsId + ':scrollTop') || -1
                         })
@@ -159,11 +161,21 @@
                 }
                 request.post('/chapters/unknownTop', params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.contentText = data.data[0].content
+                        this.chapterInfo = data.data[0];
+                        this.directory = data.listExt;
+                        this.compareChapterIndex();
                     }
                 }).finally(() => {
                     uni.hideLoading()
                 })
+            },
+            compareChapterIndex() {
+                for (let i = 0, len = this.directory.length; i< len; i++) {
+                    if ( this.directory[i].chapterId === this.chapterInfo.currentChapterId) {
+                        this.currentChapterIndex = i;
+                        break;
+                    }
+                }
             },
             //点击中间
             clickCenter () {
@@ -180,6 +192,11 @@
                     key: this.novels.novelsId + ':scrollTop',
                     data: e.target.scrollTop
                 })
+            },
+            directoryBtn() {
+                uni.navigateTo({
+                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterIndex=' + this.currentChapterIndex
+                });
             },
             //滑块设置字体间距或大小
             sliderChange (e, type) {

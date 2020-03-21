@@ -86,6 +86,13 @@
         "navigationBarTitleText": "",
         "navigationBarBackgroundColor": "#e54d42"
       }
+    },
+    {
+      "path": "pages/reading/Directory",
+      "style": {
+        "navigationBarTitleText": "目录",
+        "navigationBarBackgroundColor": "#e54d42"
+      }
     }
   ],
   "globalStyle": {
