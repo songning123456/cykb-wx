@@ -183,6 +183,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 130));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 138));};var _default =
 
 {
@@ -236,8 +238,8 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       //正文
       chapterInfo: {},
       realTimeInfo: {},
-      topChapterId: null,
-      bottomChapterId: null,
+      topChaptersId: null,
+      bottomChaptersId: null,
       directory: [],
       scrollTop: 0,
       oldScrollTop: 0,
@@ -252,129 +254,116 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       scrollType: '' };
 
   },
-  onLoad: function onLoad(options) {var _this = this;
+  onLoad: function onLoad(options) {
     this.novels = JSON.parse(options.novels);
     uni.setNavigationBarTitle({ title: this.novels.title });
     uni.showLoading({ title: 'loading...', mask: true });
     if (uni.getStorageSync('skin')) {
-      this.skin = JSON.parse(uni.getStorageSync('skin'));
+      this.skin = uni.getStorageSync('skin');
     }
     this.setSkin();
-    if (!this.$store.state.userInfo) {
-      this.noExistLoadBtn();
-    } else {
-      var params = {
-        condition: {
-          novelsId: this.novels.novelsId,
-          uniqueId: this.$store.state.userInfo.uniqueId } };
-
-
-      _request.default.post('/relation/isExist', params).then(function (data) {
-        if (data.status === 200) {
-          _this.existLoadBtn();
-        } else {
-          _this.noExistLoadBtn();
-        }
-      }).catch(function () {
-        uni.hideLoading();
-      });
-    }
+    this.topBtn();
+    this.loadChapterInfoBtn();
   },
   methods: {
-    existLoadBtn: function existLoadBtn() {var _this2 = this;
-      var params = {
-        condition: {
-          novelsId: this.novels.novelsId,
-          uniqueId: this.$store.state.userInfo.uniqueId } };
-
-
-      _request.default.post('/relation/beginReading', params).then(function (data) {
+    loadChapterInfoBtn: function loadChapterInfoBtn() {var _this = this;
+      var params;
+      var url;
+      if (uni.getStorageSync(this.novels.novelsId + ':scrollInfo')) {
+        this.realTimeInfo = uni.getStorageSync(this.novels.novelsId + ':scrollInfo');
+        this.realTimeInfo.scrollTop -= this.realTimeInfo.min;
+        this.realTimeInfo.max -= this.realTimeInfo.min;
+        this.realTimeInfo.min = 1;
+        params = { novelsId: this.novels.novelsId, chaptersId: this.realTimeInfo.chaptersId };
+        url = '/chapters/readMore';
+      } else {
+        params = { novelsId: this.novels.novelsId };
+        url = '/chapters/firstChapter';
+      }
+      _request.default.get(url, params).then(function (data) {
         if (data.status === 200 && data.data.length) {
-          _this2.chapterInfo = data.data[0];
-          _this2.directory = data.listExt;
-          _this2.topChapterId = _this2.bottomChapterId = _this2.chapterInfo.currentChapterId;
-          _this2.convertNodes('begin');
+          _this.chapterInfo = data.data[0];
+          _this.directory = data.listExt;
+          _this.topChaptersId = _this.bottomChaptersId = _this.chapterInfo.chaptersId;
+          _this.convertNodes('begin');
         }
       }).finally(function () {
         uni.hideLoading();
       });
     },
-    noExistLoadBtn: function noExistLoadBtn() {var _this3 = this;
-      var params = {
-        condition: {
-          novelsId: this.novels.novelsId } };
+    topBtn: function topBtn() {
+      // 如果 已经登陆， 则在已经加入书架的前提下更新阅读时间
+      if (this.$store.state.userInfo) {
+        var params = {
+          condition: {
+            uniqueId: this.$store.state.userInfo.uniqueId,
+            novelsId: this.novels.novelsId } };
 
 
-      _request.default.post('/chapters/unknownTop', params).then(function (data) {
-        if (data.status === 200 && data.data.length) {
-          _this3.chapterInfo = data.data[0];
-          _this3.directory = data.listExt;
-          _this3.topChapterId = _this3.bottomChapterId = _this3.chapterInfo.currentChapterId;
-          _this3.convertNodes('begin');
-        }
-      }).finally(function () {
-        uni.hideLoading();
-      });
+        _request.default.post('/relation/topBookcase', params).catch(function () {});
+      }
     },
     convertChapterIndex: function convertChapterIndex(chaptersId) {
       var result = 0;
       for (var i = 0, len = this.directory.length; i < len; i++) {
-        if (this.directory[i].chapterId === chaptersId) {
+        if (this.directory[i].chaptersId === chaptersId) {
           result = i;
           break;
         }
       }
       return result;
     },
-    queryNewChapter: function queryNewChapter(chaptersId, nodeType) {var _this4 = this;
-      var params = {
-        condition: {
-          novelsId: this.novels.novelsId,
-          chaptersId: chaptersId } };
-
-
-      if (this.$store.state.userInfo) {
-        params.condition.uniqueId = this.$store.state.userInfo.uniqueId;
-      }
+    queryNewChapter: function queryNewChapter(chaptersId, nodeType) {var _this2 = this;
+      var params = { novelsId: '', chaptersId: chaptersId };
       uni.showLoading({ title: 'loading...', mask: true });
-      _request.default.post('/relation/readNewChapter', params).then(function (data) {
+      _request.default.get('/chapters/readMore', params).then(function (data) {
         if (data.status === 200 && data.data.length) {
-          _this4.chapterInfo = data.data[0];
+          _this2.chapterInfo = data.data[0];
           if (nodeType === 'insert') {
-            _this4.topChapterId = _this4.bottomChapterId = _this4.chapterInfo.currentChapterId;
-            _this4.scrollRange = [];
-            _this4.scrollType = '';
-            _this4.realTimeInfo = {};
+            _this2.topChaptersId = _this2.bottomChaptersId = _this2.chapterInfo.chaptersId;
+            _this2.scrollRange = [];
+            _this2.scrollType = '';
+            _this2.realTimeInfo = {};
           }
-          _this4.convertNodes(nodeType);
+          _this2.convertNodes(nodeType);
         }
       }).finally(function () {
-        if (nodeType === 'top') {
-          _this4.throttleFlag.top = true;
-        } else if (nodeType === 'bottom') {
-          _this4.throttleFlag.bottom = true;
-        }
+        // dom渲染完后再过3s, 才能歌重新加载
+        _this2.$nextTick(function () {
+          setTimeout(function () {
+            if (nodeType === 'top') {
+              _this2.throttleFlag.top = true;
+            } else if (nodeType === 'bottom') {
+              _this2.throttleFlag.bottom = true;
+            }
+          }, 3000);
+        });
         uni.hideLoading();
       });
     },
     // nodeType: begin => 点击开始阅读时; top => 顶部下拉; bottom=> 底部上拉;insert => 目录页跳转;
-    convertNodes: function convertNodes(nodeType) {var _this5 = this;
+    convertNodes: function convertNodes(nodeType) {var _this3 = this;
       var node = "<div class=\"node-title\">".concat(this.chapterInfo.chapter, "</div><div class=\"node-content\">").concat(this.chapterInfo.content, "</div>");
       if (nodeType === 'top') {
         this.nodes = node + this.nodes;
         this.scrollTop = this.oldScrollTop;
         this.$nextTick(function () {
-          _this5.scrollTop = _this5.oldHeight;
+          _this3.scrollTop = _this3.oldHeight;
         });
       } else if (nodeType === 'bottom') {
         this.nodes = this.nodes + node;
+      } else if (nodeType === 'insert') {
+        this.nodes = node;
+        this.$nextTick(function () {
+          _this3.scrollTop = 0;
+          _this3.oldScrollTop = 0;
+          _this3.oldHeight = 0;
+          _this3.newHeight = 0;
+        });
       } else {
         this.nodes = node;
         this.$nextTick(function () {
-          _this5.scrollTop = 0;
-          _this5.oldScrollTop = 0;
-          _this5.oldHeight = 0;
-          _this5.newHeight = 0;
+          _this3.scrollTop = _this3.realTimeInfo.scrollTop || 0;
         });
       }
     },
@@ -385,10 +374,10 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
     scrollToUpper: function scrollToUpper(e) {
       if (this.throttleFlag.top) {
         this.throttleFlag.top = false;
-        var index = this.convertChapterIndex(this.topChapterId);
+        var index = this.convertChapterIndex(this.topChaptersId);
         if (index > 0) {
-          this.topChapterId = this.directory[--index].chapterId;
-          this.queryNewChapter(this.topChapterId, 'top');
+          this.topChaptersId = this.directory[--index].chaptersId;
+          this.queryNewChapter(this.topChaptersId, 'top');
         }
       }
       this.scrollType = 'top';
@@ -396,10 +385,10 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
     scrollBottom: function scrollBottom(e) {
       if (this.throttleFlag.bottom) {
         this.throttleFlag.bottom = false;
-        var index = this.convertChapterIndex(this.bottomChapterId);
+        var index = this.convertChapterIndex(this.bottomChaptersId);
         if (index < this.directory.length - 1) {
-          this.bottomChapterId = this.directory[++index].chapterId;
-          this.queryNewChapter(this.bottomChapterId, 'bottom');
+          this.bottomChaptersId = this.directory[++index].chaptersId;
+          this.queryNewChapter(this.bottomChaptersId, 'bottom');
         }
       }
       this.scrollType = 'bottom';
@@ -426,7 +415,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       if (this.scrollRange.length === 0) {
         var obj = {
           chapter: this.chapterInfo.chapter,
-          chaptersId: this.chapterInfo.currentChapterId,
+          chaptersId: this.chapterInfo.chaptersId,
           min: 1,
           max: newScrollHeight - oldScrollHeight > 1 ? newScrollHeight - oldScrollHeight : 2 };
 
@@ -436,7 +425,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       if (this.scrollType === 'top') {
         var _obj = {
           chapter: this.chapterInfo.chapter,
-          chaptersId: this.chapterInfo.currentChapterId,
+          chaptersId: this.chapterInfo.chaptersId,
           min: 1,
           max: newScrollHeight - oldScrollHeight > 1 ? newScrollHeight - oldScrollHeight : 2 };
 
@@ -448,7 +437,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       } else if (this.scrollType === 'bottom') {
         var _obj2 = {
           chapter: this.chapterInfo.chapter,
-          chaptersId: this.chapterInfo.currentChapterId,
+          chaptersId: this.chapterInfo.chaptersId,
           min: oldScrollHeight + 1,
           max: newScrollHeight };
 
@@ -467,12 +456,13 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       return result;
     },
     setScrollInfo: function setScrollInfo(scrollTop) {
-      var result = Object.assign({}, this.realTimeInfo);
-      result.scrollTop = scrollTop;
-      try {
-        uni.setStorageSync(this.novels.novelsId + ':scrollInfo', result);
-      } catch (e) {
-        // error
+      if (Object.keys(this.realTimeInfo).length > 0) {
+        this.realTimeInfo.scrollTop = scrollTop;
+        try {
+          uni.setStorageSync(this.novels.novelsId + ':scrollInfo', this.realTimeInfo);
+        } catch (e) {
+          // error
+        }
       }
     },
     directoryBtn: function directoryBtn() {
@@ -489,7 +479,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       }
       uni.setStorage({
         key: 'skin',
-        data: JSON.stringify(this.skin) });
+        data: this.skin });
 
     },
     setSkin: function setSkin() {
@@ -515,7 +505,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       this.setSkin();
       uni.setStorage({
         key: 'skin',
-        data: JSON.stringify(this.skin) });
+        data: this.skin });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

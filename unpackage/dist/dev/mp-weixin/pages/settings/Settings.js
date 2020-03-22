@@ -206,7 +206,11 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'Settings', data: function data() {return { isDark: false, settings: [{ icon: 'arrow', title: '退出登录', type: 'exit' }, { icon: 'text', title: '书架排序', type: 'sort' }, { icon: 'switch', title: '夜间模式', type: 'nightMode' }], sortModal: false, sorts: [{ icon: 'cuIcon-read', title: '最近阅读' }, { icon: 'cuIcon-time', title: '更新时间' }] };}, computed: { sortType: function sortType() {
+var _default = { name: 'Settings', data: function data() {return { isDark: false, settings: [{ icon: 'arrow', title: '退出登录', type: 'exit' }, { icon: 'text', title: '书架排序', type: 'sort' }, { icon: 'switch', title: '夜间模式', type: 'nightMode' }, { icon: 'arrow', title: '清理缓存', type: 'storage' }], sortModal: false, sorts: [{ icon: 'cuIcon-read', title: '最近阅读' }, { icon: 'cuIcon-time', title: '更新时间' }] };
+
+  },
+  computed: {
+    sortType: function sortType() {
       return this.$store.state.sortType;
     } },
 
@@ -232,6 +236,13 @@ var _default = { name: 'Settings', data: function data() {return { isDark: false
           this.sortModal = true;
           break;
         case 'nightMode':
+          break;
+        case 'storage':
+          try {
+            uni.clearStorageSync();
+            uni.showToast({ title: '清理完成', duration: 1000 });
+          } catch (e) {
+          }
           break;}
 
     },

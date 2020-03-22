@@ -174,10 +174,10 @@ var _default =
     this.currentChapterId = option.currentChapterId;
   },
   methods: {
-    jumpChapterBtn: function jumpChapterBtn(chapterId) {
+    jumpChapterBtn: function jumpChapterBtn(chaptersId) {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2]; //上一个页面
-      prevPage.$vm.queryNewChapter(chapterId, 'insert');
+      prevPage.$vm.queryNewChapter(chaptersId, 'insert');
       uni.navigateBack({
         delta: 1 });
 

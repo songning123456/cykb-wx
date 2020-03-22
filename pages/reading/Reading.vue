@@ -8,8 +8,10 @@
         </scroll-view>
 
         <!-- 遮罩层上部分 -->
-        <view class="mask-top" :style="{top:isShowMask?0:-100+'upx','background':skin.maskBgColor}">
-            <view style="letter-spacing: 2px; line-height: 20px;">{{realTimeInfo.chapter || chapterInfo.chapter}}</view>
+        <view class="mask-top" :style="{top:isShowMask?0:-100+'rpx','background':skin.maskBgColor}">
+            <view class="mask-title" :style="'color:' + skin.fontColor">{{realTimeInfo.chapter ||
+                chapterInfo.chapter}}
+            </view>
         </view>
         <!-- 遮罩层下部分 -->
         <view class="mask-bottom" :style="{bottom:isShowMask?0:-300+'rpx','background':skin.maskBgColor}">
@@ -101,8 +103,8 @@
                 //正文
                 chapterInfo: {},
                 realTimeInfo: {},
-                topChapterId: null,
-                bottomChapterId: null,
+                topChaptersId: null,
+                bottomChaptersId: null,
                 directory: [],
                 scrollTop: 0,
                 oldScrollTop: 0,
@@ -122,69 +124,54 @@
             uni.setNavigationBarTitle({ title: this.novels.title })
             uni.showLoading({ title: 'loading...', mask: true })
             if (uni.getStorageSync('skin')) {
-                this.skin = JSON.parse(uni.getStorageSync('skin'))
+                this.skin = uni.getStorageSync('skin')
             }
             this.setSkin()
-            if (!this.$store.state.userInfo) {
-                this.noExistLoadBtn()
-            } else {
-                let params = {
-                    condition: {
-                        novelsId: this.novels.novelsId,
-                        uniqueId: this.$store.state.userInfo.uniqueId
-                    }
-                }
-                request.post('/relation/isExist', params).then(data => {
-                    if (data.status === 200) {
-                        this.existLoadBtn()
-                    } else {
-                        this.noExistLoadBtn()
-                    }
-                }).catch(() => {
-                    uni.hideLoading()
-                })
-            }
+            this.topBtn()
+            this.loadChapterInfoBtn()
         },
         methods: {
-            existLoadBtn () {
-                let params = {
-                    condition: {
-                        novelsId: this.novels.novelsId,
-                        uniqueId: this.$store.state.userInfo.uniqueId
-                    }
+            loadChapterInfoBtn () {
+                let params
+                let url
+                if (uni.getStorageSync(this.novels.novelsId + ':scrollInfo')) {
+                    this.realTimeInfo = uni.getStorageSync(this.novels.novelsId + ':scrollInfo')
+                    this.realTimeInfo.scrollTop -= this.realTimeInfo.min
+                    this.realTimeInfo.max -= this.realTimeInfo.min
+                    this.realTimeInfo.min = 1
+                    params = { novelsId: this.novels.novelsId, chaptersId: this.realTimeInfo.chaptersId }
+                    url = '/chapters/readMore'
+                } else {
+                    params = { novelsId: this.novels.novelsId }
+                    url = '/chapters/firstChapter'
                 }
-                request.post('/relation/beginReading', params).then(data => {
+                request.get(url, params).then(data => {
                     if (data.status === 200 && data.data.length) {
                         this.chapterInfo = data.data[0]
                         this.directory = data.listExt
-                        this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
+                        this.topChaptersId = this.bottomChaptersId = this.chapterInfo.chaptersId
                         this.convertNodes('begin')
                     }
                 }).finally(() => {
                     uni.hideLoading()
                 })
             },
-            noExistLoadBtn () {
-                let params = {
-                    condition: {
-                        novelsId: this.novels.novelsId
+            topBtn () {
+                // 如果 已经登陆， 则在已经加入书架的前提下更新阅读时间
+                if (this.$store.state.userInfo) {
+                    let params = {
+                        condition: {
+                            uniqueId: this.$store.state.userInfo.uniqueId,
+                            novelsId: this.novels.novelsId
+                        }
                     }
+                    request.post('/relation/topBookcase', params).catch(() => {})
                 }
-                request.post('/chapters/unknownTop', params).then(data => {
-                    if (data.status === 200 && data.data.length) {
-                        this.chapterInfo = data.data[0]
-                        this.directory = data.listExt
-                        this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
-                        this.convertNodes('begin')
-                    }
-                }).finally(() => {
-                    uni.hideLoading()
-                })
             },
             convertChapterIndex (chaptersId) {
                 let result = 0
                 for (let i = 0, len = this.directory.length; i < len; i++) {
-                    if (this.directory[i].chapterId === chaptersId) {
+                    if (this.directory[i].chaptersId === chaptersId) {
                         result = i
                         break
                     }
@@ -192,33 +179,30 @@
                 return result
             },
             queryNewChapter (chaptersId, nodeType) {
-                let params = {
-                    condition: {
-                        novelsId: this.novels.novelsId,
-                        chaptersId: chaptersId
-                    }
-                }
-                if (this.$store.state.userInfo) {
-                    params.condition.uniqueId = this.$store.state.userInfo.uniqueId
-                }
+                let params = { novelsId: '', chaptersId: chaptersId }
                 uni.showLoading({ title: 'loading...', mask: true })
-                request.post('/relation/readNewChapter', params).then(data => {
+                request.get('/chapters/readMore', params).then(data => {
                     if (data.status === 200 && data.data.length) {
                         this.chapterInfo = data.data[0]
                         if (nodeType === 'insert') {
-                            this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
-                            this.scrollRange = [];
+                            this.topChaptersId = this.bottomChaptersId = this.chapterInfo.chaptersId
+                            this.scrollRange = []
                             this.scrollType = ''
                             this.realTimeInfo = {}
                         }
                         this.convertNodes(nodeType)
                     }
                 }).finally(() => {
-                    if (nodeType === 'top') {
-                        this.throttleFlag.top = true
-                    } else if (nodeType === 'bottom') {
-                        this.throttleFlag.bottom = true
-                    }
+                    // dom渲染完后再过3s, 才能歌重新加载
+                    this.$nextTick(() => {
+                        setTimeout(() => {
+                            if (nodeType === 'top') {
+                                this.throttleFlag.top = true
+                            } else if (nodeType === 'bottom') {
+                                this.throttleFlag.bottom = true
+                            }
+                        }, 3000)
+                    })
                     uni.hideLoading()
                 })
             },
@@ -233,13 +217,18 @@
                     })
                 } else if (nodeType === 'bottom') {
                     this.nodes = this.nodes + node
-                } else {
+                } else if (nodeType === 'insert') {
                     this.nodes = node
                     this.$nextTick(() => {
                         this.scrollTop = 0
                         this.oldScrollTop = 0
                         this.oldHeight = 0
                         this.newHeight = 0
+                    })
+                } else {
+                    this.nodes = node
+                    this.$nextTick(() => {
+                        this.scrollTop = this.realTimeInfo.scrollTop || 0
                     })
                 }
             },
@@ -250,10 +239,10 @@
             scrollToUpper (e) {
                 if (this.throttleFlag.top) {
                     this.throttleFlag.top = false
-                    let index = this.convertChapterIndex(this.topChapterId)
+                    let index = this.convertChapterIndex(this.topChaptersId)
                     if (index > 0) {
-                        this.topChapterId = this.directory[--index].chapterId
-                        this.queryNewChapter(this.topChapterId, 'top')
+                        this.topChaptersId = this.directory[--index].chaptersId
+                        this.queryNewChapter(this.topChaptersId, 'top')
                     }
                 }
                 this.scrollType = 'top'
@@ -261,10 +250,10 @@
             scrollBottom (e) {
                 if (this.throttleFlag.bottom) {
                     this.throttleFlag.bottom = false
-                    let index = this.convertChapterIndex(this.bottomChapterId)
+                    let index = this.convertChapterIndex(this.bottomChaptersId)
                     if (index < this.directory.length - 1) {
-                        this.bottomChapterId = this.directory[++index].chapterId
-                        this.queryNewChapter(this.bottomChapterId, 'bottom')
+                        this.bottomChaptersId = this.directory[++index].chaptersId
+                        this.queryNewChapter(this.bottomChaptersId, 'bottom')
                     }
                 }
                 this.scrollType = 'bottom'
@@ -291,7 +280,7 @@
                 if (this.scrollRange.length === 0) {
                     let obj = {
                         chapter: this.chapterInfo.chapter,
-                        chaptersId: this.chapterInfo.currentChapterId,
+                        chaptersId: this.chapterInfo.chaptersId,
                         min: 1,
                         max: (newScrollHeight - oldScrollHeight) > 1 ? newScrollHeight - oldScrollHeight : 2
                     }
@@ -301,7 +290,7 @@
                 if (this.scrollType === 'top') {
                     let obj = {
                         chapter: this.chapterInfo.chapter,
-                        chaptersId: this.chapterInfo.currentChapterId,
+                        chaptersId: this.chapterInfo.chaptersId,
                         min: 1,
                         max: (newScrollHeight - oldScrollHeight) > 1 ? newScrollHeight - oldScrollHeight : 2
                     }
@@ -313,7 +302,7 @@
                 } else if (this.scrollType === 'bottom') {
                     let obj = {
                         chapter: this.chapterInfo.chapter,
-                        chaptersId: this.chapterInfo.currentChapterId,
+                        chaptersId: this.chapterInfo.chaptersId,
                         min: oldScrollHeight + 1,
                         max: newScrollHeight
                     }
@@ -332,12 +321,13 @@
                 return result
             },
             setScrollInfo (scrollTop) {
-                let result = Object.assign({}, this.realTimeInfo)
-                result.scrollTop = scrollTop
-                try {
-                    uni.setStorageSync(this.novels.novelsId + ':scrollInfo', result)
-                } catch (e) {
-                    // error
+                if (Object.keys(this.realTimeInfo).length > 0) {
+                    this.realTimeInfo.scrollTop = scrollTop
+                    try {
+                        uni.setStorageSync(this.novels.novelsId + ':scrollInfo', this.realTimeInfo)
+                    } catch (e) {
+                        // error
+                    }
                 }
             },
             directoryBtn () {
@@ -354,7 +344,7 @@
                 }
                 uni.setStorage({
                     key: 'skin',
-                    data: JSON.stringify(this.skin)
+                    data: this.skin
                 })
             },
             setSkin () {
@@ -380,7 +370,7 @@
                 this.setSkin()
                 uni.setStorage({
                     key: 'skin',
-                    data: JSON.stringify(this.skin)
+                    data: this.skin
                 })
             },
         }
@@ -397,12 +387,18 @@
 
         .mask-top {
             position: fixed;
-            height: 40 upx;
+            height: 40upx;
             transition: all 0.2s;
             width: 100%;
             z-index: 1000;
             margin: auto;
             border-radius: 0 0 4px 4px;
+
+            .mask-title {
+                letter-spacing: 2px;
+                line-height: 20px;
+                padding-left: 5px
+            }
         }
 
         .mask-bottom {

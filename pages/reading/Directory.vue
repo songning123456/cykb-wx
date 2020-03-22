@@ -10,9 +10,9 @@
         </scroll-view>
         <view class="fill"></view>
         <view class="cu-list menu">
-            <view class="cu-item arrow" v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style' hover-stay-time='600' @tap="jumpChapterBtn(item.chapterId)">
+            <view class="cu-item arrow" v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style' hover-stay-time='600' @tap="jumpChapterBtn(item.chaptersId)">
                 <view class="content">
-                    <text :class="item.chapterId === currentChapterId ? 'cuIcon-locationfill text-red' : 'cuIcon-location text-grey'"></text>
+                    <text :class="item.chaptersId === currentChapterId ? 'cuIcon-locationfill text-red' : 'cuIcon-location text-grey'"></text>
                     <text class="text-grey">{{item.chapter}}</text>
                 </view>
             </view>
@@ -39,10 +39,10 @@
             this.currentChapterId = option.currentChapterId;
         },
         methods: {
-            jumpChapterBtn(chapterId) {
+            jumpChapterBtn(chaptersId) {
                 let pages = getCurrentPages();
                 let prevPage = pages[pages.length - 2];  //上一个页面
-                prevPage.$vm.queryNewChapter(chapterId, 'insert');
+                prevPage.$vm.queryNewChapter(chaptersId, 'insert');
                 uni.navigateBack({
                     delta: 1
                 });

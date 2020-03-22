@@ -55,6 +55,10 @@
                         icon: 'switch',
                         title: '夜间模式',
                         type: 'nightMode'
+                    }, {
+                        icon: 'arrow',
+                        title: '清理缓存',
+                        type: 'storage'
                     }
                 ],
                 sortModal: false,
@@ -97,6 +101,13 @@
                         this.sortModal = true
                         break
                     case 'nightMode':
+                        break
+                    case 'storage':
+                        try {
+                            uni.clearStorageSync();
+                            uni.showToast({ title: '清理完成', duration: 1000})
+                        } catch (e) {
+                        }
                         break
                 }
             },

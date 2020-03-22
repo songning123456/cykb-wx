@@ -30,13 +30,18 @@
 }
 .reading .mask-top.data-v-9618b748 {
   position: fixed;
-  height: 40 upx;
+  height: 40rpx;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
   width: 100%;
   z-index: 1000;
   margin: auto;
   border-radius: 0 0 4px 4px;
+}
+.reading .mask-top .mask-title.data-v-9618b748 {
+    letter-spacing: 2px;
+    line-height: 20px;
+    padding-left: 5px;
 }
 .reading .mask-bottom.data-v-9618b748 {
   position: fixed;
