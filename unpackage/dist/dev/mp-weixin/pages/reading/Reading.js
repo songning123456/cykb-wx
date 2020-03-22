@@ -179,8 +179,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
-var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 130));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 138));};var _default =
+
+
+
+
+var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 130));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 138));};var _default =
 
 {
   name: 'Reading',
@@ -232,6 +235,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
       novels: null,
       //正文
       chapterInfo: {},
+      realTimeInfo: {},
       topChapterId: null,
       bottomChapterId: null,
       directory: [],
@@ -242,8 +246,10 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
       nodes: [],
       throttleFlag: {
         top: true,
-        bottom: true } };
+        bottom: true },
 
+      scrollRange: [],
+      scrollType: '' };
 
   },
   onLoad: function onLoad(options) {var _this = this;
@@ -336,6 +342,9 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
           _this4.chapterInfo = data.data[0];
           if (nodeType === 'insert') {
             _this4.topChapterId = _this4.bottomChapterId = _this4.chapterInfo.currentChapterId;
+            _this4.scrollRange = [];
+            _this4.scrollType = '';
+            _this4.realTimeInfo = {};
           }
           _this4.convertNodes(nodeType);
         }
@@ -382,6 +391,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
           this.queryNewChapter(this.topChapterId, 'top');
         }
       }
+      this.scrollType = 'top';
     },
     scrollBottom: function scrollBottom(e) {
       if (this.throttleFlag.bottom) {
@@ -392,10 +402,18 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
           this.queryNewChapter(this.bottomChapterId, 'bottom');
         }
       }
+      this.scrollType = 'bottom';
     },
     scrollOn: function scrollOn(e) {
-      // this.setScrollTop(e.target.scrollTop)
       var scrollHeight = e.detail.scrollHeight;
+      // 计算每章节所属区域范围
+      this.scrollChange(scrollHeight, this.newHeight);
+      // 实时获取信息
+      var info = this.computeCurrentChapterInfo(e.target.scrollTop);
+      if (JSON.stringify(info) !== '{}') {
+        this.realTimeInfo = info;
+        this.setScrollInfo(e.detail.scrollTop);
+      }
       if (this.newHeight === 0) {
         this.newHeight = scrollHeight;
       } else if (this.newHeight !== scrollHeight) {
@@ -404,16 +422,62 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
       }
       this.oldScrollTop = e.detail.scrollTop;
     },
-    setScrollTop: function setScrollTop(scrollTop) {
+    scrollChange: function scrollChange(newScrollHeight, oldScrollHeight) {
+      if (this.scrollRange.length === 0) {
+        var obj = {
+          chapter: this.chapterInfo.chapter,
+          chaptersId: this.chapterInfo.currentChapterId,
+          min: 1,
+          max: newScrollHeight - oldScrollHeight > 1 ? newScrollHeight - oldScrollHeight : 2 };
+
+        this.scrollRange.push(obj);
+        return;
+      }
+      if (this.scrollType === 'top') {
+        var _obj = {
+          chapter: this.chapterInfo.chapter,
+          chaptersId: this.chapterInfo.currentChapterId,
+          min: 1,
+          max: newScrollHeight - oldScrollHeight > 1 ? newScrollHeight - oldScrollHeight : 2 };
+
+        for (var i in this.scrollRange) {
+          this.scrollRange[i].min += newScrollHeight - oldScrollHeight;
+          this.scrollRange[i].max += newScrollHeight - oldScrollHeight;
+        }
+        this.scrollRange.unshift(_obj);
+      } else if (this.scrollType === 'bottom') {
+        var _obj2 = {
+          chapter: this.chapterInfo.chapter,
+          chaptersId: this.chapterInfo.currentChapterId,
+          min: oldScrollHeight + 1,
+          max: newScrollHeight };
+
+        this.scrollRange.push(_obj2);
+      }
+      this.scrollType = '';
+    },
+    computeCurrentChapterInfo: function computeCurrentChapterInfo(scrollTop) {
+      var result = Object.create(null);
+      for (var key in this.scrollRange) {
+        if (scrollTop >= this.scrollRange[key].min && scrollTop <= this.scrollRange[key].max) {
+          result = this.scrollRange[key];
+          break;
+        }
+      }
+      return result;
+    },
+    setScrollInfo: function setScrollInfo(scrollTop) {
+      var result = Object.assign({}, this.realTimeInfo);
+      result.scrollTop = scrollTop;
       try {
-        uni.setStorageSync(this.novels.novelsId + ':scrollTop', scrollTop);
+        uni.setStorageSync(this.novels.novelsId + ':scrollInfo', result);
       } catch (e) {
         // error
       }
     },
     directoryBtn: function directoryBtn() {
       uni.navigateTo({
-        url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.chapterInfo.currentChapterId });
+        url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.realTimeInfo.chaptersId });
 
     },
     //滑块设置字体间距或大小

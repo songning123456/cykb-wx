@@ -28,6 +28,16 @@
   height: 100%;
   padding: 0 16rpx;
 }
+.reading .mask-top.data-v-9618b748 {
+  position: fixed;
+  height: 40 upx;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  width: 100%;
+  z-index: 1000;
+  margin: auto;
+  border-radius: 0 0 4px 4px;
+}
 .reading .mask-bottom.data-v-9618b748 {
   position: fixed;
   height: 270rpx;

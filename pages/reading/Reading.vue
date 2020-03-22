@@ -7,6 +7,10 @@
             </rich-text>
         </scroll-view>
 
+        <!-- 遮罩层上部分 -->
+        <view class="mask-top" :style="{top:isShowMask?0:-100+'upx','background':skin.maskBgColor}">
+            <view style="letter-spacing: 2px; line-height: 20px;">{{realTimeInfo.chapter || chapterInfo.chapter}}</view>
+        </view>
         <!-- 遮罩层下部分 -->
         <view class="mask-bottom" :style="{bottom:isShowMask?0:-300+'rpx','background':skin.maskBgColor}">
             <view class="v1">
@@ -45,7 +49,6 @@
     import UniIcon from '../../components/UniIcon'
     import UniTag from '../../components/UniTag'
     import request from '../../util/request'
-    import common from '../../util/common'
 
     export default {
         name: 'Reading',
@@ -97,6 +100,7 @@
                 novels: null,
                 //正文
                 chapterInfo: {},
+                realTimeInfo: {},
                 topChapterId: null,
                 bottomChapterId: null,
                 directory: [],
@@ -108,7 +112,9 @@
                 throttleFlag: {
                     top: true,
                     bottom: true
-                }
+                },
+                scrollRange: [],
+                scrollType: ''
             }
         },
         onLoad (options) {
@@ -201,6 +207,9 @@
                         this.chapterInfo = data.data[0]
                         if (nodeType === 'insert') {
                             this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
+                            this.scrollRange = [];
+                            this.scrollType = ''
+                            this.realTimeInfo = {}
                         }
                         this.convertNodes(nodeType)
                     }
@@ -240,27 +249,36 @@
             },
             scrollToUpper (e) {
                 if (this.throttleFlag.top) {
-                    this.throttleFlag.top = false;
+                    this.throttleFlag.top = false
                     let index = this.convertChapterIndex(this.topChapterId)
                     if (index > 0) {
                         this.topChapterId = this.directory[--index].chapterId
                         this.queryNewChapter(this.topChapterId, 'top')
                     }
                 }
+                this.scrollType = 'top'
             },
             scrollBottom (e) {
                 if (this.throttleFlag.bottom) {
-                    this.throttleFlag.bottom = false;
+                    this.throttleFlag.bottom = false
                     let index = this.convertChapterIndex(this.bottomChapterId)
                     if (index < this.directory.length - 1) {
                         this.bottomChapterId = this.directory[++index].chapterId
                         this.queryNewChapter(this.bottomChapterId, 'bottom')
                     }
                 }
+                this.scrollType = 'bottom'
             },
             scrollOn (e) {
-                // this.setScrollTop(e.target.scrollTop)
                 let scrollHeight = e.detail.scrollHeight
+                // 计算每章节所属区域范围
+                this.scrollChange(scrollHeight, this.newHeight)
+                // 实时获取信息
+                let info = this.computeCurrentChapterInfo(e.target.scrollTop)
+                if (JSON.stringify(info) !== '{}') {
+                    this.realTimeInfo = info
+                    this.setScrollInfo(e.detail.scrollTop)
+                }
                 if (this.newHeight === 0) {
                     this.newHeight = scrollHeight
                 } else if (this.newHeight !== scrollHeight) {
@@ -269,16 +287,62 @@
                 }
                 this.oldScrollTop = e.detail.scrollTop
             },
-            setScrollTop (scrollTop) {
+            scrollChange (newScrollHeight, oldScrollHeight) {
+                if (this.scrollRange.length === 0) {
+                    let obj = {
+                        chapter: this.chapterInfo.chapter,
+                        chaptersId: this.chapterInfo.currentChapterId,
+                        min: 1,
+                        max: (newScrollHeight - oldScrollHeight) > 1 ? newScrollHeight - oldScrollHeight : 2
+                    }
+                    this.scrollRange.push(obj)
+                    return
+                }
+                if (this.scrollType === 'top') {
+                    let obj = {
+                        chapter: this.chapterInfo.chapter,
+                        chaptersId: this.chapterInfo.currentChapterId,
+                        min: 1,
+                        max: (newScrollHeight - oldScrollHeight) > 1 ? newScrollHeight - oldScrollHeight : 2
+                    }
+                    for (let i in this.scrollRange) {
+                        this.scrollRange[i].min += newScrollHeight - oldScrollHeight
+                        this.scrollRange[i].max += newScrollHeight - oldScrollHeight
+                    }
+                    this.scrollRange.unshift(obj)
+                } else if (this.scrollType === 'bottom') {
+                    let obj = {
+                        chapter: this.chapterInfo.chapter,
+                        chaptersId: this.chapterInfo.currentChapterId,
+                        min: oldScrollHeight + 1,
+                        max: newScrollHeight
+                    }
+                    this.scrollRange.push(obj)
+                }
+                this.scrollType = ''
+            },
+            computeCurrentChapterInfo (scrollTop) {
+                let result = Object.create(null)
+                for (let key in this.scrollRange) {
+                    if (scrollTop >= this.scrollRange[key].min && scrollTop <= this.scrollRange[key].max) {
+                        result = this.scrollRange[key]
+                        break
+                    }
+                }
+                return result
+            },
+            setScrollInfo (scrollTop) {
+                let result = Object.assign({}, this.realTimeInfo)
+                result.scrollTop = scrollTop
                 try {
-                    uni.setStorageSync(this.novels.novelsId + ':scrollTop', scrollTop)
+                    uni.setStorageSync(this.novels.novelsId + ':scrollInfo', result)
                 } catch (e) {
                     // error
                 }
             },
             directoryBtn () {
                 uni.navigateTo({
-                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.chapterInfo.currentChapterId
+                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.realTimeInfo.chaptersId
                 })
             },
             //滑块设置字体间距或大小
@@ -319,7 +383,6 @@
                     data: JSON.stringify(this.skin)
                 })
             },
-
         }
     }
 </script>
@@ -330,6 +393,16 @@
         .scroll-content {
             height: 100%;
             padding: 0 16rpx;
+        }
+
+        .mask-top {
+            position: fixed;
+            height: 40 upx;
+            transition: all 0.2s;
+            width: 100%;
+            z-index: 1000;
+            margin: auto;
+            border-radius: 0 0 4px 4px;
         }
 
         .mask-bottom {
