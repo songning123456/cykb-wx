@@ -11,6 +11,7 @@
     "pages/settings/Settings",
     "pages/bookdetail/BookDetail",
     "pages/reading/Reading",
+    "pages/reading/SimpleRead",
     "pages/reading/Directory"
   ],
   "subPackages": [],

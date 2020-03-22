@@ -88,6 +88,13 @@
       }
     },
     {
+      "path": "pages/reading/SimpleRead",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationBarBackgroundColor": "#e54d42"
+      }
+    },
+    {
       "path": "pages/reading/Directory",
       "style": {
         "navigationBarTitleText": "目录",

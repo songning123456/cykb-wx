@@ -144,7 +144,7 @@
                 }
             },
             startReading() {
-                uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels)})
+                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(this.novels)})
             }
         }
     }

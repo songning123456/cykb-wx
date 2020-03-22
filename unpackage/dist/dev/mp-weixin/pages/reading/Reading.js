@@ -185,7 +185,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 130));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 138));};var _default =
+var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 138));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 146));};var _default =
 
 {
   name: 'Reading',

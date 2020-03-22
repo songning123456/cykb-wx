@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "",
+  "navigationBarBackgroundColor": "#e54d42",
+  "usingComponents": {
+    "uni-tag": "/components/UniTag",
+    "uni-icon": "/components/UniIcon"
+  }
+}

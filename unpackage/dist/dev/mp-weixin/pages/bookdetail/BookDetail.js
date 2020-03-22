@@ -290,7 +290,7 @@ var _default = { name: 'BookDetail', data: function data() {return { novels: { c
       }
     },
     startReading: function startReading() {
-      uni.navigateTo({ url: '/pages/reading/Reading?novels=' + JSON.stringify(this.novels) });
+      uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(this.novels) });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
