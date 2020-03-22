@@ -274,6 +274,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
         this.realTimeInfo.scrollTop -= this.realTimeInfo.min;
         this.realTimeInfo.max -= this.realTimeInfo.min;
         this.realTimeInfo.min = 1;
+        this.setScrollInfo();
         params = { novelsId: this.novels.novelsId, chaptersId: this.realTimeInfo.chaptersId };
         url = '/chapters/readMore';
       } else {
@@ -328,16 +329,13 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
           _this2.convertNodes(nodeType);
         }
       }).finally(function () {
-        // dom渲染完后再过3s, 才能歌重新加载
-        _this2.$nextTick(function () {
-          setTimeout(function () {
-            if (nodeType === 'top') {
-              _this2.throttleFlag.top = true;
-            } else if (nodeType === 'bottom') {
-              _this2.throttleFlag.bottom = true;
-            }
-          }, 3000);
-        });
+        setTimeout(function () {
+          if (nodeType === 'top') {
+            _this2.throttleFlag.top = true;
+          } else if (nodeType === 'bottom') {
+            _this2.throttleFlag.bottom = true;
+          }
+        }, 3000);
         uni.hideLoading();
       });
     },
@@ -411,7 +409,10 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       }
       this.oldScrollTop = e.detail.scrollTop;
     },
-    scrollChange: function scrollChange(newScrollHeight, oldScrollHeight) {
+    scrollChange: function scrollChange(newScrollHeight, oldScrollHeight) {var _this4 = this;
+      if (newScrollHeight <= oldScrollHeight) {
+        return;
+      }
       if (this.scrollRange.length === 0) {
         var obj = {
           chapter: this.chapterInfo.chapter,
@@ -420,6 +421,9 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
           max: newScrollHeight - oldScrollHeight > 1 ? newScrollHeight - oldScrollHeight : 2 };
 
         this.scrollRange.push(obj);
+        return;
+      }
+      if (this.scrollRange.filter(function (item) {return item.chaptersId === _this4.chapterInfo.chaptersId;}).length > 0) {
         return;
       }
       if (this.scrollType === 'top') {
@@ -434,6 +438,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
           this.scrollRange[i].max += newScrollHeight - oldScrollHeight;
         }
         this.scrollRange.unshift(_obj);
+        this.scrollType = '';
       } else if (this.scrollType === 'bottom') {
         var _obj2 = {
           chapter: this.chapterInfo.chapter,
@@ -442,8 +447,9 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
           max: newScrollHeight };
 
         this.scrollRange.push(_obj2);
+        this.scrollType = '';
       }
-      this.scrollType = '';
+      console.log(this.scrollRange);
     },
     computeCurrentChapterInfo: function computeCurrentChapterInfo(scrollTop) {
       var result = Object.create(null);
@@ -457,13 +463,16 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
     },
     setScrollInfo: function setScrollInfo(scrollTop) {
       if (Object.keys(this.realTimeInfo).length > 0) {
-        this.realTimeInfo.scrollTop = scrollTop;
+        if (scrollTop) {
+          this.realTimeInfo.scrollTop = scrollTop;
+        }
         try {
           uni.setStorageSync(this.novels.novelsId + ':scrollInfo', this.realTimeInfo);
         } catch (e) {
           // error
         }
       }
+      console.error(uni.getStorageSync(this.novels.novelsId + ':scrollInfo'));
     },
     directoryBtn: function directoryBtn() {
       uni.navigateTo({

@@ -139,6 +139,7 @@
                     this.realTimeInfo.scrollTop -= this.realTimeInfo.min
                     this.realTimeInfo.max -= this.realTimeInfo.min
                     this.realTimeInfo.min = 1
+                    this.setScrollInfo()
                     params = { novelsId: this.novels.novelsId, chaptersId: this.realTimeInfo.chaptersId }
                     url = '/chapters/readMore'
                 } else {
@@ -193,16 +194,13 @@
                         this.convertNodes(nodeType)
                     }
                 }).finally(() => {
-                    // dom渲染完后再过3s, 才能歌重新加载
-                    this.$nextTick(() => {
-                        setTimeout(() => {
-                            if (nodeType === 'top') {
-                                this.throttleFlag.top = true
-                            } else if (nodeType === 'bottom') {
-                                this.throttleFlag.bottom = true
-                            }
-                        }, 3000)
-                    })
+                    setTimeout(() => {
+                        if (nodeType === 'top') {
+                            this.throttleFlag.top = true
+                        } else if (nodeType === 'bottom') {
+                            this.throttleFlag.bottom = true
+                        }
+                    }, 3000)
                     uni.hideLoading()
                 })
             },
@@ -277,6 +275,9 @@
                 this.oldScrollTop = e.detail.scrollTop
             },
             scrollChange (newScrollHeight, oldScrollHeight) {
+                if (newScrollHeight <= oldScrollHeight) {
+                    return
+                }
                 if (this.scrollRange.length === 0) {
                     let obj = {
                         chapter: this.chapterInfo.chapter,
@@ -285,6 +286,9 @@
                         max: (newScrollHeight - oldScrollHeight) > 1 ? newScrollHeight - oldScrollHeight : 2
                     }
                     this.scrollRange.push(obj)
+                    return
+                }
+                if (this.scrollRange.filter(item => item.chaptersId === this.chapterInfo.chaptersId).length > 0) {
                     return
                 }
                 if (this.scrollType === 'top') {
@@ -299,6 +303,7 @@
                         this.scrollRange[i].max += newScrollHeight - oldScrollHeight
                     }
                     this.scrollRange.unshift(obj)
+                    this.scrollType = ''
                 } else if (this.scrollType === 'bottom') {
                     let obj = {
                         chapter: this.chapterInfo.chapter,
@@ -307,8 +312,9 @@
                         max: newScrollHeight
                     }
                     this.scrollRange.push(obj)
+                    this.scrollType = ''
                 }
-                this.scrollType = ''
+                console.log(this.scrollRange);
             },
             computeCurrentChapterInfo (scrollTop) {
                 let result = Object.create(null)
@@ -322,13 +328,16 @@
             },
             setScrollInfo (scrollTop) {
                 if (Object.keys(this.realTimeInfo).length > 0) {
-                    this.realTimeInfo.scrollTop = scrollTop
+                    if (scrollTop) {
+                        this.realTimeInfo.scrollTop = scrollTop
+                    }
                     try {
                         uni.setStorageSync(this.novels.novelsId + ':scrollInfo', this.realTimeInfo)
                     } catch (e) {
                         // error
                     }
                 }
+                console.error(uni.getStorageSync(this.novels.novelsId + ':scrollInfo'))
             },
             directoryBtn () {
                 uni.navigateTo({
