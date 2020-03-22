@@ -104,7 +104,11 @@
                 oldScrollTop: 0,
                 oldHeight: 0,
                 newHeight: 0,
-                nodes: []
+                nodes: [],
+                throttleFlag: {
+                    top: true,
+                    bottom: true
+                }
             }
         },
         onLoad (options) {
@@ -201,6 +205,11 @@
                         this.convertNodes(nodeType)
                     }
                 }).finally(() => {
+                    if (nodeType === 'top') {
+                        this.throttleFlag.top = true
+                    } else if (nodeType === 'bottom') {
+                        this.throttleFlag.bottom = true
+                    }
                     uni.hideLoading()
                 })
             },
@@ -230,22 +239,24 @@
                 this.isShowMask = !this.isShowMask
             },
             scrollToUpper (e) {
-                common.throttle(this, () => {
+                if (this.throttleFlag.top) {
+                    this.throttleFlag.top = false;
                     let index = this.convertChapterIndex(this.topChapterId)
                     if (index > 0) {
                         this.topChapterId = this.directory[--index].chapterId
                         this.queryNewChapter(this.topChapterId, 'top')
                     }
-                }, 5000)()
+                }
             },
             scrollBottom (e) {
-                common.throttle(this, () => {
+                if (this.throttleFlag.bottom) {
+                    this.throttleFlag.bottom = false;
                     let index = this.convertChapterIndex(this.bottomChapterId)
                     if (index < this.directory.length - 1) {
                         this.bottomChapterId = this.directory[++index].chapterId
                         this.queryNewChapter(this.bottomChapterId, 'bottom')
                     }
-                }, 5000)()
+                }
             },
             scrollOn (e) {
                 // this.setScrollTop(e.target.scrollTop)

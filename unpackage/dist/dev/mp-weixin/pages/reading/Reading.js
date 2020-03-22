@@ -239,7 +239,11 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
       oldScrollTop: 0,
       oldHeight: 0,
       newHeight: 0,
-      nodes: [] };
+      nodes: [],
+      throttleFlag: {
+        top: true,
+        bottom: true } };
+
 
   },
   onLoad: function onLoad(options) {var _this = this;
@@ -336,6 +340,11 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
           _this4.convertNodes(nodeType);
         }
       }).finally(function () {
+        if (nodeType === 'top') {
+          _this4.throttleFlag.top = true;
+        } else if (nodeType === 'bottom') {
+          _this4.throttleFlag.bottom = true;
+        }
         uni.hideLoading();
       });
     },
@@ -364,23 +373,25 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
     clickCenter: function clickCenter() {
       this.isShowMask = !this.isShowMask;
     },
-    scrollToUpper: function scrollToUpper(e) {var _this6 = this;
-      _common.default.throttle(this, function () {
-        var index = _this6.convertChapterIndex(_this6.topChapterId);
+    scrollToUpper: function scrollToUpper(e) {
+      if (this.throttleFlag.top) {
+        this.throttleFlag.top = false;
+        var index = this.convertChapterIndex(this.topChapterId);
         if (index > 0) {
-          _this6.topChapterId = _this6.directory[--index].chapterId;
-          _this6.queryNewChapter(_this6.topChapterId, 'top');
+          this.topChapterId = this.directory[--index].chapterId;
+          this.queryNewChapter(this.topChapterId, 'top');
         }
-      }, 5000)();
+      }
     },
-    scrollBottom: function scrollBottom(e) {var _this7 = this;
-      _common.default.throttle(this, function () {
-        var index = _this7.convertChapterIndex(_this7.bottomChapterId);
-        if (index < _this7.directory.length - 1) {
-          _this7.bottomChapterId = _this7.directory[++index].chapterId;
-          _this7.queryNewChapter(_this7.bottomChapterId, 'bottom');
+    scrollBottom: function scrollBottom(e) {
+      if (this.throttleFlag.bottom) {
+        this.throttleFlag.bottom = false;
+        var index = this.convertChapterIndex(this.bottomChapterId);
+        if (index < this.directory.length - 1) {
+          this.bottomChapterId = this.directory[++index].chapterId;
+          this.queryNewChapter(this.bottomChapterId, 'bottom');
         }
-      }, 5000)();
+      }
     },
     scrollOn: function scrollOn(e) {
       // this.setScrollTop(e.target.scrollTop)
