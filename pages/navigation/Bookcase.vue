@@ -130,7 +130,7 @@
                     }
                 }
                 uni.showLoading({
-                    title: '等待中',
+                    title: 'loading...',
                     mask: true
                 })
                 request.post('/relation/topBookcase', params).then(data => {

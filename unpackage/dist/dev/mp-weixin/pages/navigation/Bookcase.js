@@ -281,7 +281,7 @@ var currentDate = new Date();var _default =
 
 
       uni.showLoading({
-        title: '等待中',
+        title: 'loading...',
         mask: true });
 
       _request.default.post('/relation/topBookcase', params).then(function (data) {

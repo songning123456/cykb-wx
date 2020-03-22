@@ -179,7 +179,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 130));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 138));};var _default =
+var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
+var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var UniIcon = function UniIcon() {return Promise.all(/*! import() | components/UniIcon */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UniIcon")]).then(__webpack_require__.bind(null, /*! ../../components/UniIcon */ 130));};var UniTag = function UniTag() {return __webpack_require__.e(/*! import() | components/UniTag */ "components/UniTag").then(__webpack_require__.bind(null, /*! ../../components/UniTag */ 138));};var _default =
 
 {
   name: 'Reading',
@@ -231,16 +232,20 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       novels: null,
       //正文
       chapterInfo: {},
-      currentChapterId: null,
+      topChapterId: null,
+      bottomChapterId: null,
       directory: [],
-      scrollPosition: 0,
-      hasExist: false };
+      scrollTop: 0,
+      oldScrollTop: 0,
+      oldHeight: 0,
+      newHeight: 0,
+      nodes: [] };
 
   },
   onLoad: function onLoad(options) {var _this = this;
     this.novels = JSON.parse(options.novels);
     uni.setNavigationBarTitle({ title: this.novels.title });
-    uni.showLoading({ title: '加载中', mask: true });
+    uni.showLoading({ title: 'loading...', mask: true });
     if (uni.getStorageSync('skin')) {
       this.skin = JSON.parse(uni.getStorageSync('skin'));
     }
@@ -256,10 +261,8 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 
       _request.default.post('/relation/isExist', params).then(function (data) {
         if (data.status === 200) {
-          _this.hasExist = true;
           _this.existLoadBtn();
         } else {
-          _this.hasExist = false;
           _this.noExistLoadBtn();
         }
       }).catch(function () {
@@ -267,13 +270,6 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       });
     }
   },
-  watch: {
-    currentChapterId: function currentChapterId(newVal, oldVal) {
-      if (newVal && oldVal) {
-        this.queryNewChapter();
-      }
-    } },
-
   methods: {
     existLoadBtn: function existLoadBtn() {var _this2 = this;
       var params = {
@@ -286,10 +282,8 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
         if (data.status === 200 && data.data.length) {
           _this2.chapterInfo = data.data[0];
           _this2.directory = data.listExt;
-          _this2.currentChapterId = _this2.chapterInfo.currentChapterId;
-          _this2.$nextTick(function () {
-            _this2.scrollPosition = uni.getStorageSync(_this2.novels.novelsId + ':scrollTop') || 0;
-          });
+          _this2.topChapterId = _this2.bottomChapterId = _this2.chapterInfo.currentChapterId;
+          _this2.convertNodes('begin');
         }
       }).finally(function () {
         uni.hideLoading();
@@ -305,64 +299,110 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
         if (data.status === 200 && data.data.length) {
           _this3.chapterInfo = data.data[0];
           _this3.directory = data.listExt;
-          _this3.currentChapterId = _this3.chapterInfo.currentChapterId;
+          _this3.topChapterId = _this3.bottomChapterId = _this3.chapterInfo.currentChapterId;
+          _this3.convertNodes('begin');
         }
       }).finally(function () {
         uni.hideLoading();
       });
     },
-    currentChapterIndex: function currentChapterIndex() {
+    convertChapterIndex: function convertChapterIndex(chaptersId) {
+      var result = 0;
       for (var i = 0, len = this.directory.length; i < len; i++) {
-        if (this.directory[i].chapterId === this.chapterInfo.currentChapterId) {
-          return i;
+        if (this.directory[i].chapterId === chaptersId) {
+          result = i;
+          break;
         }
       }
+      return result;
     },
-    queryNewChapter: function queryNewChapter() {var _this4 = this;
+    queryNewChapter: function queryNewChapter(chaptersId, nodeType) {var _this4 = this;
       var params = {
         condition: {
           novelsId: this.novels.novelsId,
-          chaptersId: this.currentChapterId } };
+          chaptersId: chaptersId } };
 
 
       if (this.$store.state.userInfo) {
         params.condition.uniqueId = this.$store.state.userInfo.uniqueId;
       }
+      uni.showLoading({ title: 'loading...', mask: true });
       _request.default.post('/relation/readNewChapter', params).then(function (data) {
         if (data.status === 200 && data.data.length) {
           _this4.chapterInfo = data.data[0];
-          _this4.currentChapterId = _this4.chapterInfo.currentChapterId;
-          try {
-            uni.setStorageSync(_this4.novels.novelsId + ':scrollTop', 0);
-          } catch (e) {
-            // error
+          if (nodeType === 'insert') {
+            _this4.topChapterId = _this4.bottomChapterId = _this4.chapterInfo.currentChapterId;
           }
-          _this4.$nextTick(function () {
-            _this4.scrollPosition = 0;
-          });
+          _this4.convertNodes(nodeType);
         }
+      }).finally(function () {
+        uni.hideLoading();
       });
+    },
+    // nodeType: begin => 点击开始阅读时; top => 顶部下拉; bottom=> 底部上拉;insert => 目录页跳转;
+    convertNodes: function convertNodes(nodeType) {var _this5 = this;
+      var node = "<div class=\"node-title\">".concat(this.chapterInfo.chapter, "</div><div class=\"node-content\">").concat(this.chapterInfo.content, "</div>");
+      if (nodeType === 'top') {
+        this.nodes = node + this.nodes;
+        this.scrollTop = this.oldScrollTop;
+        this.$nextTick(function () {
+          _this5.scrollTop = _this5.oldHeight;
+        });
+      } else if (nodeType === 'bottom') {
+        this.nodes = this.nodes + node;
+      } else {
+        this.nodes = node;
+        this.$nextTick(function () {
+          _this5.scrollTop = 0;
+          _this5.oldScrollTop = 0;
+          _this5.oldHeight = 0;
+          _this5.newHeight = 0;
+        });
+      }
     },
     //点击中间
     clickCenter: function clickCenter() {
       this.isShowMask = !this.isShowMask;
     },
-    scrollTop: function scrollTop(e) {
-      console.log('top:' + JSON.stringify(e));
+    scrollToUpper: function scrollToUpper(e) {var _this6 = this;
+      _common.default.throttle(this, function () {
+        var index = _this6.convertChapterIndex(_this6.topChapterId);
+        if (index > 0) {
+          _this6.topChapterId = _this6.directory[--index].chapterId;
+          _this6.queryNewChapter(_this6.topChapterId, 'top');
+        }
+      }, 5000)();
     },
-    scrollBottom: function scrollBottom(e) {
-      console.log('bottom:' + JSON.stringify(e));
+    scrollBottom: function scrollBottom(e) {var _this7 = this;
+      _common.default.throttle(this, function () {
+        var index = _this7.convertChapterIndex(_this7.bottomChapterId);
+        if (index < _this7.directory.length - 1) {
+          _this7.bottomChapterId = _this7.directory[++index].chapterId;
+          _this7.queryNewChapter(_this7.bottomChapterId, 'bottom');
+        }
+      }, 5000)();
     },
     scrollOn: function scrollOn(e) {
+      // this.setScrollTop(e.target.scrollTop)
+      var scrollHeight = e.detail.scrollHeight;
+      if (this.newHeight === 0) {
+        this.newHeight = scrollHeight;
+      } else if (this.newHeight !== scrollHeight) {
+        this.oldHeight = scrollHeight - this.newHeight;
+        this.newHeight = scrollHeight;
+      }
+      this.oldScrollTop = e.detail.scrollTop;
+    },
+    setScrollTop: function setScrollTop(scrollTop) {
       try {
-        uni.setStorageSync(this.novels.novelsId + ':scrollTop', e.target.scrollTop);
+        uni.setStorageSync(this.novels.novelsId + ':scrollTop', scrollTop);
       } catch (e) {
         // error
       }
     },
     directoryBtn: function directoryBtn() {
       uni.navigateTo({
-        url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.currentChapterId });
+        url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.chapterInfo.currentChapterId });
 
     },
     //滑块设置字体间距或大小

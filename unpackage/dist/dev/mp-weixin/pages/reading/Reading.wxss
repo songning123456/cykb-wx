@@ -107,4 +107,11 @@
 .reading .mask-bottom .v3 .v3-item .cu-btn.data-v-9618b748 {
         width: 300rpx;
 }
+.reading.data-v-9618b748 .node-title {
+  font-weight: bold;
+  margin-bottom: 100rpx;
+}
+.reading.data-v-9618b748 .node-content {
+  margin-bottom: 100rpx;
+}
 

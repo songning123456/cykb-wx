@@ -1,8 +1,8 @@
 <template>
-    <view class="reading full-screen" :style="{background: skin.pageBgColor}">
-        <scroll-view scroll-y="true" @scrolltoupper="scrollTop" @scrolltolower="scrollBottom" @scroll="scrollOn"
-                     :scroll-top="scrollPosition" class="scroll-content">
-            <rich-text @click="clickCenter" :nodes="chapterInfo.content"
+    <view class="reading full-screen" :style="{background: skin.pageBgColor}" @click="clickCenter">
+        <scroll-view scroll-y="true" @scrolltoupper="scrollToUpper" @scrolltolower="scrollBottom" @scroll="scrollOn"
+                     :scroll-top="scrollTop" class="scroll-content">
+            <rich-text :nodes="nodes"
                        :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
             </rich-text>
         </scroll-view>
@@ -45,6 +45,7 @@
     import UniIcon from '../../components/UniIcon'
     import UniTag from '../../components/UniTag'
     import request from '../../util/request'
+    import common from '../../util/common'
 
     export default {
         name: 'Reading',
@@ -96,22 +97,26 @@
                 novels: null,
                 //正文
                 chapterInfo: {},
-                currentChapterId: null,
+                topChapterId: null,
+                bottomChapterId: null,
                 directory: [],
-                scrollPosition: 0,
-                hasExist: false
+                scrollTop: 0,
+                oldScrollTop: 0,
+                oldHeight: 0,
+                newHeight: 0,
+                nodes: []
             }
         },
         onLoad (options) {
             this.novels = JSON.parse(options.novels)
             uni.setNavigationBarTitle({ title: this.novels.title })
-            uni.showLoading({ title: '加载中', mask: true })
+            uni.showLoading({ title: 'loading...', mask: true })
             if (uni.getStorageSync('skin')) {
                 this.skin = JSON.parse(uni.getStorageSync('skin'))
             }
-            this.setSkin();
+            this.setSkin()
             if (!this.$store.state.userInfo) {
-                this.noExistLoadBtn();
+                this.noExistLoadBtn()
             } else {
                 let params = {
                     condition: {
@@ -121,23 +126,14 @@
                 }
                 request.post('/relation/isExist', params).then(data => {
                     if (data.status === 200) {
-                        this.hasExist = true;
-                        this.existLoadBtn();
+                        this.existLoadBtn()
                     } else {
-                        this.hasExist = false;
-                        this.noExistLoadBtn();
+                        this.noExistLoadBtn()
                     }
                 }).catch(() => {
-                    uni.hideLoading();
+                    uni.hideLoading()
                 })
             }
-        },
-        watch: {
-            currentChapterId(newVal, oldVal) {
-                if (newVal && oldVal) {
-                    this.queryNewChapter()
-                }
-            },
         },
         methods: {
             existLoadBtn () {
@@ -149,18 +145,16 @@
                 }
                 request.post('/relation/beginReading', params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.chapterInfo = data.data[0];
-                        this.directory = data.listExt;
-                        this.currentChapterId = this.chapterInfo.currentChapterId;
-                        this.$nextTick(() => {
-                            this.scrollPosition = uni.getStorageSync(this.novels.novelsId + ':scrollTop') || 0
-                        })
+                        this.chapterInfo = data.data[0]
+                        this.directory = data.listExt
+                        this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
+                        this.convertNodes('begin')
                     }
                 }).finally(() => {
                     uni.hideLoading()
                 })
             },
-            noExistLoadBtn() {
+            noExistLoadBtn () {
                 let params = {
                     condition: {
                         novelsId: this.novels.novelsId
@@ -168,67 +162,113 @@
                 }
                 request.post('/chapters/unknownTop', params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.chapterInfo = data.data[0];
-                        this.directory = data.listExt;
-                        this.currentChapterId = this.chapterInfo.currentChapterId;
+                        this.chapterInfo = data.data[0]
+                        this.directory = data.listExt
+                        this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
+                        this.convertNodes('begin')
                     }
                 }).finally(() => {
                     uni.hideLoading()
                 })
             },
-            currentChapterIndex() {
-                for (let i = 0, len = this.directory.length; i< len; i++) {
-                    if ( this.directory[i].chapterId === this.chapterInfo.currentChapterId) {
-                        return i;
+            convertChapterIndex (chaptersId) {
+                let result = 0
+                for (let i = 0, len = this.directory.length; i < len; i++) {
+                    if (this.directory[i].chapterId === chaptersId) {
+                        result = i
+                        break
                     }
                 }
+                return result
             },
-            queryNewChapter() {
+            queryNewChapter (chaptersId, nodeType) {
                 let params = {
                     condition: {
                         novelsId: this.novels.novelsId,
-                        chaptersId: this.currentChapterId
+                        chaptersId: chaptersId
                     }
                 }
                 if (this.$store.state.userInfo) {
                     params.condition.uniqueId = this.$store.state.userInfo.uniqueId
                 }
+                uni.showLoading({ title: 'loading...', mask: true })
                 request.post('/relation/readNewChapter', params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.chapterInfo = data.data[0];
-                        this.currentChapterId = this.chapterInfo.currentChapterId;
-                        try {
-                            uni.setStorageSync(this.novels.novelsId + ':scrollTop', 0);
-                        } catch (e) {
-                            // error
+                        this.chapterInfo = data.data[0]
+                        if (nodeType === 'insert') {
+                            this.topChapterId = this.bottomChapterId = this.chapterInfo.currentChapterId
                         }
-                        this.$nextTick(() => {
-                            this.scrollPosition = 0
-                        })
+                        this.convertNodes(nodeType)
                     }
+                }).finally(() => {
+                    uni.hideLoading()
                 })
+            },
+            // nodeType: begin => 点击开始阅读时; top => 顶部下拉; bottom=> 底部上拉;insert => 目录页跳转;
+            convertNodes (nodeType) {
+                let node = `<div class="node-title">${this.chapterInfo.chapter}</div><div class="node-content">${this.chapterInfo.content}</div>`
+                if (nodeType === 'top') {
+                    this.nodes = node + this.nodes
+                    this.scrollTop = this.oldScrollTop
+                    this.$nextTick(() => {
+                        this.scrollTop = this.oldHeight
+                    })
+                } else if (nodeType === 'bottom') {
+                    this.nodes = this.nodes + node
+                } else {
+                    this.nodes = node
+                    this.$nextTick(() => {
+                        this.scrollTop = 0
+                        this.oldScrollTop = 0
+                        this.oldHeight = 0
+                        this.newHeight = 0
+                    })
+                }
             },
             //点击中间
             clickCenter () {
                 this.isShowMask = !this.isShowMask
             },
-            scrollTop (e) {
-                console.log('top:' + JSON.stringify(e))
+            scrollToUpper (e) {
+                common.throttle(this, () => {
+                    let index = this.convertChapterIndex(this.topChapterId)
+                    if (index > 0) {
+                        this.topChapterId = this.directory[--index].chapterId
+                        this.queryNewChapter(this.topChapterId, 'top')
+                    }
+                }, 5000)()
             },
             scrollBottom (e) {
-                console.log('bottom:' + JSON.stringify(e))
+                common.throttle(this, () => {
+                    let index = this.convertChapterIndex(this.bottomChapterId)
+                    if (index < this.directory.length - 1) {
+                        this.bottomChapterId = this.directory[++index].chapterId
+                        this.queryNewChapter(this.bottomChapterId, 'bottom')
+                    }
+                }, 5000)()
             },
             scrollOn (e) {
+                // this.setScrollTop(e.target.scrollTop)
+                let scrollHeight = e.detail.scrollHeight
+                if (this.newHeight === 0) {
+                    this.newHeight = scrollHeight
+                } else if (this.newHeight !== scrollHeight) {
+                    this.oldHeight = scrollHeight - this.newHeight
+                    this.newHeight = scrollHeight
+                }
+                this.oldScrollTop = e.detail.scrollTop
+            },
+            setScrollTop (scrollTop) {
                 try {
-                    uni.setStorageSync(this.novels.novelsId + ':scrollTop', e.target.scrollTop);
+                    uni.setStorageSync(this.novels.novelsId + ':scrollTop', scrollTop)
                 } catch (e) {
                     // error
                 }
             },
-            directoryBtn() {
+            directoryBtn () {
                 uni.navigateTo({
-                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.currentChapterId
-                });
+                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.chapterInfo.currentChapterId
+                })
             },
             //滑块设置字体间距或大小
             sliderChange (e, type) {
@@ -242,7 +282,7 @@
                     data: JSON.stringify(this.skin)
                 })
             },
-            setSkin() {
+            setSkin () {
                 let titleFontColor = '#000000'
                 if (this.skin.pageBgColor === '#333b3d') {
                     titleFontColor = '#ffffff'
@@ -339,6 +379,15 @@
                     }
                 }
             }
+        }
+
+        /deep/ .node-title {
+            font-weight: bold;
+            margin-bottom: 100rpx;
+        }
+
+        /deep/ .node-content {
+            margin-bottom: 100rpx;
         }
     }
 

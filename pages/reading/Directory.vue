@@ -42,7 +42,7 @@
             jumpChapterBtn(chapterId) {
                 let pages = getCurrentPages();
                 let prevPage = pages[pages.length - 2];  //上一个页面
-                prevPage.$vm.currentChapterId = chapterId;
+                prevPage.$vm.queryNewChapter(chapterId, 'insert');
                 uni.navigateBack({
                     delta: 1
                 });

@@ -39,4 +39,47 @@ common.sleep = function (milliSeconds) {
        // ...
     }
 };
+
+/**
+ *
+ * @param obj
+ * @param func
+ * @param wait 毫秒
+ * @param arrParams
+ * @returns {Function}
+ */
+common.debounce = function (obj, func, wait, arrParams) {
+    let timeout = null;
+    (function() {
+        if(timeout !== null) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+            if (arrParams) {
+                func.apply(obj, arrParams);
+            } else {
+                func.apply(obj);
+            }
+        }, wait);
+    })()
+};
+common.throttle = function (obj, func, delay, arrParams) {
+    let timer = null;
+    let startTime = Date.now();
+    return function() {
+        let curTime = Date.now();
+        let remaining = delay - (curTime - startTime);
+        clearTimeout(timer);
+        if (remaining <= 0) {
+            if (arrParams) {
+                func.apply(obj, arrParams);
+            } else {
+                func.apply(obj);
+            }
+            startTime = Date.now();
+        } else {
+            timer = setTimeout(func, remaining);
+        }
+    }
+}
 export default common;
