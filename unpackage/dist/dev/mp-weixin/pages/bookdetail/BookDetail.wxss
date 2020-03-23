@@ -24,57 +24,57 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.book-detail .book-frame.data-v-268bf866 {
+.book-detail .book-frame.data-v-a9e476bc {
   width: 100%;
   height: calc(100% - (100rpx + env(safe-area-inset-bottom) / 2 + 1px));
   overflow-y: auto;
 }
-.book-detail .book-frame .cu-card.data-v-268bf866 {
+.book-detail .book-frame .cu-card.data-v-a9e476bc {
     width: 100%;
 }
-.book-detail .book-frame .cu-card .cu-item.data-v-268bf866 {
+.book-detail .book-frame .cu-card .cu-item.data-v-a9e476bc {
       width: 100%;
       height: 100%;
 }
-.book-detail .book-frame .cu-card .cu-item .image.data-v-268bf866 {
+.book-detail .book-frame .cu-card .cu-item .image.data-v-a9e476bc {
         width: 100%;
         height: 100%;
         padding: 30rpx;
         box-sizing: border-box;
         margin: unset;
 }
-.book-detail .book-frame .cu-card .cu-item .image .image-size.data-v-268bf866 {
+.book-detail .book-frame .cu-card .cu-item .image .image-size.data-v-a9e476bc {
           width: 165rpx;
           height: 220rpx;
           border-radius: 6rpx;
 }
-.book-detail .book-frame .cu-card .cu-item .image .cu-tag.data-v-268bf866 {
+.book-detail .book-frame .cu-card .cu-item .image .cu-tag.data-v-a9e476bc {
           position: unset;
 }
-.book-detail .book-frame .author-books.data-v-268bf866 {
+.book-detail .book-frame .author-books.data-v-a9e476bc {
     white-space: nowrap;
     width: 100%;
     padding: 20rpx;
     margin: 0 auto;
 }
-.book-detail .book-frame .author-books .author-book.data-v-268bf866 {
+.book-detail .book-frame .author-books .author-book.data-v-a9e476bc {
       width: 24%;
       margin-right: 20rpx;
       display: inline-block;
       vertical-align: top;
 }
-.book-detail .book-frame .author-books .author-book .avatar-img.data-v-268bf866 {
+.book-detail .book-frame .author-books .author-book .avatar-img.data-v-a9e476bc {
         display: inline-block;
         height: 220rpx;
         width: 165rpx;
         border-radius: 6rpx;
         position: relative;
 }
-.book-detail .book-frame .author-books .author-book .avatar-img .uni-image.data-v-268bf866 {
+.book-detail .book-frame .author-books .author-book .avatar-img .uni-image.data-v-a9e476bc {
           width: 100%;
           height: 100%;
 }
-.book-detail .bottom-bar.data-v-268bf866 {
+.book-detail .bottom-bar.data-v-a9e476bc {
   bottom: 0;
   position: fixed;
   width: 100%;

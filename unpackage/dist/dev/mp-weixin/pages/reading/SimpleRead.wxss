@@ -24,27 +24,56 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.reading .scroll-content.data-v-4f18a97d {
+.reading .scroll-content.data-v-4d20be70 {
   height: 100%;
   padding: 0 16rpx;
 }
-.reading .mask-left.data-v-4f18a97d {
+.reading .scroll-content .read-content.data-v-4d20be70 {
+    min-height: 1000rpx;
+}
+.reading .mask-left.data-v-4d20be70 {
   position: fixed;
   height: auto;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  top: 35%;
   width: auto;
   z-index: 1000;
 }
-.reading .mask-right.data-v-4f18a97d {
+.reading .mask-left button.data-v-4d20be70 {
+    line-height: 45rpx;
+    width: 40rpx;
+    height: 300rpx;
+}
+.reading .mask-left button.data-v-4d20be70:before {
+    right: 100%;
+    content: " ";
+    position: absolute;
+    border: 6px solid transparent;
+    border-right-color: black;
+}
+.reading .mask-right.data-v-4d20be70 {
   position: fixed;
   height: auto;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  top: 35%;
   width: auto;
   z-index: 1000;
 }
-.reading .mask-top.data-v-4f18a97d {
+.reading .mask-right button.data-v-4d20be70 {
+    line-height: 45rpx;
+    width: 40rpx;
+    height: 300rpx;
+}
+.reading .mask-right button.data-v-4d20be70:before {
+    left: 100%;
+    content: " ";
+    position: absolute;
+    border: 6px solid transparent;
+    border-left-color: black;
+}
+.reading .mask-top.data-v-4d20be70 {
   position: fixed;
   height: 40rpx;
   -webkit-transition: all 0.2s;
@@ -54,12 +83,12 @@
   margin: auto;
   border-radius: 0 0 4px 4px;
 }
-.reading .mask-top .mask-title.data-v-4f18a97d {
+.reading .mask-top .mask-title.data-v-4d20be70 {
     letter-spacing: 2px;
     line-height: 20px;
-    padding-left: 5px;
+    text-align: center;
 }
-.reading .mask-bottom.data-v-4f18a97d {
+.reading .mask-bottom.data-v-4d20be70 {
   position: fixed;
   height: 270rpx;
   -webkit-transition: all 0.2s;
@@ -71,7 +100,7 @@
   padding: 10px;
   box-sizing: border-box;
 }
-.reading .mask-bottom .v1.data-v-4f18a97d {
+.reading .mask-bottom .v1.data-v-4d20be70 {
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -80,7 +109,7 @@
     -webkit-align-items: center;
             align-items: center;
 }
-.reading .mask-bottom .v1 .slider-warp.data-v-4f18a97d {
+.reading .mask-bottom .v1 .slider-warp.data-v-4d20be70 {
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
@@ -91,12 +120,12 @@
       -webkit-align-items: center;
               align-items: center;
 }
-.reading .mask-bottom .v1 .slider-warp .slider.data-v-4f18a97d {
+.reading .mask-bottom .v1 .slider-warp .slider.data-v-4d20be70 {
         -webkit-box-flex: 1;
         -webkit-flex: 1;
                 flex: 1;
 }
-.reading .mask-bottom .v2.data-v-4f18a97d {
+.reading .mask-bottom .v2.data-v-4d20be70 {
     display: -webkit-box;
     display: -webkit-flex;
     display: flex;
@@ -105,7 +134,7 @@
             justify-content: space-around;
     margin-top: 10px;
 }
-.reading .mask-bottom .v2 .v2-circle.data-v-4f18a97d {
+.reading .mask-bottom .v2 .v2-circle.data-v-4d20be70 {
       width: 26px;
       height: 26px;
       border-radius: 50%;
@@ -119,10 +148,10 @@
       -webkit-align-items: center;
               align-items: center;
 }
-.reading .mask-bottom .v3.data-v-4f18a97d {
+.reading .mask-bottom .v3.data-v-4d20be70 {
     margin-top: 10px;
 }
-.reading .mask-bottom .v3 .v3-item.data-v-4f18a97d {
+.reading .mask-bottom .v3 .v3-item.data-v-4d20be70 {
       height: 42px;
       padding: 0 30rpx;
       display: -webkit-box;
@@ -135,14 +164,17 @@
       -webkit-align-items: center;
               align-items: center;
 }
-.reading .mask-bottom .v3 .v3-item .cu-btn.data-v-4f18a97d {
+.reading .mask-bottom .v3 .v3-item .cu-btn.data-v-4d20be70 {
         width: 300rpx;
 }
-.reading.data-v-4f18a97d .node-title {
+.reading.data-v-4d20be70 .node-title {
   font-weight: bold;
   margin-bottom: 100rpx;
 }
-.reading.data-v-4f18a97d .node-content {
+.reading.data-v-4d20be70 .node-content {
   margin-bottom: 100rpx;
+}
+.reading .letter-space.data-v-4d20be70 {
+  letter-spacing: 40rpx;
 }
 

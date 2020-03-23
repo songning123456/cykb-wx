@@ -2,26 +2,24 @@
     <view class="reading full-screen" :style="{background: skin.pageBgColor}" @click="clickCenter">
         <scroll-view scroll-y="true" @scroll="scrollOn"
                      :scroll-top="scrollTop" class="scroll-content">
-            <view class="padding flex flex-direction text-bold" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('previous')">上一章</button></view>
-            <rich-text :nodes="nodes"
-                       :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
-            </rich-text>
-            <view class="padding flex flex-direction text-bold" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('next')">下一章</button></view>
+            <view class="padding flex flex-direction text-bold letter-space" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('previous')">上一章</button></view>
+            <view class="read-content" :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
+                <rich-text :nodes="nodes"></rich-text>
+            </view>
+            <view class="padding flex flex-direction text-bold letter-space" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('next')">下一章</button></view>
         </scroll-view>
 
         <!-- 遮罩层左侧部分 -->
-        <view class="mask-left" :style="{left:isShowMask?0:-200+'rpx'}">
-            <view class="flex flex-direction text-bold" style="writing-mode:vertical-lr">
+        <view class="mask-left" :style="{left:isShowMask? '5%':'-15%'}">
+            <view class="flex flex-direction text-bold">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg" @tap="readMore('previous')">上一章</button>
             </view>
-            <text class="cuIcon-back text-black"></text>
         </view>
         <!-- 遮罩层右侧部分 -->
-        <view class="mask-right" :style="{right:isShowMask?0:-200+'rpx'}">
+        <view class="mask-right" :style="{right:isShowMask? '5%':'-15%'}">
             <view class="flex flex-direction text-bold" style="writing-mode:vertical-lr">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg" @tap="readMore('next')">下一章</button>
             </view>
-            <text class="cuIcon-right text-black"></text>
         </view>
         <!-- 遮罩层上部分 -->
         <view class="mask-top" :style="{top:isShowMask?0:-100+'rpx','background':skin.maskBgColor}">
@@ -51,8 +49,8 @@
                 </view>
             </view>
             <view class="v3 v-page">
-                <view class="v3-item" :style="'color:' + skin.fontColor">
-                    <button class="cu-btn block line-red" @tap="directoryBtn">
+                <view class="v3-item">
+                    <button class="cu-btn block line-black" :style="'color:' + skin.fontColor" @tap="directoryBtn">
                         <text class="cuIcon-sort"></text>
                         目录
                     </button>
@@ -286,22 +284,54 @@
         .scroll-content {
             height: 100%;
             padding: 0 16rpx;
+
+            .read-content {
+                min-height: 1000rpx;
+            }
         }
 
         .mask-left {
             position: fixed;
             height: auto;
             transition: all 0.2s;
+            top: 35%;
             width: auto;
             z-index: 1000;
+            button {
+                line-height: 45rpx;
+                width: 40rpx;
+                height: 300rpx;
+            }
+
+            button:before {
+                right: 100%;
+                content: " ";
+                position: absolute;
+                border: 6px solid transparent;
+                border-right-color: black;
+            }
         }
 
         .mask-right {
             position: fixed;
             height: auto;
             transition: all 0.2s;
+            top: 35%;
             width: auto;
             z-index: 1000;
+            button {
+                line-height: 45rpx;
+                width: 40rpx;
+                height: 300rpx;
+            }
+
+            button:before {
+                left: 100%;
+                content: " ";
+                position: absolute;
+                border: 6px solid transparent;
+                border-left-color: black;
+            }
         }
 
         .mask-top {
@@ -316,7 +346,7 @@
             .mask-title {
                 letter-spacing: 2px;
                 line-height: 20px;
-                padding-left: 5px
+                text-align: center;
             }
         }
 
@@ -387,6 +417,10 @@
 
         /deep/ .node-content {
             margin-bottom: 100rpx;
+        }
+
+        .letter-space {
+            letter-spacing: 40rpx;
         }
     }
 

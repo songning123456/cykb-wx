@@ -24,12 +24,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.comment .cu-form-group.data-v-36c94d26 {
+.comment .cu-form-group.data-v-59b19e02 {
   margin: 1rpx 30rpx;
   background: unset;
   border: 0.08px solid #cccccc;
 }
-.comment .bottom-bar.data-v-36c94d26 {
+.comment .bottom-bar.data-v-59b19e02 {
   bottom: 0;
   position: fixed;
   width: 100%;
@@ -38,7 +38,7 @@
   -webkit-justify-content: center;
           justify-content: center;
 }
-.comment .bottom-bar button.data-v-36c94d26 {
+.comment .bottom-bar button.data-v-59b19e02 {
     width: 300rpx;
 }
 
