@@ -9,6 +9,20 @@
             <view class="padding flex flex-direction text-bold" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('next')">下一章</button></view>
         </scroll-view>
 
+        <!-- 遮罩层左侧部分 -->
+        <view class="mask-left" :style="{left:isShowMask?0:-200+'rpx'}">
+            <view class="flex flex-direction text-bold" style="writing-mode:vertical-lr">
+                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg" @tap="readMore('previous')">上一章</button>
+            </view>
+            <text class="cuIcon-back text-black"></text>
+        </view>
+        <!-- 遮罩层右侧部分 -->
+        <view class="mask-right" :style="{right:isShowMask?0:-200+'rpx'}">
+            <view class="flex flex-direction text-bold" style="writing-mode:vertical-lr">
+                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg" @tap="readMore('next')">下一章</button>
+            </view>
+            <text class="cuIcon-right text-black"></text>
+        </view>
         <!-- 遮罩层上部分 -->
         <view class="mask-top" :style="{top:isShowMask?0:-100+'rpx','background':skin.maskBgColor}">
             <view class="mask-title" :style="'color:' + skin.fontColor">{{chapterInfo.chapter}}
@@ -272,6 +286,22 @@
         .scroll-content {
             height: 100%;
             padding: 0 16rpx;
+        }
+
+        .mask-left {
+            position: fixed;
+            height: auto;
+            transition: all 0.2s;
+            width: auto;
+            z-index: 1000;
+        }
+
+        .mask-right {
+            position: fixed;
+            height: auto;
+            transition: all 0.2s;
+            width: auto;
+            z-index: 1000;
         }
 
         .mask-top {

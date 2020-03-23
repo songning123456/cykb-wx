@@ -28,6 +28,22 @@
   height: 100%;
   padding: 0 16rpx;
 }
+.reading .mask-left.data-v-4f18a97d {
+  position: fixed;
+  height: auto;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  width: auto;
+  z-index: 1000;
+}
+.reading .mask-right.data-v-4f18a97d {
+  position: fixed;
+  height: auto;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  width: auto;
+  z-index: 1000;
+}
 .reading .mask-top.data-v-4f18a97d {
   position: fixed;
   height: 40rpx;
