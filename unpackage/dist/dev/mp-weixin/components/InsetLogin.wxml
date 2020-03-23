@@ -1,1 +1,1 @@
-<view class="inset-login login-image full-size data-v-e415cf7a"><button class="cu-btn block bg-red margin-tb-sm lg data-v-e415cf7a" open-type="getUserInfo" withCredentials="true" data-event-opts="{{[['getuserinfo',[['loginWx',['$event']]]]]}}" bindgetuserinfo="__e">一键登录</button></view>
+<view class="inset-login login-image full-size data-v-18ded3ae"><button class="cu-btn block bg-red margin-tb-sm lg data-v-18ded3ae" open-type="getUserInfo" withCredentials="true" data-event-opts="{{[['getuserinfo',[['loginWx',['$event']]]]]}}" bindgetuserinfo="__e">一键登录</button></view>

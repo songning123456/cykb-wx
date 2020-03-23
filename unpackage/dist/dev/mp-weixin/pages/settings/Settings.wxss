@@ -24,11 +24,11 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.settings.data-v-7b74bd62 {
+.settings.data-v-1a456be6 {
   width: 100%;
   height: 100%;
 }
-.settings switch.data-v-7b74bd62::after, .settings switch.data-v-7b74bd62::before {
+.settings switch.data-v-1a456be6::after, .settings switch.data-v-1a456be6::before {
     content: unset;
 }
 

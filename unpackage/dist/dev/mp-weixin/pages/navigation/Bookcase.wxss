@@ -24,32 +24,32 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.book-case .cu-list.data-v-65f116c7 {
+.book-case .cu-list.data-v-b52db69c {
   overflow-y: auto;
 }
-.book-case .cu-list .cu-item.data-v-65f116c7 {
+.book-case .cu-list .cu-item.data-v-b52db69c {
     -webkit-box-pack: unset;
     -webkit-justify-content: unset;
             justify-content: unset;
     padding-right: unset;
     background: unset;
 }
-.book-case .cu-list .cu-item .image-size.data-v-65f116c7 {
+.book-case .cu-list .cu-item .image-size.data-v-b52db69c {
       width: 105rpx;
 }
-.book-case .cu-list .cu-item .cu-avatar.data-v-65f116c7 {
+.book-case .cu-list .cu-item .cu-avatar.data-v-b52db69c {
       float: left;
       left: 15rpx;
 }
-.book-case .cu-list .cu-item .content.data-v-65f116c7 {
+.book-case .cu-list .cu-item .content.data-v-b52db69c {
       float: left;
       left: 135rpx;
       width: calc(100% - 140rpx - 20rpx);
 }
-.book-case .cu-list .cu-item .move-no-top.data-v-65f116c7 {
+.book-case .cu-list .cu-item .move-no-top.data-v-b52db69c {
       width: 140rpx;
 }
-.book-case .cu-list .move-no-top-cur.data-v-65f116c7 {
+.book-case .cu-list .move-no-top-cur.data-v-b52db69c {
     -webkit-transform: translateX(-140rpx);
             transform: translateX(-140rpx);
 }

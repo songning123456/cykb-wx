@@ -105,7 +105,8 @@
                 chapterInfo: {},
                 storageInfo: {},
                 directory: [],
-                nodes: ''
+                nodes: '',
+                scrollTop: 0
             }
         },
         onLoad (options) {
@@ -189,6 +190,7 @@
             },
             modifyNode (type) {
                 this.nodes = `<div class="node-title">${this.chapterInfo.chapter}</div><div class="node-content">${this.chapterInfo.content}</div>`
+                this.scrollTop = Math.random();
                 this.$nextTick(() => {
                     if (type === 'first' && this.storageInfo && this.storageInfo.scrollTop) {
                         this.scrollTop = this.storageInfo.scrollTop
@@ -196,7 +198,6 @@
                         this.scrollTop = 0
                     }
                 });
-                this.scrollTop = -1;
             },
             //点击中间
             clickCenter () {

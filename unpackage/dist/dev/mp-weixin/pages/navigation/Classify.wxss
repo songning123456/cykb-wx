@@ -24,17 +24,17 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.classify.data-v-05436a32 {
+.classify.data-v-44bb781d {
   background: unset;
 }
-.classify .cu-list.data-v-05436a32 {
+.classify .cu-list.data-v-44bb781d {
     background: unset;
 }
-.classify .cu-list .cu-avatar.data-v-05436a32 {
+.classify .cu-list .cu-avatar.data-v-44bb781d {
       margin: auto;
       width: 78rpx;
 }
-.classify .cu-list .classify-margin.data-v-05436a32 {
+.classify .cu-list .classify-margin.data-v-44bb781d {
       margin: 3px 0;
 }
 

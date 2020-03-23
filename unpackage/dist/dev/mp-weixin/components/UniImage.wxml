@@ -1,1 +1,1 @@
-<image src="{{imageSrc}}" mode="{{mode}}" lazy-load="{{true}}" data-event-opts="{{[['load',[['imageLoad',['$event']]]],['error',[['imageErr',['$event']]]]]}}" bindload="__e" binderror="__e" class="data-v-52d80e82"></image>
+<image src="{{imageSrc}}" mode="{{mode}}" lazy-load="{{true}}" data-event-opts="{{[['load',[['imageLoad',['$event']]]],['error',[['imageErr',['$event']]]]]}}" bindload="__e" binderror="__e" class="data-v-4d80aea6"></image>
