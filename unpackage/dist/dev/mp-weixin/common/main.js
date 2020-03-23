@@ -113,6 +113,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.commit('SET_SORTTYPE', data.data);
       } });
 
+    uni.getSystemInfo({
+      success: function success(e) {
+        uni.setStorageSync('phoneInfo', e);
+      } });
+
   },
   onShow: function onShow() {
     console.log('App Show');

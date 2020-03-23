@@ -13,6 +13,11 @@
                     this.$store.commit('SET_SORTTYPE', data.data)
                 }
             })
+            uni.getSystemInfo({
+                success: function (e) {
+                    uni.setStorageSync('phoneInfo', e)
+                }
+            })
         },
         onShow: function () {
             console.log('App Show')

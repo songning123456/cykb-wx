@@ -31,7 +31,7 @@
         </view>
         <!-- 遮罩层右侧部分 -->
         <view class="mask-right" :style="{right:isShowMask? '5%':'-15%'}">
-            <view class="flex flex-direction text-bold" style="writing-mode:vertical-lr">
+            <view class="flex flex-direction text-bold">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg"
                         :class="skin.fontColor !== '#7e8894' ? 'right-btn-border' : 'right-btn-border-2'"
                         @tap="readMore('next')">下一章

@@ -10,7 +10,7 @@
         </scroll-view>
         <view class="fill"></view>
         <view class="cu-list menu">
-            <view class="cu-item arrow" v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style' hover-stay-time='600' @tap="jumpChapterBtn(item.chaptersId)">
+            <view class="cu-item arrow" :class="{'chosen-item': item.chaptersId === currentChapterId}" v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style' hover-stay-time='600' @tap="jumpChapterBtn(item.chaptersId)">
                 <view class="content">
                     <text :class="item.chaptersId === currentChapterId ? 'cuIcon-locationfill text-red' : 'cuIcon-location text-grey'"></text>
                     <text class="text-grey">{{item.chapter}}</text>
@@ -28,6 +28,7 @@
                 directoryList: [],
                 currentChapterId: '',
                 tabCur: 'positive',
+                halfHeight: 400,
                 sortTabs: [
                     {key: 'positive', value: '正序'},
                     {key: 'reverse', value: '倒序'}
@@ -37,6 +38,12 @@
         onLoad(option) {
             this.directoryList = JSON.parse(option.directory);
             this.currentChapterId = option.currentChapterId;
+            if (uni.getStorageSync('phoneInfo') && uni.getStorageSync('phoneInfo').windowHeight) {
+                this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
+            } else {
+                this.halfHeight = 400;
+            }
+            this.scrollCenter();
         },
         methods: {
             jumpChapterBtn(chaptersId) {
@@ -51,7 +58,18 @@
                 if (this.tabCur !== e.currentTarget.dataset.sort) {
                     this.tabCur = e.currentTarget.dataset.sort
                     this.directoryList.reverse()
+                    this.scrollCenter()
                 }
+            },
+            scrollCenter() {
+                uni.createSelectorQuery().select(".directory").boundingClientRect(data=>{
+                    uni.createSelectorQuery().select(".chosen-item").boundingClientRect((res)=>{
+                        uni.pageScrollTo({
+                            duration:0,
+                            scrollTop:res.top - data.top - this.halfHeight
+                        })
+                    }).exec()
+                }).exec();
             }
         }
     }

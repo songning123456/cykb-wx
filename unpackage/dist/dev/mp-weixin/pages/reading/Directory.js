@@ -163,6 +163,7 @@ var _default =
       directoryList: [],
       currentChapterId: '',
       tabCur: 'positive',
+      halfHeight: 400,
       sortTabs: [
       { key: 'positive', value: '正序' },
       { key: 'reverse', value: '倒序' }] };
@@ -172,6 +173,12 @@ var _default =
   onLoad: function onLoad(option) {
     this.directoryList = JSON.parse(option.directory);
     this.currentChapterId = option.currentChapterId;
+    if (uni.getStorageSync('phoneInfo') && uni.getStorageSync('phoneInfo').windowHeight) {
+      this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
+    } else {
+      this.halfHeight = 400;
+    }
+    this.scrollCenter();
   },
   methods: {
     jumpChapterBtn: function jumpChapterBtn(chaptersId) {
@@ -186,7 +193,18 @@ var _default =
       if (this.tabCur !== e.currentTarget.dataset.sort) {
         this.tabCur = e.currentTarget.dataset.sort;
         this.directoryList.reverse();
+        this.scrollCenter();
       }
+    },
+    scrollCenter: function scrollCenter() {var _this = this;
+      uni.createSelectorQuery().select(".directory").boundingClientRect(function (data) {
+        uni.createSelectorQuery().select(".chosen-item").boundingClientRect(function (res) {
+          uni.pageScrollTo({
+            duration: 0,
+            scrollTop: res.top - data.top - _this.halfHeight });
+
+        }).exec();
+      }).exec();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
