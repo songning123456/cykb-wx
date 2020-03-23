@@ -2,23 +2,40 @@
     <view class="reading full-screen" :style="{background: skin.pageBgColor}" @click="clickCenter">
         <scroll-view scroll-y="true" @scroll="scrollOn"
                      :scroll-top="scrollTop" class="scroll-content">
-            <view class="padding flex flex-direction text-bold letter-space" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('previous')">上一章</button></view>
-            <view class="read-content" :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
+            <view class="padding flex flex-direction text-bold letter-space"
+                  v-show="JSON.stringify(chapterInfo) !== '{}'">
+                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
+                        @tap="readMore('previous')">上一章
+                </button>
+            </view>
+            <view class="read-content"
+                  :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
                 <rich-text :nodes="nodes"></rich-text>
             </view>
-            <view class="padding flex flex-direction text-bold letter-space" v-show="JSON.stringify(chapterInfo) !== '{}'"><button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow" @tap="readMore('next')">下一章</button></view>
+            <view class="padding flex flex-direction text-bold letter-space"
+                  v-show="JSON.stringify(chapterInfo) !== '{}'">
+                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
+                        @tap="readMore('next')">下一章
+                </button>
+            </view>
         </scroll-view>
 
         <!-- 遮罩层左侧部分 -->
         <view class="mask-left" :style="{left:isShowMask? '5%':'-15%'}">
             <view class="flex flex-direction text-bold">
-                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg" @tap="readMore('previous')">上一章</button>
+                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg"
+                        :class="skin.fontColor !== '#7e8894' ? 'left-btn-border' : 'left-btn-border-2'"
+                        @tap="readMore('previous')">上一章
+                </button>
             </view>
         </view>
         <!-- 遮罩层右侧部分 -->
         <view class="mask-right" :style="{right:isShowMask? '5%':'-15%'}">
             <view class="flex flex-direction text-bold" style="writing-mode:vertical-lr">
-                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg" @tap="readMore('next')">下一章</button>
+                <button :style="[{color: skin.fontColor}]" class="cu-btn line-black lg"
+                        :class="skin.fontColor !== '#7e8894' ? 'right-btn-border' : 'right-btn-border-2'"
+                        @tap="readMore('next')">下一章
+                </button>
             </view>
         </view>
         <!-- 遮罩层上部分 -->
@@ -178,7 +195,7 @@
                     uni.hideLoading()
                 })
             },
-            readMore(type) {
+            readMore (type) {
                 let index = this.convertChapterIndex(this.chapterInfo.chaptersId)
                 if (type === 'previous') {
                     if (index > 0) {
@@ -202,14 +219,14 @@
             },
             modifyNode (type) {
                 this.nodes = `<div class="node-title">${this.chapterInfo.chapter}</div><div class="node-content">${this.chapterInfo.content}</div>`
-                this.scrollTop = Math.random();
+                this.scrollTop = Math.random()
                 this.$nextTick(() => {
                     if (type === 'first' && this.storageInfo && this.storageInfo.scrollTop) {
                         this.scrollTop = this.storageInfo.scrollTop
                     } else {
                         this.scrollTop = 0
                     }
-                });
+                })
             },
             //点击中间
             clickCenter () {
@@ -297,18 +314,26 @@
             top: 35%;
             width: auto;
             z-index: 1000;
-            button {
+
+            .left-btn-border, .left-btn-border-2 {
                 line-height: 45rpx;
                 width: 40rpx;
                 height: 300rpx;
             }
 
-            button:before {
+            .left-btn-border:before, .left-btn-border-2:before {
                 right: 100%;
                 content: " ";
                 position: absolute;
                 border: 6px solid transparent;
+            }
+
+            .left-btn-border:before {
                 border-right-color: black;
+            }
+
+            .left-btn-border-2:before {
+                border-right-color: white;
             }
         }
 
@@ -319,18 +344,26 @@
             top: 35%;
             width: auto;
             z-index: 1000;
-            button {
+
+            .right-btn-border, .right-btn-border-2 {
                 line-height: 45rpx;
                 width: 40rpx;
                 height: 300rpx;
             }
 
-            button:before {
+            .right-btn-border:before, .right-btn-border-2:before {
                 left: 100%;
                 content: " ";
                 position: absolute;
                 border: 6px solid transparent;
+            }
+
+            .right-btn-border:before {
                 border-left-color: black;
+            }
+
+            .right-btn-border-2:before {
+                border-left-color: white;
             }
         }
 
