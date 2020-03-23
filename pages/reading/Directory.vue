@@ -42,6 +42,11 @@
                 this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
             } else {
                 this.halfHeight = 400;
+                uni.getSystemInfo({
+                    success: function (e) {
+                        uni.setStorageSync('phoneInfo', e)
+                    }
+                })
             }
             this.scrollCenter();
         },

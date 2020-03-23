@@ -223,7 +223,7 @@ var _default = { name: 'Settings', data: function data() {return { isDark: false
             mask: true });
 
           try {
-            uni.clearStorageSync();
+            uni.removeStorageSync('userInfo');
             this.$store.commit('SET_USERINFO', null);
           } catch (e) {
             console.error(e);

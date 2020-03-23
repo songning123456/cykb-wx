@@ -177,6 +177,11 @@ var _default =
       this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
     } else {
       this.halfHeight = 400;
+      uni.getSystemInfo({
+        success: function success(e) {
+          uni.setStorageSync('phoneInfo', e);
+        } });
+
     }
     this.scrollCenter();
   },
