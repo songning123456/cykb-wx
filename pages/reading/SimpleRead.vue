@@ -11,6 +11,10 @@
                   :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
                 <rich-text :nodes="nodes"></rich-text>
             </view>
+            <view class="load-again" v-if="JSON.stringify(this.chapterInfo) === '{}'" @tap="loadChapterInfoBtn">
+                <view class="cuIcon-refresh"></view>
+                <view class="load-text">重新加载</view>
+            </view>
             <view class="padding flex flex-direction text-bold letter-space">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
                         @tap="readMore('next')">下一章
@@ -71,10 +75,6 @@
                     </button>
                 </view>
             </view>
-        </view>
-        <view class="load-again" v-if="JSON.stringify(this.chapterInfo) === '{}'" @tap="loadChapterInfoBtn">
-            <view class="cuIcon-refresh"></view>
-            <view class="load-text">重新加载</view>
         </view>
     </view>
 </template>
@@ -319,7 +319,7 @@
         }
 
         .load-again {
-            position: fixed;
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
