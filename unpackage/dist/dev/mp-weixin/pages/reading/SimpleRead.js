@@ -100,14 +100,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var g0 = JSON.stringify(_vm.chapterInfo)
-  var g1 = JSON.stringify(_vm.chapterInfo)
+  var g0 = JSON.stringify(this.chapterInfo)
   _vm.$mp.data = Object.assign(
     {},
     {
       $root: {
-        g0: g0,
-        g1: g1
+        g0: g0
       }
     }
   )
@@ -145,6 +143,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
 
 
 
@@ -281,13 +281,13 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       storageInfo: {},
       directory: [],
       nodes: '',
+      errorNode: '<div class="node-title">未知</div><div class="node-content">加载出错了!!!</div>',
       scrollTop: 0 };
 
   },
   onLoad: function onLoad(options) {
     this.novels = JSON.parse(options.novels);
     uni.setNavigationBarTitle({ title: this.novels.title });
-    uni.showLoading({ title: 'loading...', mask: true });
     if (uni.getStorageSync('skin')) {
       this.skin = uni.getStorageSync('skin');
     }
@@ -297,6 +297,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
   },
   methods: {
     loadChapterInfoBtn: function loadChapterInfoBtn() {var _this = this;
+      uni.showLoading({ title: 'loading...', mask: true });
       var params;
       var url;
       if (uni.getStorageSync(this.novels.novelsId + ':scrollInfo')) {
@@ -312,7 +313,11 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
           _this.chapterInfo = data.data[0];
           _this.directory = data.listExt;
           _this.modifyNode('first');
+        } else {
+          _this.nodes = _this.errorNode;
         }
+      }).catch(function () {
+        _this.nodes = _this.errorNode;
       }).finally(function () {
         uni.hideLoading();
       });
@@ -346,10 +351,14 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
       if (type === 'previous') {
         if (index > 0) {
           this.queryNewChapter(this.directory[--index].chaptersId);
+        } else {
+          uni.showToast({ title: '已到顶了!', duration: 1000, icon: 'none' });
         }
       } else {
         if (index < this.directory.length - 1) {
           this.queryNewChapter(this.directory[++index].chaptersId);
+        } else {
+          uni.showToast({ title: '已到底了!', duration: 1000, icon: 'none' });
         }
       }
     },

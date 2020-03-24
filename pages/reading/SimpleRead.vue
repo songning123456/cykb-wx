@@ -2,8 +2,7 @@
     <view class="reading full-screen" :style="{background: skin.pageBgColor}" @click="clickCenter">
         <scroll-view scroll-y="true" @scroll="scrollOn"
                      :scroll-top="scrollTop" class="scroll-content">
-            <view class="padding flex flex-direction text-bold letter-space"
-                  v-show="JSON.stringify(chapterInfo) !== '{}'">
+            <view class="padding flex flex-direction text-bold letter-space">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
                         @tap="readMore('previous')">上一章
                 </button>
@@ -12,8 +11,7 @@
                   :style="[{background:skin.pageBgColor,'font-size':skin.fontSize+'px','line-height':skin.lineHeight+'px','color':skin.fontColor}]">
                 <rich-text :nodes="nodes"></rich-text>
             </view>
-            <view class="padding flex flex-direction text-bold letter-space"
-                  v-show="JSON.stringify(chapterInfo) !== '{}'">
+            <view class="padding flex flex-direction text-bold letter-space">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
                         @tap="readMore('next')">下一章
                 </button>
@@ -40,7 +38,7 @@
         </view>
         <!-- 遮罩层上部分 -->
         <view class="mask-top" :style="{top:isShowMask?0:-100+'rpx','background':skin.maskBgColor}">
-            <view class="mask-title" :style="'color:' + skin.fontColor">{{chapterInfo.chapter}}
+            <view class="mask-title" :style="'color:' + skin.fontColor">{{chapterInfo.chapter || '未知'}}
             </view>
         </view>
         <!-- 遮罩层下部分 -->
@@ -73,6 +71,10 @@
                     </button>
                 </view>
             </view>
+        </view>
+        <view class="load-again" v-if="JSON.stringify(this.chapterInfo) === '{}'" @tap="loadChapterInfoBtn">
+            <view class="cuIcon-refresh"></view>
+            <view class="load-text">重新加载</view>
         </view>
     </view>
 </template>
@@ -135,13 +137,13 @@
                 storageInfo: {},
                 directory: [],
                 nodes: '',
+                errorNode: '<div class="node-title">未知</div><div class="node-content">加载出错了!!!</div>',
                 scrollTop: 0
             }
         },
         onLoad (options) {
             this.novels = JSON.parse(options.novels)
             uni.setNavigationBarTitle({ title: this.novels.title })
-            uni.showLoading({ title: 'loading...', mask: true })
             if (uni.getStorageSync('skin')) {
                 this.skin = uni.getStorageSync('skin')
             }
@@ -151,6 +153,7 @@
         },
         methods: {
             loadChapterInfoBtn () {
+                uni.showLoading({ title: 'loading...', mask: true })
                 let params
                 let url
                 if (uni.getStorageSync(this.novels.novelsId + ':scrollInfo')) {
@@ -166,7 +169,11 @@
                         this.chapterInfo = data.data[0]
                         this.directory = data.listExt
                         this.modifyNode('first')
+                    } else {
+                        this.nodes = this.errorNode;
                     }
+                }).catch(() => {
+                    this.nodes = this.errorNode;
                 }).finally(() => {
                     uni.hideLoading()
                 })
@@ -200,10 +207,14 @@
                 if (type === 'previous') {
                     if (index > 0) {
                         this.queryNewChapter(this.directory[--index].chaptersId)
+                    } else {
+                        uni.showToast({ title: '已到顶了!', duration: 1000, icon: 'none'})
                     }
                 } else {
                     if (index < this.directory.length - 1) {
                         this.queryNewChapter(this.directory[++index].chaptersId)
+                    } else {
+                        uni.showToast({ title: '已到底了!', duration: 1000, icon: 'none'})
                     }
                 }
             },
@@ -304,6 +315,22 @@
 
             .read-content {
                 min-height: 1000rpx;
+            }
+        }
+
+        .load-again {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            .cuIcon-refresh {
+                text-align: center;
+                font-size: 100rpx;
+            }
+
+            .load-text {
+                font-size: 30rpx;
             }
         }
 

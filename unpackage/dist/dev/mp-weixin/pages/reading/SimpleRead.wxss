@@ -31,6 +31,20 @@
 .reading .scroll-content .read-content.data-v-4d20be70 {
     min-height: 1000rpx;
 }
+.reading .load-again.data-v-4d20be70 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+.reading .load-again .cuIcon-refresh.data-v-4d20be70 {
+    text-align: center;
+    font-size: 100rpx;
+}
+.reading .load-again .load-text.data-v-4d20be70 {
+    font-size: 30rpx;
+}
 .reading .mask-left.data-v-4d20be70 {
   position: fixed;
   height: auto;

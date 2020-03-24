@@ -173,17 +173,19 @@ var _default =
   onLoad: function onLoad(option) {
     this.directoryList = JSON.parse(option.directory);
     this.currentChapterId = option.currentChapterId;
-    if (uni.getStorageSync('phoneInfo') && uni.getStorageSync('phoneInfo').windowHeight) {
-      this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
-    } else {
-      this.halfHeight = 400;
-      uni.getSystemInfo({
-        success: function success(e) {
-          uni.setStorageSync('phoneInfo', e);
-        } });
+    if (this.directoryList && this.directoryList.length && this.currentChapterId) {
+      if (uni.getStorageSync('phoneInfo') && uni.getStorageSync('phoneInfo').windowHeight) {
+        this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
+      } else {
+        this.halfHeight = 400;
+        uni.getSystemInfo({
+          success: function success(e) {
+            uni.setStorageSync('phoneInfo', e);
+          } });
 
+      }
+      this.scrollCenter();
     }
-    this.scrollCenter();
   },
   methods: {
     jumpChapterBtn: function jumpChapterBtn(chaptersId) {

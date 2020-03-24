@@ -31,4 +31,10 @@
 .settings switch.data-v-7b74bd62::after, .settings switch.data-v-7b74bd62::before {
     content: unset;
 }
+.settings .clear-modal.data-v-7b74bd62 {
+    -webkit-transform: unset;
+            transform: unset;
+    -webkit-transition: unset;
+    transition: unset;
+}
 

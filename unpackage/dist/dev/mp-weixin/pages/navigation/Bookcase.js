@@ -184,6 +184,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _convertDate2 = _interopRequireDefault(__webpack_require__(/*! ../../util/convertDate */ 48));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var InsetLogin = function InsetLogin() {return __webpack_require__.e(/*! import() | components/InsetLogin */ "components/InsetLogin").then(__webpack_require__.bind(null, /*! ../../components/InsetLogin */ 131));};
 
@@ -198,7 +217,9 @@ var currentDate = new Date();var _default =
       listTouchStart: 0,
       listTouchDirection: null,
       // 假数据
-      result: [] };
+      result: [],
+      deleteModal: false,
+      toDeleteInfo: {} };
 
   },
   computed: {
@@ -250,6 +271,9 @@ var currentDate = new Date();var _default =
       }
       this.listTouchDirection = null;
     },
+    startReading: function startReading(item) {
+      uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(item) });
+    },
     navChange: function navChange() {
       uni.switchTab({
         url: '/pages/navigation/Classify' });
@@ -300,11 +324,23 @@ var currentDate = new Date();var _default =
         uni.hideLoading();
       });
     },
-    deleteBtn: function deleteBtn(novelsId, index) {var _this3 = this;
+    deleteBtn: function deleteBtn(novelsId, index) {
+      this.deleteModal = true;
+      this.toDeleteInfo = {
+        novelsId: novelsId,
+        index: index };
+
+    },
+    hideDeleteModalBtn: function hideDeleteModalBtn() {
+      this.deleteModal = false;
+      this.toDeleteInfo = {};
+    },
+    sureDeleteBtn: function sureDeleteBtn() {var _this3 = this;
+      this.deleteModal = false;
       var params = {
         condition: {
           uniqueId: this.userInfo.uniqueId,
-          novelsId: novelsId } };
+          novelsId: this.toDeleteInfo.novelsId } };
 
 
       uni.showLoading({
@@ -313,10 +349,11 @@ var currentDate = new Date();var _default =
 
       _request.default.post('/relation/deleteBookcase', params).then(function (data) {
         if (data.status === 200) {
-          _this3.result.splice(index, 1);
+          _this3.result.splice(_this3.toDeleteInfo.index, 1);
         }
       }).finally(function () {
         uni.hideLoading();
+        _this3.toDeleteInfo = {};
       });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

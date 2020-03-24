@@ -170,6 +170,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -206,25 +225,26 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'Settings', data: function data() {return { isDark: false, settings: [{ icon: 'arrow', title: '退出登录', type: 'exit' }, { icon: 'text', title: '书架排序', type: 'sort' }, { icon: 'switch', title: '夜间模式', type: 'nightMode' }, { icon: 'arrow', title: '清理缓存', type: 'storage' }], sortModal: false, sorts: [{ icon: 'cuIcon-read', title: '最近阅读' }, { icon: 'cuIcon-time', title: '更新时间' }] };
-
-  },
-  computed: {
-    sortType: function sortType() {
-      return this.$store.state.sortType;
-    } },
-
-  methods: {
-    settingBtn: function settingBtn(type) {
-      switch (type) {
-        case 'exit':
-          uni.showLoading({
-            title: '注销中',
-            mask: true });
-
-          try {
-            uni.removeStorageSync('userInfo');
-            this.$store.commit('SET_USERINFO', null);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { name: 'Settings', data: function data() {return { isDark: false, settings: [{ icon: 'arrow', title: '退出登录', type: 'exit' }, { icon: 'text', title: '书架排序', type: 'sort' }, { icon: 'switch', title: '夜间模式', type: 'nightMode' }, { icon: 'arrow', title: '清理缓存', type: 'storage' }], sortModal: false, clearModal: false, sorts: [{ icon: 'cuIcon-read', title: '最近阅读' }, { icon: 'cuIcon-time', title: '更新时间' }] };}, computed: { sortType: function sortType() {return this.$store.state.sortType;} }, methods: { settingBtn: function settingBtn(type) {switch (type) {case 'exit':uni.showLoading({ title: '注销中', mask: true });try {uni.removeStorageSync('userInfo');this.$store.commit('SET_USERINFO', null);
           } catch (e) {
             console.error(e);
           } finally {
@@ -238,11 +258,7 @@ var _default = { name: 'Settings', data: function data() {return { isDark: false
         case 'nightMode':
           break;
         case 'storage':
-          try {
-            uni.clearStorageSync();
-            uni.showToast({ title: '清理完成', duration: 1000 });
-          } catch (e) {
-          }
+          this.clearModal = true;
           break;}
 
     },
@@ -259,6 +275,17 @@ var _default = { name: 'Settings', data: function data() {return { isDark: false
     },
     hideSortModal: function hideSortModal() {
       this.sortModal = false;
+    },
+    hideClearModalBtn: function hideClearModalBtn() {
+      this.clearModal = false;
+    },
+    sureClearBtn: function sureClearBtn() {
+      this.clearModal = false;
+      try {
+        uni.clearStorageSync();
+        uni.showToast({ title: '清理完成', duration: 1000 });
+      } catch (e) {
+      }
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

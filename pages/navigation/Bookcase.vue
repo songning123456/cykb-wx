@@ -4,7 +4,7 @@
             <view class="cu-item"
                   v-for="(item,index) in result" :key="index"
                   :class="[(modalName==='move-box-'+ index && sortType === '最近阅读') ? 'move-cur' : '', (modalName==='move-box-'+ index && sortType === '更新时间') ? 'move-no-top-cur':'']"
-                  @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"
+                  @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" @tap="startReading(item)"
                   :data-target="'move-box-' + index">
                 <uni-image :url="item.coverUrl" class="image-size cu-avatar radius xl"></uni-image>
                 <view class="content">
@@ -24,6 +24,25 @@
                 <view class="cu-avatar radius lg add-image"></view>
                 <view class="content">
                     <view class="text-black text-bold" @tap="navChange">收藏小说</view>
+                </view>
+            </view>
+            <view class="cu-modal" :class="{'show': deleteModal}">
+                <view class="cu-dialog">
+                    <view class="cu-bar bg-white justify-end">
+                        <view class="content">提示</view>
+                        <view class="action" @tap="hideDeleteModalBtn">
+                            <text class="cuIcon-close text-red"></text>
+                        </view>
+                    </view>
+                    <view class="padding-xl">
+                        确定从书架中移除此本小说?
+                    </view>
+                    <view class="cu-bar bg-white justify-end">
+                        <view class="action">
+                            <button class="cu-btn line-red text-red" @tap="hideDeleteModalBtn">取消</button>
+                            <button class="cu-btn bg-red margin-left" @tap="sureDeleteBtn">确定</button>
+                        </view>
+                    </view>
                 </view>
             </view>
         </view>
@@ -47,7 +66,9 @@
                 listTouchStart: 0,
                 listTouchDirection: null,
                 // 假数据
-                result: []
+                result: [],
+                deleteModal: false,
+                toDeleteInfo: {}
             }
         },
         computed: {
@@ -98,6 +119,9 @@
                     this.modalName = null
                 }
                 this.listTouchDirection = null
+            },
+            startReading(item) {
+                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(item)})
             },
             navChange () {
                 uni.switchTab({
@@ -150,10 +174,22 @@
                 })
             },
             deleteBtn (novelsId, index) {
+                this.deleteModal = true;
+                this.toDeleteInfo = {
+                    novelsId: novelsId,
+                    index: index
+                }
+            },
+            hideDeleteModalBtn() {
+                this.deleteModal = false;
+                this.toDeleteInfo = {};
+            },
+            sureDeleteBtn() {
+                this.deleteModal = false;
                 let params = {
                     condition: {
                         uniqueId: this.userInfo.uniqueId,
-                        novelsId: novelsId
+                        novelsId: this.toDeleteInfo.novelsId
                     }
                 }
                 uni.showLoading({
@@ -162,10 +198,11 @@
                 })
                 request.post('/relation/deleteBookcase', params).then(data => {
                     if (data.status === 200) {
-                        this.result.splice(index, 1)
+                        this.result.splice(this.toDeleteInfo.index, 1)
                     }
                 }).finally(() => {
-                    uni.hideLoading()
+                    uni.hideLoading();
+                    this.toDeleteInfo = {};
                 })
             }
         }
@@ -201,6 +238,11 @@
                 .move-no-top {
                     width: 140upx;
                 }
+            }
+
+            .cu-modal {
+                transform: unset;
+                transition: unset;
             }
 
             .move-no-top-cur {
