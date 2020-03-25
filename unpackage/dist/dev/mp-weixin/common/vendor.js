@@ -1673,7 +1673,7 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 143:
+/***/ 145:
 /*!****************************************!*\
   !*** C:/project/cykb-wx/util/icons.js ***!
   \****************************************/
@@ -9058,56 +9058,6 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 48:
-/*!**********************************************!*\
-  !*** C:/project/cykb-wx/util/convertDate.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var convertDate = {};
-/**
-                                                                                                                           *
-                                                                                                                           * @param systemTime new Date()
-                                                                                                                           * @param updateTime String
-                                                                                                                           */
-convertDate.convertZh = function (systemTime, updateTime) {
-  var result = '';
-  var sTime = systemTime.getTime();
-  var uTime = convertDate.strToDate(updateTime).getTime();
-  var compare = sTime - uTime;
-  if (compare >= 0 && compare < 1000 * 3600) {
-    result = '刚才';
-  } else if (compare >= 1000 * 3600 && compare < 1000 * 3600 * 24) {
-    result = '一小时前';
-  } else if (compare >= 1000 * 3600 * 24 && compare < 1000 * 3600 * 24 * 3) {
-    result = '一天前';
-  } else if (compare >= 1000 * 3600 * 24 * 3 && compare < 1000 * 3600 * 24 * 7) {
-    result = '三天前';
-  } else if (compare >= 1000 * 3600 * 24 * 7 && compare < 1000 * 3600 * 24 * 30) {
-    result = '一周前';
-  } else if (compare >= 1000 * 3600 * 24 * 30 && compare < 1000 * 3600 * 24 * 30 * 3) {
-    result = '一个月前';
-  } else if (compare >= 1000 * 3600 * 24 * 30 * 3 && compare < 1000 * 3600 * 24 * 30 * 12) {
-    result = '三个月前';
-  } else {
-    result = '一年前';
-  }
-  return result;
-};
-/**
-    * yyyy-MM-dd HH:mm:ss => Date
-    * @param str
-    */
-convertDate.strToDate = function (str) {
-  str = str.replace(/-/g, '/');
-  return new Date(str);
-};var _default =
-convertDate;exports.default = _default;
-
-/***/ }),
-
 /***/ 5:
 /*!*******************************************************!*\
   !*** ./node_modules/@dcloudio/uni-stat/dist/index.js ***!
@@ -9995,6 +9945,56 @@ main();
 
 /***/ }),
 
+/***/ 50:
+/*!**********************************************!*\
+  !*** C:/project/cykb-wx/util/convertDate.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var convertDate = {};
+/**
+                                                                                                                           *
+                                                                                                                           * @param systemTime new Date()
+                                                                                                                           * @param updateTime String
+                                                                                                                           */
+convertDate.convertZh = function (systemTime, updateTime) {
+  var result = '';
+  var sTime = systemTime.getTime();
+  var uTime = convertDate.strToDate(updateTime).getTime();
+  var compare = sTime - uTime;
+  if (compare >= 0 && compare < 1000 * 3600) {
+    result = '刚才';
+  } else if (compare >= 1000 * 3600 && compare < 1000 * 3600 * 24) {
+    result = '一小时前';
+  } else if (compare >= 1000 * 3600 * 24 && compare < 1000 * 3600 * 24 * 3) {
+    result = '一天前';
+  } else if (compare >= 1000 * 3600 * 24 * 3 && compare < 1000 * 3600 * 24 * 7) {
+    result = '三天前';
+  } else if (compare >= 1000 * 3600 * 24 * 7 && compare < 1000 * 3600 * 24 * 30) {
+    result = '一周前';
+  } else if (compare >= 1000 * 3600 * 24 * 30 && compare < 1000 * 3600 * 24 * 30 * 3) {
+    result = '一个月前';
+  } else if (compare >= 1000 * 3600 * 24 * 30 * 3 && compare < 1000 * 3600 * 24 * 30 * 12) {
+    result = '三个月前';
+  } else {
+    result = '一年前';
+  }
+  return result;
+};
+/**
+    * yyyy-MM-dd HH:mm:ss => Date
+    * @param str
+    */
+convertDate.strToDate = function (str) {
+  str = str.replace(/-/g, '/');
+  return new Date(str);
+};var _default =
+convertDate;exports.default = _default;
+
+/***/ }),
+
 /***/ 6:
 /*!******************************************************!*\
   !*** ./node_modules/@dcloudio/uni-stat/package.json ***!
@@ -10006,7 +10006,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 
 /***/ }),
 
-/***/ 65:
+/***/ 67:
 /*!******************************************!*\
   !*** C:/project/cykb-wx/util/regular.js ***!
   \******************************************/

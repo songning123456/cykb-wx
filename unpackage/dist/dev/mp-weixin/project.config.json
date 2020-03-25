@@ -8,10 +8,8 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.9.2",
-	"appid": "wxa0c6ab139ce8d933",
+	"appid": "touristappid",
 	"projectname": "cykb-wx",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -26,8 +24,14 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 2,
+			"list": [
+				{
+					"name": "test",
+					"id": 0,
+					"pathName": "pages/navigation/Search"
+				}
+			]
 		}
 	}
 }

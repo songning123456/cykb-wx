@@ -145,5 +145,12 @@
         "text": "我的"
       }
     ]
+  },
+  "condition": {
+    "current": 2,
+    "list": [{
+      "name": "test",
+      "path": "pages/navigation/Search"
+    }]
   }
 }
