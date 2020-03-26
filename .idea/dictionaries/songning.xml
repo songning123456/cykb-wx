@@ -2,6 +2,7 @@
   <dictionary name="songning">
     <words>
       <w>bookdetail</w>
+      <w>bookname</w>
       <w>ecdemic</w>
       <w>locationfill</w>
       <w>sorttype</w>

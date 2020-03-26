@@ -24,25 +24,46 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.search .tip-card .tips.data-v-52b2de54 {
-  left: 0;
-  right: unset;
-}
-.search .tip-card .search-item.data-v-52b2de54 {
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-          justify-content: center;
-  padding-right: unset;
-}
-.search .tip-card .search-item .setting-source.data-v-52b2de54 {
-    position: absolute;
-    right: 36rpx;
-}
-.search .history-card .cu-item.data-v-52b2de54 {
+.search .tip-card .tip-item.data-v-52b2de54 {
   background-color: unset;
-  min-height: 70rpx;
+  border: 1px solid #a6a6a6;
 }
-.search .history-card .cu-item.data-v-52b2de54:after {
-    border-bottom: unset;
+.search .tip-card .tip-item .tips.data-v-52b2de54 {
+    left: 48%;
+    right: unset;
+    color: #e54d42;
+    top: 15rpx;
+    background-color: unset;
+}
+.search .tip-card .tip-item .search-item.data-v-52b2de54 {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+            justify-content: center;
+    text-align: center;
+    padding: 30rpx 0;
+}
+.search .tip-card .tip-item .search-item .setting-source.data-v-52b2de54 {
+      position: absolute;
+      right: 36rpx;
+}
+.search .history-card .solid-top.data-v-52b2de54::after {
+  border-top: unset;
+}
+.search .history-card .cu-list.data-v-52b2de54 {
+  height: 300px;
+  overflow-y: auto;
+}
+.search .history-card .cu-list .cu-item.data-v-52b2de54 {
+    background-color: unset;
+    min-height: 70rpx;
+}
+.search .history-card .cu-list .cu-item.data-v-52b2de54:after {
+      border-bottom: unset;
+}
+.search .fast-result.data-v-52b2de54 {
+  width: 100%;
+}
+.search .fast-result .cu-item.data-v-52b2de54 {
+    background-color: unset;
 }
 

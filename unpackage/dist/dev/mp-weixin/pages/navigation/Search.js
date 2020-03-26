@@ -133,148 +133,183 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
-{
-  name: 'Search',
-  data: function data() {
-    return {
-      searchText: '',
-      tabCur: 'native',
-      searchHistory: [],
-      webTabs: [
-      {
-        key: 'native',
-        value: '本站搜索' },
-
-      {
-        key: 'ecdemic',
-        value: '全网搜索' }],
-
-
-      tipInfo: {
-        'native': '搜索已录入在本站的书籍，搜索更快',
-        'ecdemic': '海量全网搜索(自定义资源路径)' },
-
-      sourceModal: false,
-      sourceBox: [
-      {
-        value: 'biquge',
-        name: '笔趣阁',
-        checked: false,
-        hot: false },
-
-      {
-        value: 'qidian',
-        name: '起点',
-        checked: false,
-        hot: false },
-
-      {
-        value: 'chuangshi',
-        name: '创世',
-        checked: false,
-        hot: false },
-
-      {
-        value: 'meiwen',
-        name: '美文',
-        checked: false,
-        hot: true }] };
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
-  },
-  onLoad: function onLoad() {
-    this.searchHistory = uni.getStorageSync('searchHistory') || [];
-  },
-  methods: {
-    tabSelect: function tabSelect(e) {
-      this.tabCur = e.currentTarget.dataset.web;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { name: 'Search', data: function data() {return { searchText: '', tabCur: 'native', searchHistory: [], fastResult: [], debounceFlag: true, webTabs: [{ key: 'native', value: '本站搜索' }, { key: 'ecdemic', value: '全网搜索' }], tipInfo: { 'native': '搜索已录入在本站的书籍，搜索更快', 'ecdemic': '海量全网搜索(自定义资源路径)' }, sourceModal: false, sourceBox: [{ value: 'biquge', name: '笔趣阁', checked: false, hot: false }, { value: 'qidian', name: '起点', checked: false, hot: false }, { value: 'chuangshi', name: '创世', checked: false, hot: false }, { value: 'meiwen', name: '美文', checked: false, hot: true }] };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, methods: { tabSelect: function tabSelect(e) {this.tabCur = e.currentTarget.dataset.web;}, inputBtn: function inputBtn(e) {var _this = this;if (this.tabCur === 'native' && this.debounceFlag) {this.debounceFlag = false;setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}}, confirmBtn: function confirmBtn(e) {this.searchHistory.push(e.detail.value);uni.setStorageSync('searchHistory', this.searchHistory);console.error(2, e.detail.value);}, fastQueryBooks: function fastQueryBooks(authorOrTitle) {var _this2 = this;if (authorOrTitle) {var params = { authorOrTitle: authorOrTitle };_request.default.get('/novels/fastSearch', params).then(function (data) {
+          if (data.status === 200 && data.data.length > 0) {
+            _this2.fastResult = data.data;
+          }
+        }).finally(function () {
+          if (!_this2.debounceFlag) {
+            _this2.debounceFlag = true;
+          }
+        });
+      }
     },
-    inputBtn: function inputBtn(e) {
-      console.error(1, e.detail.value);
-    },
-    confirmBtn: function confirmBtn(e) {
-      this.searchHistory.push(e.detail.value);
-      uni.setStorageSync('searchHistory', this.searchHistory);
-      console.error(2, e.detail.value);
+    queryBooksBtn: function queryBooksBtn() {
+      uni.showLoading({ title: 'loading...', mask: true });
+      /// let params
     },
     clearBtn: function clearBtn() {
       this.searchText = '';
+      this.fastResult = [];
     },
     hideSourceModal: function hideSourceModal() {
       this.sourceModal = false;

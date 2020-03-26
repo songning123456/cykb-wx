@@ -12,7 +12,7 @@
                 <text>取消</text>
             </view>
         </view>
-        <scroll-view scroll-x class="nav">
+        <scroll-view scroll-x class="nav" v-if="!fastResult.length">
             <view class="flex text-center">
                 <view class="cu-item flex-sub" :class="{'text-red cur': item.key===tabCur}"
                       v-for="(item,index) in webTabs" :key="index" @tap="tabSelect" :data-web="item.key">
@@ -20,24 +20,20 @@
                 </view>
             </view>
         </scroll-view>
-        <view class="cu-card case tip-card">
-            <view class="cu-item shadow">
-                <view class="image">
-                    <image src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg"
-                           mode="widthFix"></image>
-                    <view class="cu-tag bg-red tips">Tips</view>
-                </view>
-                <view class="cu-list menu-avatar">
-                    <view class="cu-item text-grey search-item">
-                        <text class="cuIcon-info text-red padding-right-xs"></text>
-                        {{tipInfo[tabCur]}}
-                        <text class="text-red setting-source" v-if="tabCur === 'ecdemic'" @tap="openSourceModal">设置
-                        </text>
-                    </view>
+        <view class="cu-card case tip-card" v-if="!fastResult.length">
+            <view class="cu-item shadow tip-item">
+                <view class="cu-tag tips text-bold">Tips</view>
+                <view class="text-grey search-item">
+                    <text class="cuIcon-info text-red padding-right-xs"></text>
+                    {{tipInfo[tabCur]}}
+                    <text class="text-red setting-source padding-right-sm" v-if="tabCur === 'ecdemic'"
+                          @tap="openSourceModal">设置
+                    </text>
                 </view>
             </view>
         </view>
-        <view class="cu-modal bottom-modal" :class="{'show': sourceModal}" @tap="hideSourceModal">
+        <view class="cu-modal bottom-modal" :class="{'show': sourceModal}" @tap="hideSourceModal"
+              v-if="!fastResult.length">
             <view class="cu-dialog" @tap.stop="">
                 <view class="grid col-3 padding-sm">
                     <view v-for="(item,index) in sourceBox" class="padding-xs" :key="index">
@@ -52,10 +48,11 @@
                 </view>
             </view>
         </view>
-        <view class="cu-card case no-card history-card">
+        <view class="cu-card case no-card history-card" v-if="!fastResult.length">
             <view class="cu-bar solid-bottom">
                 <view class="action">
-                    <text class="cuIcon-time text-red"></text> 搜索历史
+                    <text class="cuIcon-time text-red"></text>
+                    搜索历史
                 </view>
                 <view class="action">
                     <text class="cuIcon-delete" @tap="deleteSearchHistoryBtn"></text>
@@ -69,10 +66,20 @@
                 </view>
             </view>
         </view>
+        <view class="cu-list menu text-left solid-top fast-result" v-if="fastResult.length">
+            <view class="cu-item" v-for="(item, index) in fastResult" :key="index">
+                <view class="content">
+                    <text class="text-grey">{{item.title}}</text>
+                    <text class="padding-left-xl text-gray">{{item.author}}</text>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 
 <script>
+    import request from '../../util/request'
+
     export default {
         name: 'Search',
         data () {
@@ -80,6 +87,8 @@
                 searchText: '',
                 tabCur: 'native',
                 searchHistory: [],
+                fastResult: [],
+                debounceFlag: true,
                 webTabs: [
                     {
                         key: 'native',
@@ -123,23 +132,49 @@
                 ]
             }
         },
-        onLoad() {
-            this.searchHistory = uni.getStorageSync('searchHistory') || [];
+        onLoad () {
+            this.searchHistory = uni.getStorageSync('searchHistory') || []
         },
         methods: {
             tabSelect (e) {
                 this.tabCur = e.currentTarget.dataset.web
             },
             inputBtn (e) {
-                console.error(1, e.detail.value)
+                if (this.tabCur === 'native' && this.debounceFlag) {
+                    this.debounceFlag = false;
+                    setTimeout(() => {
+                        this.fastQueryBooks(e.detail.value);
+                    }, 1000)
+                }
             },
             confirmBtn (e) {
-                this.searchHistory.push(e.detail.value);
-                uni.setStorageSync('searchHistory', this.searchHistory);
+                this.searchHistory.push(e.detail.value)
+                uni.setStorageSync('searchHistory', this.searchHistory)
                 console.error(2, e.detail.value)
+            },
+            fastQueryBooks (authorOrTitle) {
+                if (authorOrTitle) {
+                    let params = {
+                        authorOrTitle: authorOrTitle
+                    }
+                    request.get('/novels/fastSearch', params).then(data => {
+                        if (data.status === 200 && data.data.length > 0) {
+                            this.fastResult = data.data
+                        }
+                    }).finally(() => {
+                        if (!this.debounceFlag) {
+                            this.debounceFlag = true;
+                        }
+                    })
+                }
+            },
+            queryBooksBtn () {
+                uni.showLoading({ title: 'loading...', mask: true })
+                /// let params
             },
             clearBtn () {
                 this.searchText = ''
+                this.fastResult = []
             },
             hideSourceModal () {
                 this.sourceModal = false
@@ -147,22 +182,22 @@
             openSourceModal () {
                 this.sourceModal = true
             },
-            ChooseCheckbox(e) {
-                let items = this.sourceBox;
-                let current = e.currentTarget.dataset.value;
+            ChooseCheckbox (e) {
+                let items = this.sourceBox
+                let current = e.currentTarget.dataset.value
                 for (let i = 0, lenI = items.length; i < lenI; ++i) {
                     if (items[i].value === current) {
                         if (items[i].checked && this.sourceBox.filter(item => item.checked).length === 1) {
-                            return;
+                            return
                         }
-                        items[i].checked = !items[i].checked;
+                        items[i].checked = !items[i].checked
                         break
                     }
                 }
             },
-            deleteSearchHistoryBtn() {
-                this.searchHistory = [];
-                uni.removeStorageSync('searchHistory');
+            deleteSearchHistoryBtn () {
+                this.searchHistory = []
+                uni.removeStorageSync('searchHistory')
             },
         }
     }
@@ -171,28 +206,57 @@
 <style lang="scss" scoped>
     .search {
         .tip-card {
-            .tips {
-                left: 0;
-                right: unset;
-            }
-            .search-item {
-                justify-content: center;
-                padding-right: unset;
+            .tip-item {
+                background-color: unset;
+                border: 1px solid #a6a6a6;
 
-                .setting-source {
-                    position: absolute;
-                    right: 36rpx;
+                .tips {
+                    left: 48%;
+                    right: unset;
+                    color: #e54d42;
+                    top: 15rpx;
+                    background-color: unset;
+                }
+
+                .search-item {
+                    justify-content: center;
+                    text-align: center;
+                    padding: 30rpx 0;
+
+                    .setting-source {
+                        position: absolute;
+                        right: 36rpx;
+                    }
                 }
             }
         }
 
         .history-card {
+
+            .solid-top::after {
+                border-top: unset;
+            }
+
+            .cu-list {
+                height: 300px;
+                overflow-y: auto;
+
+                .cu-item {
+                    background-color: unset;
+                    min-height: 70rpx;
+
+                    &:after {
+                        border-bottom: unset;
+                    }
+                }
+            }
+        }
+
+        .fast-result {
+            width: 100%;
+
             .cu-item {
                 background-color: unset;
-                min-height: 70rpx;
-                &:after {
-                    border-bottom: unset;
-                }
             }
         }
     }
