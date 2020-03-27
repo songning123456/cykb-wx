@@ -15,8 +15,13 @@
             </view>
         </view>
         <view class="cu-list menu">
-            <view class="cu-item arrow"
-                  v-for="(item, index) in displayInfo" :key="index" @tap="tapBtn(item.icon)">
+            <button open-type="share" class="cu-item arrow">
+                <view class="content">
+                    <text class="text-black cuIcon-share"></text>
+                    <text class="text-black">分享给朋友</text>
+                </view>
+            </button>
+            <view class="cu-item arrow" v-for="(item, index) in displayInfo" :key="index" @tap="tapBtn(item.icon)">
                 <view class="content">
                     <text class="text-black" :class="'cuIcon-' + item.icon"></text>
                     <text class="text-black">{{item.title}}</text>
@@ -55,10 +60,6 @@
                         title: '请给我好评'
                     },
                     {
-                        icon: 'share',
-                        title: '分享给朋友'
-                    },
-                    {
                         icon: 'comment',
                         title: '意见反馈'
                     },
@@ -67,6 +68,13 @@
                         title: '设置'
                     }
                 ]
+            }
+        },
+        onShareAppMessage: function(res) {
+            return {
+                title: '畅游看吧',
+                path: '/pages/navigation/HomePage',
+                imageUrl: '/static/image/share.png'
             }
         },
         computed: {
@@ -191,6 +199,22 @@
 
 <style lang="scss" scoped>
     .my {
+
+        .cu-list {
+            button {
+                text-align: unset;
+            }
+
+            button::after {
+                border-bottom: 1rpx solid #ddd;
+                border-top: unset;
+                text-decoration: unset;
+                line-height: unset;
+                border-radius: unset;
+                overflow: unset;
+                color: unset;
+            }
+        }
         .cu-modal {
             transform: scale(1);
         }

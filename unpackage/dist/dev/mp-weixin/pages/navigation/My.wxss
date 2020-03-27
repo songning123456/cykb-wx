@@ -24,6 +24,18 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.my .cu-list button.data-v-f3eb5c4c {
+  text-align: unset;
+}
+.my .cu-list button.data-v-f3eb5c4c::after {
+  border-bottom: 1rpx solid #ddd;
+  border-top: unset;
+  text-decoration: unset;
+  line-height: unset;
+  border-radius: unset;
+  overflow: unset;
+  color: unset;
+}
 .my .cu-modal.data-v-f3eb5c4c {
   -webkit-transform: scale(1);
           transform: scale(1);
