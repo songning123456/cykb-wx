@@ -84,10 +84,7 @@
                 });
             },
             searchBtn(category) {
-                uni.$emit('SearchResult', {type: 'classify', sex: this.tabCur, category: category});
-                uni.navigateTo({
-                    url: '/pages/result/SearchResult'
-                });
+                uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'classify', sex: this.tabCur, category: category})});
             }
         }
     };

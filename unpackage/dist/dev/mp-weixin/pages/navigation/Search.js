@@ -204,15 +204,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -283,29 +274,74 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = { name: 'Search', data: function data() {return { searchText: '', tabCur: 'native', searchHistory: [], fastResult: [], debounceFlag: true, webTabs: [{ key: 'native', value: '本站搜索' }, { key: 'ecdemic', value: '全网搜索' }], tipInfo: { 'native': '搜索已录入在本站的书籍，搜索更快', 'ecdemic': '海量全网搜索(自定义资源路径)' }, sourceModal: false, sourceBox: [{ value: 'biquge', name: '笔趣阁', checked: false, hot: false }, { value: 'qidian', name: '起点', checked: false, hot: false }, { value: 'chuangshi', name: '创世', checked: false, hot: false }, { value: 'meiwen', name: '美文', checked: false, hot: true }] };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, methods: { tabSelect: function tabSelect(e) {this.tabCur = e.currentTarget.dataset.web;}, inputBtn: function inputBtn(e) {var _this = this;if (this.tabCur === 'native' && this.debounceFlag) {this.debounceFlag = false;setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}}, confirmBtn: function confirmBtn(e) {this.searchHistory.push(e.detail.value);uni.setStorageSync('searchHistory', this.searchHistory);console.error(2, e.detail.value);}, fastQueryBooks: function fastQueryBooks(authorOrTitle) {var _this2 = this;if (authorOrTitle) {var params = { authorOrTitle: authorOrTitle };_request.default.get('/novels/fastSearch', params).then(function (data) {
-          if (data.status === 200 && data.data.length > 0) {
-            _this2.fastResult = data.data;
+var _default = { name: 'Search', data: function data() {return { searchText: '', tabCur: 'native', searchHistory: [], fastResult: [], debounceTimeout: null, webTabs: [{ key: 'native', value: '本站搜索' }, { key: 'ecdemic', value: '全网搜索' }], tipInfo: { 'native': '搜索已录入在本站的书籍，搜索更快', 'ecdemic': '海量全网搜索(自定义资源路径)' }, sourceModal: false, sourceBox: [{ value: 'biquge', name: '笔趣阁', checked: true, hot: false }, { value: 'qidian', name: '起点', checked: false, hot: false }, { value: 'chuangshi', name: '创世', checked: false, hot: false }, { value: 'meiwen', name: '美文', checked: false, hot: true }] };}, onLoad: function onLoad() {var _this = this;var result = uni.getStorageSync('searchHistory');if (result && result.length > 0) {this.searchHistory = result.reverse().filter(function (item) {return item.searchType === _this.tabCur;});}}, methods: { tabSelect: function tabSelect(e) {var _this2 = this;this.tabCur = e.currentTarget.dataset.web;var result = uni.getStorageSync('searchHistory');if (result && result.length > 0) {this.searchHistory = result.reverse().filter(function (item) {return item.searchType === _this2.tabCur;});}}, inputBtn: function inputBtn(e) {var _this3 = this;if (this.tabCur === 'native') {if (this.debounceTimeout) {
+          clearTimeout(this.debounceTimeout);
+          this.debounceTimeout = null;
+        }
+        this.debounceTimeout = setTimeout(function () {
+          _this3.fastQueryBooks(e.detail.value);
+        }, 1000);
+      }
+    },
+    confirmBtn: function confirmBtn(e) {
+      if (e.detail.value) {
+        var obj = {
+          searchType: this.tabCur,
+          authorOrTitle: e.detail.value };
+
+        this.searchHistory.push(obj);
+        uni.setStorageSync('searchHistory', this.searchHistory);
+        if (this.tabCur === 'native') {
+          uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'nativeSearch', authorOrTitle: e.detail.value }) });
+        } else if (this.tabCur === 'ecdemic') {
+          uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'ecdemicSearch', authorOrTitle: e.detail.value, source: [] }) });
+        }
+      }
+    },
+    queryHistoryBtn: function queryHistoryBtn(history) {
+      var src = uni.getStorageSync('searchHistory');
+      if (src && src.length > 0) {
+        var result = [];
+        src.forEach(function (item) {
+          if (JSON.stringify(item) === JSON.stringify(history)) {
+            result.unshift(item);
+          } else {
+            result.push(item);
           }
-        }).finally(function () {
-          if (!_this2.debounceFlag) {
-            _this2.debounceFlag = true;
+        });
+        uni.setStorageSync('searchHistory', result);
+      }
+      if (this.tabCur === 'native') {
+        if (history.novels) {
+          uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + history.novels });
+        } else {
+          uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'nativeSearch', authorOrTitle: history.authorOrTitle }) });
+        }
+      } else {
+        uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'ecdemicSearch', authorOrTitle: history.authorOrTitle, source: [] }) });
+      }
+    },
+    fastSearchBtn: function fastSearchBtn(novels) {
+      var obj = {
+        searchType: 'native',
+        authorOrTitle: novels.title + '    ' + novels.author,
+        novels: novels };
+
+      this.searchHistory.push(obj);
+      uni.setStorageSync('searchHistory', this.searchHistory);
+      uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + novels });
+    },
+    fastQueryBooks: function fastQueryBooks(authorOrTitle) {var _this4 = this;
+      if (authorOrTitle) {
+        var params = {
+          authorOrTitle: authorOrTitle };
+
+        _request.default.get('/novels/fastSearch', params).then(function (data) {
+          if (data.status === 200 && data.data.length > 0) {
+            _this4.fastResult = data.data;
           }
         });
       }
-    },
-    queryBooksBtn: function queryBooksBtn() {
-      uni.showLoading({ title: 'loading...', mask: true });
-      /// let params
     },
     clearBtn: function clearBtn() {
       this.searchText = '';

@@ -1,7 +1,7 @@
 <template>
     <view class="search-result">
         <view class="cu-list full-size">
-            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index">
+            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index" @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
                         <uni-image class="image-size" :url="item.coverUrl"></uni-image>
@@ -10,9 +10,7 @@
                             <view class="text-content">{{convertIntroduction(item.introduction)}}</view>
                             <view>
                                 <view class="cu-tag bg-red light sm round">{{item.author}}</view>
-                                <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex,
-                                    item.category)}}
-                                </view>
+                                <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex, item.category)}}</view>
                                 <view class="cu-tag bg-yellow light sm round">{{convertSex(item.sex)}}</view>
                             </view>
                         </view>
@@ -39,29 +37,28 @@
                 result: []
             };
         },
-        onLoad() {
-            uni.$once('SearchResult', (response) => {
-                this.loadType = response.type;
-                if (response.type === 'classify') {
-                    this.loadParams = {
-                        sex: response.sex,
-                        category: response.category
-                    };
-                    uni.setNavigationBarTitle({title: Category[response.sex][response.category]});
-                } else if (response.type === 'nativeSearch') {
-                    this.loadParams = {
-                        authorOrTitle: response.authorOrTitle
-                    };
-                    uni.setNavigationBarTitle({title: '本站搜索'});
-                } else if (response.type === 'ecdemicSearch') {
-                    this.loadParams = {
-                        authorOrTitle: response.authorOrTitle,
-                        source: response.source
-                    };
-                    uni.setNavigationBarTitle({title: '全网搜索'});
-                }
-                uni.startPullDownRefresh();
-            });
+        onLoad(option) {
+            let response = JSON.parse(option.params);
+            this.loadType = response.type;
+            if (response.type === 'classify') {
+                this.loadParams = {
+                    sex: response.sex,
+                    category: response.category
+                };
+                uni.setNavigationBarTitle({title: Category[response.sex][response.category]});
+            } else if (response.type === 'nativeSearch') {
+                this.loadParams = {
+                    authorOrTitle: response.authorOrTitle
+                };
+                uni.setNavigationBarTitle({title: '本站搜索'});
+            } else if (response.type === 'ecdemicSearch') {
+                this.loadParams = {
+                    authorOrTitle: response.authorOrTitle,
+                    source: response.source
+                };
+                uni.setNavigationBarTitle({title: '全网搜索'});
+            }
+            uni.startPullDownRefresh();
         },
         onReachBottom() {
             if (this.loadType === 'classify') {
@@ -121,6 +118,9 @@
                 }).finally(() => {
                     uni.stopPullDownRefresh();//得到数据后停止下拉刷新
                 });
+            },
+            bookDetailBtn (novels) {
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) })
             },
             convertSex(sex) {
                 return common.getSex(sex);

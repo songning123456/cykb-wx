@@ -3,9 +3,7 @@
         <view class="cu-bar bg-white search">
             <view class="search-form radius">
                 <text class="cuIcon-search"></text>
-                <input @input="inputBtn" @confirm="confirmBtn" v-model='searchText' :adjust-position="false" type="text"
-                       placeholder="搜索作者、小说"
-                       confirm-type="search"/>
+                <input @input="inputBtn" @confirm="confirmBtn" v-model='searchText' :adjust-position="false" type="text" placeholder="搜索作者、小说" confirm-type="search"/>
             </view>
             <view class="action" v-if="searchText.length" @tap="clearBtn">
                 <text class="cuIcon-close"></text>
@@ -50,19 +48,12 @@
         </view>
         <view class="cu-card case no-card history-card" v-if="!fastResult.length">
             <view class="cu-bar solid-bottom">
-                <view class="action">
-                    <text class="cuIcon-time text-red"></text>
-                    搜索历史
-                </view>
-                <view class="action">
-                    <text class="cuIcon-delete" @tap="deleteSearchHistoryBtn"></text>
-                </view>
+                <view class="action"><text class="cuIcon-time text-red"></text>搜索历史</view>
+                <view class="action"><text class="cuIcon-delete" @tap="deleteSearchHistoryBtn"></text></view>
             </view>
             <view class="cu-list menu text-left solid-top">
-                <view class="cu-item" v-for="(item, index) in searchHistory" :key="index">
-                    <view class="content">
-                        <text class="text-grey">{{item}}</text>
-                    </view>
+                <view class="cu-item" v-for="(item, index) in searchHistory" :key="index" @tap="queryHistoryBtn(item)">
+                    <view class="content"><text class="text-grey">{{item.authorOrTitle}}</text></view>
                 </view>
             </view>
         </view>
@@ -134,16 +125,16 @@
         },
         onLoad() {
             let result = uni.getStorageSync('searchHistory');
-            if (result > 0) {
-                this.searchHistory = result.filter(item => item.searchType === this.tabCur);
+            if (result && result.length > 0) {
+                this.searchHistory = result.reverse().filter(item => item.searchType === this.tabCur);
             }
         },
         methods: {
             tabSelect(e) {
                 this.tabCur = e.currentTarget.dataset.web;
                 let result = uni.getStorageSync('searchHistory');
-                if (result > 0) {
-                    this.searchHistory = result.filter(item => item.searchType === this.tabCur);
+                if (result && result.length > 0) {
+                    this.searchHistory = result.reverse().filter(item => item.searchType === this.tabCur);
                 }
             },
             inputBtn(e) {
@@ -166,13 +157,34 @@
                    this.searchHistory.push(obj);
                    uni.setStorageSync('searchHistory', this.searchHistory);
                    if (this.tabCur === 'native') {
-                       uni.$emit('SearchResult',{type: 'nativeSearch', authorOrTitle: e.detail.value});
-                       uni.navigateTo({url: '/pages/result/SearchResult'});
+                       uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'nativeSearch', authorOrTitle: e.detail.value})});
                    } else if (this.tabCur === 'ecdemic') {
-                       uni.$emit('SearchResult',{type: 'ecdemicSearch', authorOrTitle: e.detail.value, source: []});
-                       uni.navigateTo({url: '/pages/result/SearchResult'});
+                       uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'ecdemicSearch', authorOrTitle: e.detail.value, source: []})});
                    }
                }
+            },
+            queryHistoryBtn(history) {
+                let src = uni.getStorageSync('searchHistory');
+                if (src && src.length > 0) {
+                    let result = [];
+                    src.forEach(item => {
+                        if (JSON.stringify(item) === JSON.stringify(history)) {
+                            result.unshift(item);
+                        } else {
+                            result.push(item);
+                        }
+                    })
+                    uni.setStorageSync('searchHistory', result);
+                }
+                if (this.tabCur === 'native') {
+                    if (history.novels) {
+                        uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + history.novels})
+                    } else {
+                        uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'nativeSearch', authorOrTitle: history.authorOrTitle})});
+                    }
+                } else {
+                    uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'ecdemicSearch', authorOrTitle: history.authorOrTitle, source: []})});
+                }
             },
             fastSearchBtn(novels) {
                 let obj = {
@@ -182,9 +194,7 @@
                 };
                 this.searchHistory.push(obj);
                 uni.setStorageSync('searchHistory', this.searchHistory);
-                uni.navigateTo({
-                    url: '/pages/bookdetail/BookDetail?novels=' + novels
-                })
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + novels})
             },
             fastQueryBooks(authorOrTitle) {
                 if (authorOrTitle) {

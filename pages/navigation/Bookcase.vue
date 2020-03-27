@@ -8,11 +8,11 @@
                   :data-target="'move-box-' + index">
                 <uni-image :url="item.coverUrl" class="image-size cu-avatar radius xl"></uni-image>
                 <view class="content">
-                    <view class="text-black text-df">{{item.title}}</view>
-                    <view class="text-grey text-sm">{{item.author}}</view>
+                    <view class="text-black text-df">{{item.title || '暂无'}}</view>
+                    <view class="text-grey text-sm">{{item.author || '暂无'}}</view>
                     <view class="text-gray text-xs text-cut">
                         <text class="margin-right-xs">{{convertDate(item.updateTime)}} ·</text>
-                        <text>{{item.latestChapter}}</text>
+                        <text>{{item.latestChapter || '暂无'}}</text>
                     </view>
                 </view>
                 <view class="move" :class="{'move-no-top':sortType === '更新时间'}">

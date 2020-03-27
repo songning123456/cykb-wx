@@ -188,9 +188,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
 var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
@@ -216,10 +213,10 @@ var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/catego
 //
 //
 //
-//
-//
-//
-var _default = { name: 'HomePage', data: function data() {return { pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;var params = Object.create(null);params.pageRecordNum = this.pageSize;if (type === 'first') {params.recordStartNo = 0;} else {
+var _default = { name: 'HomePage', data: function data() {return { pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;var params = Object.create(null);params.pageRecordNum = this.pageSize;
+      if (type === 'first') {
+        params.recordStartNo = 0;
+      } else {
         if (this.pageResult.length > 0) {
           params.condition = Object.create(null);
           params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime;
@@ -252,9 +249,7 @@ var _default = { name: 'HomePage', data: function data() {return { pageSize: 20,
       return _common.default.getIntroduction(introduction);
     },
     bookDetailBtn: function bookDetailBtn(novels) {
-      uni.navigateTo({
-        url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
-
+      uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

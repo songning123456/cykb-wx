@@ -246,13 +246,7 @@ var _default = { name: 'Classify', data: function data() {return { tabCur: 'male
       });
     },
     searchBtn: function searchBtn(category) {
-      var params = {
-        sex: this.tabCur,
-        category: category };
-
-      uni.navigateTo({
-        url: '/pages/result/SearchResult?classify=' + JSON.stringify(params) });
-
+      uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sex: this.tabCur, category: category }) });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

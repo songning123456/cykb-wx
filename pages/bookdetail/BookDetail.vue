@@ -80,7 +80,7 @@
             }
         },
         onLoad (option) {
-            this.novels = option.novels;
+            this.novels = JSON.parse(option.novels);
             this.querySameAuthor()
         },
         methods: {

@@ -31,25 +31,6 @@
                 </view>
             </view>
         </view>
-        <view class="cu-modal clear-modal" :class="{'show': clearModal}">
-            <view class="cu-dialog">
-                <view class="cu-bar bg-white justify-end">
-                    <view class="content">提示</view>
-                    <view class="action" @tap="hideClearModalBtn">
-                        <text class="cuIcon-close text-red"></text>
-                    </view>
-                </view>
-                <view class="padding-xl">
-                    <text class="cuIcon-info text-red padding-right-xs"></text>确定清空 阅读记录,登录信息?
-                </view>
-                <view class="cu-bar bg-white justify-end">
-                    <view class="action">
-                        <button class="cu-btn line-red text-red" @tap="hideClearModalBtn">取消</button>
-                        <button class="cu-btn bg-red margin-left" @tap="sureClearBtn">确定</button>
-                    </view>
-                </view>
-            </view>
-        </view>
     </view>
 </template>
 
@@ -81,7 +62,6 @@
                     }
                 ],
                 sortModal: false,
-                clearModal: false,
                 sorts: [
                     {
                         icon: 'cuIcon-read',
@@ -123,7 +103,19 @@
                     case 'nightMode':
                         break
                     case 'storage':
-                        this.clearModal = true
+                        uni.showModal({
+                            title: '提示',
+                            content: '确定清空 阅读记录,登录信息?',
+                            success: function (res) {
+                                if (res.confirm) {
+                                    try {
+                                        uni.clearStorageSync();
+                                        uni.showToast({ title: '清理完成', duration: 1000})
+                                    } catch (e) {
+                                    }
+                                }
+                            }
+                        });
                         break
                 }
             },
@@ -140,17 +132,6 @@
             },
             hideSortModal () {
                 this.sortModal = false
-            },
-            hideClearModalBtn() {
-                this.clearModal = false;
-            },
-            sureClearBtn() {
-                this.clearModal = false;
-                try {
-                    uni.clearStorageSync();
-                    uni.showToast({ title: '清理完成', duration: 1000})
-                } catch (e) {
-                }
             },
         }
     }

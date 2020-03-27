@@ -177,8 +177,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
 var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
@@ -204,20 +202,43 @@ var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/catego
 //
 //
 //
-//
-//
-var _default = { name: 'SearchResult', data: function data() {return { params: null, pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad(option) {if (option.classify) {this.params = JSON.parse(option.classify);uni.setNavigationBarTitle({ title: _category.default[this.params.sex][this.params.category] });}uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryClassifyResult('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryClassifyResult('first');
+var _default = { name: 'SearchResult', data: function data() {return { loadParams: null, loadType: '', pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad(option) {var response = JSON.parse(option.params);this.loadType = response.type;if (response.type === 'classify') {this.loadParams = { sex: response.sex, category: response.category };uni.setNavigationBarTitle({ title: _category.default[response.sex][response.category] });} else if (response.type === 'nativeSearch') {this.loadParams = {
+        authorOrTitle: response.authorOrTitle };
+
+      uni.setNavigationBarTitle({ title: '本站搜索' });
+    } else if (response.type === 'ecdemicSearch') {
+      this.loadParams = {
+        authorOrTitle: response.authorOrTitle,
+        source: response.source };
+
+      uni.setNavigationBarTitle({ title: '全网搜索' });
+    }
+    uni.startPullDownRefresh();
+  },
+  onReachBottom: function onReachBottom() {
+    if (this.loadType === 'classify') {
+      this.queryConstantResult('more', '/novels/classifyResult');
+    } else if (this.loadType === 'nativeSearch') {
+      this.queryConstantResult('more', '/novels/nativeSearch');
+    }
+  },
+  onPullDownRefresh: function onPullDownRefresh() {
+    if (this.loadType === 'classify') {
+      this.queryConstantResult('first', '/novels/classifyResult');
+    } else if (this.loadType === 'nativeSearch') {
+      this.queryConstantResult('first', '/novels/nativeSearch');
+    } else if (this.loadType === 'ecdemicSearch') {
+      // 全网搜索一次性全部请求完
+      this.queryEcdemicResult();
+    }
   },
   methods: {
-    queryClassifyResult: function queryClassifyResult(type) {var _this = this;
+    queryConstantResult: function queryConstantResult(firstOrMore, url) {var _this = this;
       var params = {
         pageRecordNum: this.pageSize,
-        condition: {
-          sex: this.params.sex,
-          category: this.params.category } };
+        condition: this.loadParams };
 
-
-      if (type === 'first') {
+      if (firstOrMore === 'first') {
         params.recordStartNo = 0;
       } else {
         if (this.pageResult.length > 0) {
@@ -226,20 +247,35 @@ var _default = { name: 'SearchResult', data: function data() {return { params: n
           return;
         }
       }
-      _request.default.post('/novels/classifyResult', params).then(function (data) {
+      _request.default.post(url, params).then(function (data) {
         if (data.status === 200) {
           _this.pageResult = data.data;
-          if (type === 'first') {
+          if (firstOrMore === 'first') {
             _this.result = data.data;
           } else {
             _this.result = _this.result.concat(data.data);
           }
         }
       }).finally(function () {
-        if (type === 'first') {
+        if (firstOrMore === 'first') {
           uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
         }
       });
+    },
+    queryEcdemicResult: function queryEcdemicResult() {var _this2 = this;
+      var params = {
+        condition: this.loadParams };
+
+      _request.default.post('/novels/ecdemicSearch', params).then(function (data) {
+        if (data.status === 200) {
+          _this2.result = data.data;
+        }
+      }).finally(function () {
+        uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
+      });
+    },
+    bookDetailBtn: function bookDetailBtn(novels) {
+      uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
     },
     convertSex: function convertSex(sex) {
       return _common.default.getSex(sex);
