@@ -40,7 +40,7 @@
             };
         },
         onLoad() {
-            uni.$on('SearchResult', (response) => {
+            uni.$once('SearchResult', (response) => {
                 this.loadType = response.type;
                 if (response.type === 'classify') {
                     this.loadParams = {
