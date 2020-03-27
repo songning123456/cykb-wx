@@ -80,7 +80,7 @@
             }
         },
         onLoad (option) {
-            this.novels = JSON.parse(option.novels)
+            this.novels = option.novels;
             this.querySameAuthor()
         },
         methods: {
@@ -107,7 +107,7 @@
             },
             SimilarBookBtn (novels) {
                 uni.navigateTo({
-                    url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
+                    url: '/pages/bookdetail/BookDetail?novels=' + novels
                 })
             },
             addBookcase() {

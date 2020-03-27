@@ -87,7 +87,7 @@
             },
             bookDetailBtn (novels) {
                 uni.navigateTo({
-                    url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)
+                    url: '/pages/bookdetail/BookDetail?novels=' + novels
                 })
             }
         }

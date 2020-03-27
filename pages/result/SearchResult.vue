@@ -24,79 +24,115 @@
 </template>
 
 <script>
-    import request from '../../util/request'
-    import common from '../../util/common'
-    import Category from '../../util/category'
+    import request from '../../util/request';
+    import common from '../../util/common';
+    import Category from '../../util/category';
 
     export default {
         name: 'SearchResult',
-        data () {
+        data() {
             return {
-                params: null,
+                loadParams: null,
+                loadType: '',
                 pageSize: 20,
                 pageResult: [],
                 result: []
+            };
+        },
+        onLoad() {
+            uni.$on('SearchResult', (response) => {
+                this.loadType = response.type;
+                if (response.type === 'classify') {
+                    this.loadParams = {
+                        sex: response.sex,
+                        category: response.category
+                    };
+                    uni.setNavigationBarTitle({title: Category[response.sex][response.category]});
+                } else if (response.type === 'nativeSearch') {
+                    this.loadParams = {
+                        authorOrTitle: response.authorOrTitle
+                    };
+                    uni.setNavigationBarTitle({title: '本站搜索'});
+                } else if (response.type === 'ecdemicSearch') {
+                    this.loadParams = {
+                        authorOrTitle: response.authorOrTitle,
+                        source: response.source
+                    };
+                    uni.setNavigationBarTitle({title: '全网搜索'});
+                }
+                uni.startPullDownRefresh();
+            });
+        },
+        onReachBottom() {
+            if (this.loadType === 'classify') {
+                this.queryConstantResult('more', '/novels/classifyResult');
+            } else if (this.loadType === 'nativeSearch') {
+                this.queryConstantResult('more', '/novels/nativeSearch');
             }
         },
-        onLoad (option) {
-            if (option.classify) {
-                this.params = JSON.parse(option.classify)
-                uni.setNavigationBarTitle({
-                    title: Category[this.params.sex][this.params.category]
-                })
+        onPullDownRefresh() {
+            if (this.loadType === 'classify') {
+                this.queryConstantResult('first', '/novels/classifyResult');
+            } else if (this.loadType === 'nativeSearch') {
+                this.queryConstantResult('first', '/novels/nativeSearch');
+            } else if (this.loadType === 'ecdemicSearch') {
+                // 全网搜索一次性全部请求完
+                this.queryEcdemicResult();
             }
-            uni.startPullDownRefresh()
-        },
-        onReachBottom () {
-            this.queryClassifyResult('more')
-        },
-        onPullDownRefresh () {
-            this.queryClassifyResult('first')
         },
         methods: {
-            queryClassifyResult (type) {
+            queryConstantResult(firstOrMore, url) {
                 let params = {
                     pageRecordNum: this.pageSize,
-                    condition: {
-                        sex: this.params.sex,
-                        category: this.params.category
-                    }
-                }
-                if (type === 'first') {
-                    params.recordStartNo = 0
+                    condition: this.loadParams
+                };
+                if (firstOrMore === 'first') {
+                    params.recordStartNo = 0;
                 } else {
                     if (this.pageResult.length > 0) {
-                        params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime
+                        params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime;
                     } else {
-                        return
+                        return;
                     }
                 }
-                request.post('/novels/classifyResult', params).then(data => {
+                request.post(url, params).then(data => {
                     if (data.status === 200) {
-                        this.pageResult = data.data
-                        if (type === 'first') {
-                            this.result = data.data
+                        this.pageResult = data.data;
+                        if (firstOrMore === 'first') {
+                            this.result = data.data;
                         } else {
-                            this.result = this.result.concat(data.data)
+                            this.result = this.result.concat(data.data);
                         }
                     }
                 }).finally(() => {
-                    if (type === 'first') {
-                        uni.stopPullDownRefresh()//得到数据后停止下拉刷新
+                    if (firstOrMore === 'first') {
+                        uni.stopPullDownRefresh();//得到数据后停止下拉刷新
                     }
-                })
+                });
             },
-            convertSex (sex) {
-                return common.getSex(sex)
+            queryEcdemicResult() {
+                let params = {
+                    condition: this.loadParams
+                };
+                request.post('/novels/ecdemicSearch', params).then(data => {
+                    if (data.status === 200) {
+                        this.result = data.data;
+                    }
+                }).finally(() => {
+                    uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+                });
             },
-            convertCategory (sex, category) {
-                return Category[sex][category]
+            convertSex(sex) {
+                return common.getSex(sex);
             },
-            convertIntroduction (introduction) {
-                return common.getIntroduction(introduction)
+            convertCategory(sex, category) {
+                return Category[sex][category];
+            },
+            convertIntroduction(introduction) {
+                return common.getIntroduction(introduction);
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>

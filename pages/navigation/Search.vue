@@ -67,7 +67,7 @@
             </view>
         </view>
         <view class="cu-list menu text-left solid-top fast-result" v-if="fastResult.length">
-            <view class="cu-item" v-for="(item, index) in fastResult" :key="index">
+            <view class="cu-item" v-for="(item, index) in fastResult" :key="index" @tap="fastSearchBtn(item)">
                 <view class="content">
                     <text class="text-grey">{{item.title}}</text>
                     <text class="padding-left-xl text-gray">{{item.author}}</text>
@@ -78,17 +78,17 @@
 </template>
 
 <script>
-    import request from '../../util/request'
+    import request from '../../util/request';
 
     export default {
         name: 'Search',
-        data () {
+        data() {
             return {
                 searchText: '',
                 tabCur: 'native',
                 searchHistory: [],
                 fastResult: [],
-                debounceFlag: true,
+                debounceTimeout: null,
                 webTabs: [
                     {
                         key: 'native',
@@ -108,99 +108,125 @@
                     {
                         value: 'biquge',
                         name: '笔趣阁',
-                        checked: false,
-                        hot: false,
+                        checked: true,
+                        hot: false
                     },
                     {
                         value: 'qidian',
                         name: '起点',
                         checked: false,
-                        hot: false,
+                        hot: false
                     },
                     {
                         value: 'chuangshi',
                         name: '创世',
                         checked: false,
-                        hot: false,
+                        hot: false
                     },
                     {
                         value: 'meiwen',
                         name: '美文',
                         checked: false,
-                        hot: true,
+                        hot: true
                     }
                 ]
+            };
+        },
+        onLoad() {
+            let result = uni.getStorageSync('searchHistory');
+            if (result > 0) {
+                this.searchHistory = result.filter(item => item.searchType === this.tabCur);
             }
         },
-        onLoad () {
-            this.searchHistory = uni.getStorageSync('searchHistory') || []
-        },
         methods: {
-            tabSelect (e) {
-                this.tabCur = e.currentTarget.dataset.web
-            },
-            inputBtn (e) {
-                if (this.tabCur === 'native' && this.debounceFlag) {
-                    this.debounceFlag = false;
-                    setTimeout(() => {
-                        this.fastQueryBooks(e.detail.value);
-                    }, 1000)
+            tabSelect(e) {
+                this.tabCur = e.currentTarget.dataset.web;
+                let result = uni.getStorageSync('searchHistory');
+                if (result > 0) {
+                    this.searchHistory = result.filter(item => item.searchType === this.tabCur);
                 }
             },
-            confirmBtn (e) {
-                this.searchHistory.push(e.detail.value)
-                uni.setStorageSync('searchHistory', this.searchHistory)
-                console.error(2, e.detail.value)
+            inputBtn(e) {
+                if (this.tabCur === 'native') {
+                    if (this.debounceTimeout) {
+                        clearTimeout(this.debounceTimeout);
+                        this.debounceTimeout = null;
+                    }
+                    this.debounceTimeout = setTimeout(() => {
+                        this.fastQueryBooks(e.detail.value);
+                    }, 1000);
+                }
             },
-            fastQueryBooks (authorOrTitle) {
+            confirmBtn(e) {
+               if (e.detail.value) {
+                   let obj = {
+                       searchType: this.tabCur,
+                       authorOrTitle: e.detail.value
+                   };
+                   this.searchHistory.push(obj);
+                   uni.setStorageSync('searchHistory', this.searchHistory);
+                   if (this.tabCur === 'native') {
+                       uni.$emit('SearchResult',{type: 'nativeSearch', authorOrTitle: e.detail.value});
+                       uni.navigateTo({url: '/pages/result/SearchResult'});
+                   } else if (this.tabCur === 'ecdemic') {
+                       uni.$emit('SearchResult',{type: 'ecdemicSearch', authorOrTitle: e.detail.value, source: []});
+                       uni.navigateTo({url: '/pages/result/SearchResult'});
+                   }
+               }
+            },
+            fastSearchBtn(novels) {
+                let obj = {
+                    searchType: 'native',
+                    authorOrTitle: novels.title + '    ' + novels.author,
+                    novels: novels
+                };
+                this.searchHistory.push(obj);
+                uni.setStorageSync('searchHistory', this.searchHistory);
+                uni.navigateTo({
+                    url: '/pages/bookdetail/BookDetail?novels=' + novels
+                })
+            },
+            fastQueryBooks(authorOrTitle) {
                 if (authorOrTitle) {
                     let params = {
                         authorOrTitle: authorOrTitle
-                    }
+                    };
                     request.get('/novels/fastSearch', params).then(data => {
                         if (data.status === 200 && data.data.length > 0) {
-                            this.fastResult = data.data
+                            this.fastResult = data.data;
                         }
-                    }).finally(() => {
-                        if (!this.debounceFlag) {
-                            this.debounceFlag = true;
-                        }
-                    })
+                    });
                 }
             },
-            queryBooksBtn () {
-                uni.showLoading({ title: 'loading...', mask: true })
-                /// let params
+            clearBtn() {
+                this.searchText = '';
+                this.fastResult = [];
             },
-            clearBtn () {
-                this.searchText = ''
-                this.fastResult = []
+            hideSourceModal() {
+                this.sourceModal = false;
             },
-            hideSourceModal () {
-                this.sourceModal = false
+            openSourceModal() {
+                this.sourceModal = true;
             },
-            openSourceModal () {
-                this.sourceModal = true
-            },
-            ChooseCheckbox (e) {
-                let items = this.sourceBox
-                let current = e.currentTarget.dataset.value
+            ChooseCheckbox(e) {
+                let items = this.sourceBox;
+                let current = e.currentTarget.dataset.value;
                 for (let i = 0, lenI = items.length; i < lenI; ++i) {
                     if (items[i].value === current) {
                         if (items[i].checked && this.sourceBox.filter(item => item.checked).length === 1) {
-                            return
+                            return;
                         }
-                        items[i].checked = !items[i].checked
-                        break
+                        items[i].checked = !items[i].checked;
+                        break;
                     }
                 }
             },
-            deleteSearchHistoryBtn () {
-                this.searchHistory = []
-                uni.removeStorageSync('searchHistory')
-            },
+            deleteSearchHistoryBtn() {
+                this.searchHistory = [];
+                uni.removeStorageSync('searchHistory');
+            }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>

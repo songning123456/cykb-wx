@@ -19,13 +19,13 @@
 </template>
 
 <script>
-    import Category from '../../util/category'
-    import request from '../../util/request'
-    import common from '../../util/common'
+    import Category from '../../util/category';
+    import request from '../../util/request';
+    import common from '../../util/common';
 
     export default {
         name: 'Classify',
-        data () {
+        data() {
             return {
                 tabCur: 'male',
                 sexTabs: [
@@ -40,60 +40,57 @@
                 ],
                 result: [],
                 firstEnter: true
-            }
+            };
         },
-        onLoad () {
-            this.queryClassify()
+        onLoad() {
+            this.queryClassify();
         },
-        onTabItemTap () {
+        onTabItemTap() {
             if (!this.firstEnter) {
-                this.queryClassify()
+                this.queryClassify();
             }
         },
         methods: {
-            tabSelect (e) {
-                this.tabCur = e.currentTarget.dataset.sex
-                this.queryClassify()
+            tabSelect(e) {
+                this.tabCur = e.currentTarget.dataset.sex;
+                this.queryClassify();
             },
-            convertCategory (arg0) {
-                return Category[this.tabCur][arg0]
+            convertCategory(arg0) {
+                return Category[this.tabCur][arg0];
             },
-            convertSex (sex) {
-                return common.getSex(sex)
+            convertSex(sex) {
+                return common.getSex(sex);
             },
-            convertTotal (arg0) {
+            convertTotal(arg0) {
                 let result = arg0;
-                (result || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-                result = '共' + result + '部'
-                return result
+                (result || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+                result = '共' + result + '部';
+                return result;
             },
-            queryClassify () {
+            queryClassify() {
                 let params = {
                     condition: {
                         sex: this.tabCur
                     }
-                }
+                };
                 request.post('/novels/classify', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        this.result = data.data
+                        this.result = data.data;
                     }
                 }).finally(() => {
                     if (this.firstEnter) {
-                        this.firstEnter = false
+                        this.firstEnter = false;
                     }
-                })
+                });
             },
-            searchBtn (category) {
-                let params = {
-                    sex: this.tabCur,
-                    category: category
-                }
+            searchBtn(category) {
+                uni.$emit('SearchResult', {type: 'classify', sex: this.tabCur, category: category});
                 uni.navigateTo({
-                    url: '/pages/result/SearchResult?classify=' + JSON.stringify(params)
-                })
+                    url: '/pages/result/SearchResult'
+                });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
