@@ -167,20 +167,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -214,21 +200,19 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = { name: 'My', data: function data() {return { shareModal: false, clipboard: '我正在用畅游看吧读免费百万小说。下载地址：git@github.com:songning123456/cykb-wx.git', displayInfo: [{ icon: 'appreciate', title: '请给我好评' }, { icon: 'comment', title: '意见反馈' }, { icon: 'settings', title: '设置' }] };}, onShareAppMessage: function onShareAppMessage(res) {return { title: '畅游看吧', path: '/pages/navigation/HomePage', imageUrl: '/static/image/share.png' };}, computed: { UserInfo: function UserInfo() {return this.$store.state.userInfo;}, sexClazz: function sexClazz() {var clazz = '';if (this.$store.state.userInfo) {if (this.$store.state.userInfo.gender === 1) {clazz = 'cuIcon-male bg-blue';} else if (this.$store.state.userInfo.gender === 2) {clazz = 'cuIcon-female bg-pink';}}return clazz;}, avatarClazz: function avatarClazz() {var clazz = '';
+var _default = { name: 'My', data: function data() {return { displayInfo: [{ icon: 'appreciate', title: '请给我好评' }, { icon: 'comment', title: '意见反馈' }, { icon: 'settings', title: '设置' }] };}, onShareAppMessage: function onShareAppMessage(res) {return { title: '畅游看吧', path: '/pages/navigation/HomePage', imageUrl: '/static/image/share.png' };}, computed: { UserInfo: function UserInfo() {return this.$store.state.userInfo;}, sexClazz: function sexClazz() {
+      var clazz = '';
+      if (this.$store.state.userInfo) {
+        if (this.$store.state.userInfo.gender === 1) {
+          clazz = 'cuIcon-male bg-blue';
+        } else if (this.$store.state.userInfo.gender === 2) {
+          clazz = 'cuIcon-female bg-pink';
+        }
+      }
+      return clazz;
+    },
+    avatarClazz: function avatarClazz() {
+      var clazz = '';
       if (this.$store.state.userInfo && this.$store.state.userInfo.avatar) {
         clazz = "background-image:url(".concat(this.$store.state.userInfo.avatar, ")");
       }
@@ -239,9 +223,6 @@ var _default = { name: 'My', data: function data() {return { shareModal: false, 
     tapBtn: function tapBtn(type) {
       switch (type) {
         case 'appreciate':
-          break;
-        case 'share':
-          this.shareModal = true;
           break;
         case 'comment':
           uni.navigateTo({
@@ -254,18 +235,6 @@ var _default = { name: 'My', data: function data() {return { shareModal: false, 
 
           break;}
 
-    },
-    hideShareModal: function hideShareModal(type) {
-      this.shareModal = false;
-      if (!type) {
-        // 复制到剪切板
-        uni.setClipboardData({
-          data: this.clipboard,
-          success: function success() {
-            console.log('success');
-          } });
-
-      }
     },
     wxBtn: function wxBtn() {var _this = this;
       uni.login({
