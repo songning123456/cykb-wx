@@ -104,7 +104,7 @@ __webpack_require__.r(__webpack_exports__);
     uni.getStorage({
       key: 'userInfo',
       success: function success(data) {
-        _this.$store.commit('SET_USERINFO', JSON.parse(data.data));
+        _this.$store.commit('SET_USERINFO', data.data);
       } });
 
     uni.getStorage({

@@ -153,10 +153,9 @@ var _default = { name: 'InsetLogin', methods: { loginWx: function loginWx() {var
               _request.default.post('/users/weixin/getUsersInfo', params).then(function (data) {
                 uni.hideLoading();
                 if (data.status === 200) {
-                  var result = JSON.stringify(data.data[0]);
                   uni.setStorage({
                     key: 'userInfo',
-                    data: result });
+                    data: data.data[0] });
 
                   _this.$store.commit('SET_USERINFO', data.data[0]);
                 } else {

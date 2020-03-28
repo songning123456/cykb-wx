@@ -51,10 +51,9 @@
                                 request.post('/users/weixin/getUsersInfo', params).then(data => {
                                     uni.hideLoading()
                                     if (data.status === 200) {
-                                        let result = JSON.stringify(data.data[0])
                                         uni.setStorage({
                                             key: 'userInfo',
-                                            data: result
+                                            data: data.data[0]
                                         })
                                         this.$store.commit('SET_USERINFO', data.data[0])
                                         this.endOperation();
