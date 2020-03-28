@@ -1830,7 +1830,8 @@ _vue.default.use(_vuex.default);
 var store = new _vuex.default.Store({
   state: {
     userInfo: null,
-    sortType: '最近阅读' },
+    sortType: '最近阅读',
+    isDark: false },
 
   mutations: {
     SET_USERINFO: function SET_USERINFO(state, userInfo) {
@@ -1838,6 +1839,9 @@ var store = new _vuex.default.Store({
     },
     SET_SORTTYPE: function SET_SORTTYPE(state, sortType) {
       state.sortType = sortType;
+    },
+    SET_ISDARK: function SET_ISDARK(state, isDark) {
+      state.isDark = isDark;
     } },
 
   actions: {} });var _default =

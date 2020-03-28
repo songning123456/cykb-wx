@@ -35,13 +35,12 @@
 </template>
 
 <script>
-    import common from '../../util/common'
+    import common from '../../util/common';
 
     export default {
         name: 'Settings',
         data () {
             return {
-                isDark: false,
                 settings: [
                     {
                         icon: 'arrow',
@@ -72,11 +71,14 @@
                         title: '更新时间'
                     },
                 ]
-            }
+            };
         },
         computed: {
             sortType () {
-                return this.$store.state.sortType
+                return this.$store.state.sortType;
+            },
+            isDark() {
+                return this.$store.state.isDark;
             },
         },
         methods: {
@@ -86,55 +88,68 @@
                         uni.showLoading({
                             title: '注销中',
                             mask: true
-                        })
+                        });
                         try {
                             uni.removeStorageSync('userInfo');
-                            this.$store.commit('SET_USERINFO', null)
+                            this.$store.commit('SET_USERINFO', null);
                         } catch (e) {
-                            console.error(e)
+                            console.error(e);
                         } finally {
-                            common.sleep(500)
-                            uni.hideLoading()
+                            common.sleep(500);
+                            uni.hideLoading();
                         }
-                        break
+                        break;
                     case 'sort':
-                        this.sortModal = true
-                        break
+                        this.sortModal = true;
+                        break;
                     case 'nightMode':
-                        break
+                        break;
                     case 'storage':
                         uni.showModal({
                             title: '提示',
                             content: '确定清空 阅读记录,登录信息?',
-                            success: function (res) {
+                            success: res => {
                                 if (res.confirm) {
                                     try {
                                         uni.clearStorageSync();
-                                        uni.showToast({ title: '清理完成', duration: 1000})
+                                        this.$store.commit('SET_USERINFO', null);
+                                        this.$store.commit('SET_SORTTYPE', '最近阅读');
+                                        this.$store.commit('SET_ISDARK', false);
+                                        uni.showToast({ title: '清理完成', duration: 1000 });
                                     } catch (e) {
+                                        console.error(e);
                                     }
                                 }
                             }
                         });
-                        break
+                        break;
                 }
             },
             sortBtn (e) {
-                this.$store.commit('SET_SORTTYPE', e.currentTarget.dataset.sort)
+                this.$store.commit('SET_SORTTYPE', e.currentTarget.dataset.sort);
                 uni.setStorage({
                     key: 'sortType',
                     data: e.currentTarget.dataset.sort
-                })
-                this.sortModal = false
+                });
+                this.sortModal = false;
             },
             nightModeBtn (e) {
-                this.isDark = e.detail.value
+                this.$store.commit('SET_ISDARK', e.detail.value);
+                uni.setStorage({
+                    key: 'sortType',
+                    data: e.detail.value
+                });
+                let value = 1;
+                if (this.isDark) {
+                    value = 0.3;
+                }
+                uni.setScreenBrightness({ value: value });
             },
             hideSortModal () {
-                this.sortModal = false
+                this.sortModal = false;
             },
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>

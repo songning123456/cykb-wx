@@ -101,18 +101,28 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 {
   onLaunch: function onLaunch() {var _this = this;
+    // 用户信息
     uni.getStorage({
       key: 'userInfo',
       success: function success(data) {
         _this.$store.commit('SET_USERINFO', data.data);
       } });
 
+    // 排序方式
     uni.getStorage({
       key: 'sortType',
       success: function success(data) {
         _this.$store.commit('SET_SORTTYPE', data.data);
       } });
 
+    // 暗黑模式
+    uni.getStorage({
+      key: 'isDark',
+      success: function success(data) {
+        _this.$store.commit('SET_ISDARK', data.data);
+      } });
+
+    // 系统信息
     uni.getSystemInfo({
       success: function success(e) {
         uni.setStorageSync('phoneInfo', e);

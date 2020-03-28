@@ -206,16 +206,18 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'Settings', data: function data() {return { isDark: false, settings: [{ icon: 'arrow', title: '退出登录', type: 'exit' }, { icon: 'text', title: '书架排序', type: 'sort' }, { icon: 'switch', title: '夜间模式', type: 'nightMode' }, { icon: 'arrow', title: '清理缓存', type: 'storage' }], sortModal: false, sorts: [{ icon: 'cuIcon-read', title: '最近阅读' }, { icon: 'cuIcon-time', title: '更新时间' }] };
-
+var _default = { name: 'Settings', data: function data() {return { settings: [{ icon: 'arrow', title: '退出登录', type: 'exit' }, { icon: 'text', title: '书架排序', type: 'sort' }, { icon: 'switch', title: '夜间模式', type: 'nightMode' }, { icon: 'arrow', title: '清理缓存', type: 'storage' }], sortModal: false, sorts: [{ icon: 'cuIcon-read', title: '最近阅读' }, { icon: 'cuIcon-time', title: '更新时间' }] };
   },
   computed: {
     sortType: function sortType() {
       return this.$store.state.sortType;
+    },
+    isDark: function isDark() {
+      return this.$store.state.isDark;
     } },
 
   methods: {
-    settingBtn: function settingBtn(type) {
+    settingBtn: function settingBtn(type) {var _this = this;
       switch (type) {
         case 'exit':
           uni.showLoading({
@@ -245,8 +247,12 @@ var _default = { name: 'Settings', data: function data() {return { isDark: false
               if (res.confirm) {
                 try {
                   uni.clearStorageSync();
+                  _this.$store.commit('SET_USERINFO', null);
+                  _this.$store.commit('SET_SORTTYPE', '最近阅读');
+                  _this.$store.commit('SET_ISDARK', false);
                   uni.showToast({ title: '清理完成', duration: 1000 });
                 } catch (e) {
+                  console.error(e);
                 }
               }
             } });
@@ -263,7 +269,16 @@ var _default = { name: 'Settings', data: function data() {return { isDark: false
       this.sortModal = false;
     },
     nightModeBtn: function nightModeBtn(e) {
-      this.isDark = e.detail.value;
+      this.$store.commit('SET_ISDARK', e.detail.value);
+      uni.setStorage({
+        key: 'sortType',
+        data: e.detail.value });
+
+      var value = 1;
+      if (this.isDark) {
+        value = 0.3;
+      }
+      uni.setScreenBrightness({ value: value });
     },
     hideSortModal: function hideSortModal() {
       this.sortModal = false;
