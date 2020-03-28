@@ -9,6 +9,7 @@
       <w>tabbar</w>
       <w>userinfo</w>
       <w>weixin</w>
+      <w>wxpay</w>
     </words>
   </dictionary>
 </component>

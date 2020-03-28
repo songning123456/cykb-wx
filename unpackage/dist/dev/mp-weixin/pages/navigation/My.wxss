@@ -36,8 +36,4 @@
   overflow: unset;
   color: unset;
 }
-.my .cu-modal.data-v-f3eb5c4c {
-  -webkit-transform: scale(1);
-          transform: scale(1);
-}
 

@@ -32,17 +32,13 @@
 </template>
 
 <script>
-    import request from '../../util/request'
+    import request from '../../util/request';
 
     export default {
         name: 'My',
         data () {
             return {
                 displayInfo: [
-                    {
-                        icon: 'appreciate',
-                        title: '请给我好评'
-                    },
                     {
                         icon: 'comment',
                         title: '意见反馈'
@@ -52,53 +48,51 @@
                         title: '设置'
                     }
                 ]
-            }
+            };
         },
-        onShareAppMessage: function(res) {
+        onShareAppMessage: function (res) {
             return {
                 title: '畅游看吧',
                 path: '/pages/navigation/HomePage',
                 imageUrl: '/static/image/share.png'
-            }
+            };
         },
         computed: {
             UserInfo () {
-                return this.$store.state.userInfo
+                return this.$store.state.userInfo;
             },
             sexClazz () {
-                let clazz = ''
+                let clazz = '';
                 if (this.$store.state.userInfo) {
                     if (this.$store.state.userInfo.gender === 1) {
-                        clazz = 'cuIcon-male bg-blue'
+                        clazz = 'cuIcon-male bg-blue';
                     } else if (this.$store.state.userInfo.gender === 2) {
-                        clazz = 'cuIcon-female bg-pink'
+                        clazz = 'cuIcon-female bg-pink';
                     }
                 }
-                return clazz
+                return clazz;
             },
             avatarClazz () {
-                let clazz = ''
+                let clazz = '';
                 if (this.$store.state.userInfo && this.$store.state.userInfo.avatar) {
-                    clazz = `background-image:url(${this.$store.state.userInfo.avatar})`
+                    clazz = `background-image:url(${this.$store.state.userInfo.avatar})`;
                 }
-                return clazz
+                return clazz;
             }
         },
         methods: {
             tapBtn (type) {
                 switch (type) {
-                    case 'appreciate':
-                        break
                     case 'comment':
                         uni.navigateTo({
                             url: '/pages/comment/Comment'
-                        })
-                        break
+                        });
+                        break;
                     case 'settings':
                         uni.navigateTo({
                             url: '/pages/settings/Settings'
-                        })
-                        break
+                        });
+                        break;
                 }
             },
             wxBtn () {
@@ -111,7 +105,7 @@
                                 uni.showLoading({
                                     title: '登陆中',
                                     mask: true
-                                })
+                                });
                                 let params = {
                                     condition: {
                                         code: response2.code,
@@ -119,38 +113,37 @@
                                         nickName: response3.userInfo.nickName,
                                         gender: response3.userInfo.gender
                                     }
-                                }
+                                };
                                 request.post('/users/weixin/getUsersInfo', params).then(data => {
-                                    uni.hideLoading()
+                                    uni.hideLoading();
                                     if (data.status === 200) {
-                                        let result = JSON.stringify(data.data[0])
+                                        let result = JSON.stringify(data.data[0]);
                                         uni.setStorage({
                                             key: 'userInfo',
                                             data: result
-                                        })
-                                        this.$store.commit('SET_USERINFO', data.data[0])
-                                        this.$emit('userInfo', data.data[0])
+                                        });
+                                        this.$store.commit('SET_USERINFO', data.data[0]);
+                                        this.$emit('userInfo', data.data[0]);
                                     } else {
                                         uni.showToast({
                                             title: '获取用户信息失败',
                                             duration: 1000,
                                             icon: 'none'
-                                        })
+                                        });
                                     }
                                 }).catch(e => {
-                                    uni.hideLoading()
+                                    uni.hideLoading();
                                     uni.showToast({
                                         title: '获取用户信息失败',
                                         duration: 1000,
                                         icon: 'none'
-                                    })
-                                })
+                                    });
+                                });
                             },
                             fail: reject3 => {
-                                debugger;
                                 // doNothing...
                             }
-                        })
+                        });
                     },
                     fail: response2 => {
                         debugger;
@@ -158,12 +151,12 @@
                             title: '登录失败',
                             duration: 1000,
                             icon: 'none'
-                        })
+                        });
                     }
-                })
+                });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -183,9 +176,6 @@
                 overflow: unset;
                 color: unset;
             }
-        }
-        .cu-modal {
-            transform: scale(1);
         }
     }
 </style>

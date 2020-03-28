@@ -200,11 +200,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: 'My', data: function data() {return { displayInfo: [{ icon: 'appreciate', title: '请给我好评' }, { icon: 'comment', title: '意见反馈' }, { icon: 'settings', title: '设置' }] };}, onShareAppMessage: function onShareAppMessage(res) {return { title: '畅游看吧', path: '/pages/navigation/HomePage', imageUrl: '/static/image/share.png' };}, computed: { UserInfo: function UserInfo() {return this.$store.state.userInfo;}, sexClazz: function sexClazz() {
-      var clazz = '';
-      if (this.$store.state.userInfo) {
-        if (this.$store.state.userInfo.gender === 1) {
-          clazz = 'cuIcon-male bg-blue';
+var _default = { name: 'My', data: function data() {return { displayInfo: [{ icon: 'comment', title: '意见反馈' }, { icon: 'settings', title: '设置' }] };}, onShareAppMessage: function onShareAppMessage(res) {return { title: '畅游看吧', path: '/pages/navigation/HomePage', imageUrl: '/static/image/share.png' };}, computed: { UserInfo: function UserInfo() {return this.$store.state.userInfo;}, sexClazz: function sexClazz() {var clazz = '';if (this.$store.state.userInfo) {if (this.$store.state.userInfo.gender === 1) {clazz = 'cuIcon-male bg-blue';
         } else if (this.$store.state.userInfo.gender === 2) {
           clazz = 'cuIcon-female bg-pink';
         }
@@ -222,8 +218,6 @@ var _default = { name: 'My', data: function data() {return { displayInfo: [{ ico
   methods: {
     tapBtn: function tapBtn(type) {
       switch (type) {
-        case 'appreciate':
-          break;
         case 'comment':
           uni.navigateTo({
             url: '/pages/comment/Comment' });
@@ -282,7 +276,6 @@ var _default = { name: 'My', data: function data() {return { displayInfo: [{ ico
               });
             },
             fail: function fail(reject3) {
-              debugger;
               // doNothing...
             } });
 
