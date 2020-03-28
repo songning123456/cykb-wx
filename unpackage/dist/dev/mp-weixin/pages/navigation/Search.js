@@ -168,6 +168,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -202,8 +206,11 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: 'Search', data: function data() {return { searchText: '', searchHistory: [], fastResult: [], debounceTimeout: null };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, methods: { inputBtn: function inputBtn(e) {var _this = this;if (this.debounceTimeout) {clearTimeout(this.debounceTimeout);this.debounceTimeout = null;}this.debounceTimeout = setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}, confirmBtn: function confirmBtn(e) {if (e.detail.value) {var obj = { authorOrTitle: e.detail.value };this.searchHistory = this.searchHistory.filter(function (item) {return item.authorOrTitle !== e.detail.value;});this.searchHistory.unshift(obj);uni.setStorageSync('searchHistory', this.searchHistory);uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: e.detail.value }) });}
-    },
+//
+//
+//
+//
+var _default = { name: 'Search', data: function data() {return { searchText: '', searchHistory: [], fastResult: [], debounceTimeout: null };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, onShow: function onShow() {this.clearBtn();}, methods: { inputBtn: function inputBtn(e) {var _this = this;if (this.debounceTimeout) {clearTimeout(this.debounceTimeout);this.debounceTimeout = null;}this.debounceTimeout = setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}, confirmBtn: function confirmBtn(e) {if (e.detail.value) {var obj = { authorOrTitle: e.detail.value };this.searchHistory = this.searchHistory.filter(function (item) {return item.authorOrTitle !== e.detail.value;});this.searchHistory.unshift(obj);uni.setStorageSync('searchHistory', this.searchHistory);uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: e.detail.value }) });}},
     fastSearchBtn: function fastSearchBtn(novels) {
       var obj = {
         authorOrTitle: novels.title + '    ' + novels.author,

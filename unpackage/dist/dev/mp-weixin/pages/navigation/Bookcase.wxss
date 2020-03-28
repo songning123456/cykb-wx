@@ -49,12 +49,6 @@
 .book-case .cu-list .cu-item .move-no-top.data-v-65f116c7 {
       width: 140rpx;
 }
-.book-case .cu-list .cu-modal.data-v-65f116c7 {
-    -webkit-transform: unset;
-            transform: unset;
-    -webkit-transition: unset;
-    transition: unset;
-}
 .book-case .cu-list .move-no-top-cur.data-v-65f116c7 {
     -webkit-transform: translateX(-140rpx);
             transform: translateX(-140rpx);

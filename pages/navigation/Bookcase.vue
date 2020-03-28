@@ -16,33 +16,14 @@
                     </view>
                 </view>
                 <view class="move" :class="{'move-no-top':sortType === '更新时间'}">
-                    <view class="bg-grey" v-if="sortType === '最近阅读'" @tap="topBtn(item.novelsId)">置顶</view>
-                    <view class="bg-red" @tap="deleteBtn(item.novelsId, index)">删除</view>
+                    <view class="bg-grey" v-if="sortType === '最近阅读'" @tap.stop="topBtn(item.novelsId)">置顶</view>
+                    <view class="bg-red" @tap.stop="deleteBtn(item.novelsId, index)">删除</view>
                 </view>
             </view>
             <view class="cu-item">
                 <view class="cu-avatar radius lg add-image"></view>
                 <view class="content">
                     <view class="text-black text-bold" @tap="navChange">收藏小说</view>
-                </view>
-            </view>
-            <view class="cu-modal" :class="{'show': deleteModal}">
-                <view class="cu-dialog">
-                    <view class="cu-bar bg-white justify-end">
-                        <view class="content">提示</view>
-                        <view class="action" @tap="hideDeleteModalBtn">
-                            <text class="cuIcon-close text-red"></text>
-                        </view>
-                    </view>
-                    <view class="padding-xl">
-                        确定从书架中移除此本小说?
-                    </view>
-                    <view class="cu-bar bg-white justify-end">
-                        <view class="action">
-                            <button class="cu-btn line-red text-red" @tap="hideDeleteModalBtn">取消</button>
-                            <button class="cu-btn bg-red margin-left" @tap="sureDeleteBtn">确定</button>
-                        </view>
-                    </view>
                 </view>
             </view>
         </view>
@@ -67,7 +48,6 @@
                 listTouchDirection: null,
                 // 假数据
                 result: [],
-                deleteModal: false,
                 toDeleteInfo: {}
             };
         },
@@ -153,10 +133,7 @@
                         novelsId: novelsId
                     }
                 };
-                uni.showLoading({
-                    title: 'loading...',
-                    mask: true
-                });
+                uni.showLoading({ title: 'loading...', mask: true });
                 request.post('/relation/topBookcase', params).then(data => {
                     if (data.status === 200) {
                         let temp = [];
@@ -174,35 +151,27 @@
                 });
             },
             deleteBtn (novelsId, index) {
-                this.deleteModal = true;
-                this.toDeleteInfo = {
-                    novelsId: novelsId,
-                    index: index
-                };
-            },
-            hideDeleteModalBtn () {
-                this.deleteModal = false;
-                this.toDeleteInfo = {};
-            },
-            sureDeleteBtn () {
-                this.deleteModal = false;
-                let params = {
-                    condition: {
-                        uniqueId: this.userInfo.uniqueId,
-                        novelsId: this.toDeleteInfo.novelsId
+                uni.showModal({
+                    title: '提示',
+                    content: '确定从书架中移除此本小说?',
+                    success: (res) => {
+                        if (res.confirm) {
+                            let params = {
+                                condition: {
+                                    uniqueId: this.userInfo.uniqueId,
+                                    novelsId: novelsId
+                                }
+                            };
+                            uni.showLoading({ title: 'loading...', mask: true });
+                            request.post('/relation/deleteBookcase', params).then(data => {
+                                if (data.status === 200) {
+                                    this.result.splice(index, 1);
+                                }
+                            }).finally(() => {
+                                uni.hideLoading();
+                            });
+                        }
                     }
-                };
-                uni.showLoading({
-                    title: '删除中',
-                    mask: true
-                });
-                request.post('/relation/deleteBookcase', params).then(data => {
-                    if (data.status === 200) {
-                        this.result.splice(this.toDeleteInfo.index, 1);
-                    }
-                }).finally(() => {
-                    uni.hideLoading();
-                    this.toDeleteInfo = {};
                 });
             }
         }
@@ -238,11 +207,6 @@
                 .move-no-top {
                     width: 140rpx;
                 }
-            }
-
-            .cu-modal {
-                transform: unset;
-                transition: unset;
             }
 
             .move-no-top-cur {

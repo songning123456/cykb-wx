@@ -45,13 +45,6 @@
                 };
                 uni.setNavigationBarTitle({title: response.sourceName});
             } else if (response.type === 'searchResult') {
-                try {
-                    let pages = getCurrentPages();
-                    let prevPage = pages[pages.length - 2];  //上一个页面
-                    prevPage.$vm.clearBtn();
-                }catch (e) {
-                    console.error(e);
-                }
                 this.loadParams = {
                     authorOrTitle: response.authorOrTitle
                 };

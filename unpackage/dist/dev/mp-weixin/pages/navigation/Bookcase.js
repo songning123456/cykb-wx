@@ -184,25 +184,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _convertDate2 = _interopRequireDefault(__webpack_require__(/*! ../../util/convertDate */ 50));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var InsetLogin = function InsetLogin() {return __webpack_require__.e(/*! import() | components/InsetLogin */ "components/InsetLogin").then(__webpack_require__.bind(null, /*! ../../components/InsetLogin */ 133));};
 
@@ -218,7 +199,6 @@ var currentDate = new Date();var _default =
       listTouchDirection: null,
       // 假数据
       result: [],
-      deleteModal: false,
       toDeleteInfo: {} };
 
   },
@@ -304,10 +284,7 @@ var currentDate = new Date();var _default =
           novelsId: novelsId } };
 
 
-      uni.showLoading({
-        title: 'loading...',
-        mask: true });
-
+      uni.showLoading({ title: 'loading...', mask: true });
       _request.default.post('/relation/topBookcase', params).then(function (data) {
         if (data.status === 200) {
           var temp = [];
@@ -324,37 +301,29 @@ var currentDate = new Date();var _default =
         uni.hideLoading();
       });
     },
-    deleteBtn: function deleteBtn(novelsId, index) {
-      this.deleteModal = true;
-      this.toDeleteInfo = {
-        novelsId: novelsId,
-        index: index };
-
-    },
-    hideDeleteModalBtn: function hideDeleteModalBtn() {
-      this.deleteModal = false;
-      this.toDeleteInfo = {};
-    },
-    sureDeleteBtn: function sureDeleteBtn() {var _this3 = this;
-      this.deleteModal = false;
-      var params = {
-        condition: {
-          uniqueId: this.userInfo.uniqueId,
-          novelsId: this.toDeleteInfo.novelsId } };
+    deleteBtn: function deleteBtn(novelsId, index) {var _this3 = this;
+      uni.showModal({
+        title: '提示',
+        content: '确定从书架中移除此本小说?',
+        success: function success(res) {
+          if (res.confirm) {
+            var params = {
+              condition: {
+                uniqueId: _this3.userInfo.uniqueId,
+                novelsId: novelsId } };
 
 
-      uni.showLoading({
-        title: '删除中',
-        mask: true });
+            uni.showLoading({ title: 'loading...', mask: true });
+            _request.default.post('/relation/deleteBookcase', params).then(function (data) {
+              if (data.status === 200) {
+                _this3.result.splice(index, 1);
+              }
+            }).finally(function () {
+              uni.hideLoading();
+            });
+          }
+        } });
 
-      _request.default.post('/relation/deleteBookcase', params).then(function (data) {
-        if (data.status === 200) {
-          _this3.result.splice(_this3.toDeleteInfo.index, 1);
-        }
-      }).finally(function () {
-        uni.hideLoading();
-        _this3.toDeleteInfo = {};
-      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

@@ -17,7 +17,11 @@
             </view>
             <view class="cu-list menu text-left solid-top" >
                 <view class="cu-item" v-for="(item, index) in searchHistory" :key="index" @tap="queryHistoryBtn(item)">
-                    <view class="content"><text class="text-grey">{{item.authorOrTitle}}</text></view>
+                    <view class="content" v-if="item.novels">
+                        <text class="text-grey">{{item.novels.title}}</text>
+                        <text class="padding-left-xl text-gray">{{item.novels.author}}</text>
+                    </view>
+                    <view class="content" v-else><text class="text-grey">{{item.authorOrTitle}}</text></view>
                 </view>
             </view>
         </view>
@@ -47,6 +51,9 @@
         },
         onLoad() {
             this.searchHistory = uni.getStorageSync('searchHistory') || [];
+        },
+        onShow() {
+            this.clearBtn();
         },
         methods: {
             inputBtn(e) {
