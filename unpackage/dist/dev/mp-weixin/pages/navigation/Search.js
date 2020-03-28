@@ -202,7 +202,18 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: 'Search', data: function data() {return { searchText: '', searchHistory: [], fastResult: [], debounceTimeout: null };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, methods: { inputBtn: function inputBtn(e) {var _this = this;if (this.debounceTimeout) {clearTimeout(this.debounceTimeout);this.debounceTimeout = null;}this.debounceTimeout = setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}, confirmBtn: function confirmBtn(e) {if (e.detail.value) {var obj = { authorOrTitle: e.detail.value };this.searchHistory.unshift(obj);uni.setStorageSync('searchHistory', this.searchHistory);uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: e.detail.value }) });}},
+var _default = { name: 'Search', data: function data() {return { searchText: '', searchHistory: [], fastResult: [], debounceTimeout: null };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, methods: { inputBtn: function inputBtn(e) {var _this = this;if (this.debounceTimeout) {clearTimeout(this.debounceTimeout);this.debounceTimeout = null;}this.debounceTimeout = setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}, confirmBtn: function confirmBtn(e) {if (e.detail.value) {var obj = { authorOrTitle: e.detail.value };this.searchHistory = this.searchHistory.filter(function (item) {return item.authorOrTitle !== e.detail.value;});this.searchHistory.unshift(obj);uni.setStorageSync('searchHistory', this.searchHistory);uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: e.detail.value }) });}
+    },
+    fastSearchBtn: function fastSearchBtn(novels) {
+      var obj = {
+        authorOrTitle: novels.title + '    ' + novels.author,
+        novels: novels };
+
+      this.searchHistory = this.searchHistory.filter(function (item) {return item.authorOrTitle !== novels.title + '    ' + novels.author;});
+      this.searchHistory.unshift(obj);
+      uni.setStorageSync('searchHistory', this.searchHistory);
+      uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
+    },
     queryHistoryBtn: function queryHistoryBtn(history) {
       var src = uni.getStorageSync('searchHistory');
       if (src && src.length > 0) {
@@ -214,22 +225,14 @@ var _default = { name: 'Search', data: function data() {return { searchText: '',
             result.push(item);
           }
         });
+        this.searchHistory = result;
         uni.setStorageSync('searchHistory', result);
       }
       if (history.novels) {
-        uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + history.novels });
+        uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(history.novels) });
       } else {
         uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: history.authorOrTitle }) });
       }
-    },
-    fastSearchBtn: function fastSearchBtn(novels) {
-      var obj = {
-        authorOrTitle: novels.title + '    ' + novels.author,
-        novels: novels };
-
-      this.searchHistory.unshift(obj);
-      uni.setStorageSync('searchHistory', this.searchHistory);
-      uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
     },
     fastQueryBooks: function fastQueryBooks(authorOrTitle) {var _this2 = this;
       if (authorOrTitle) {

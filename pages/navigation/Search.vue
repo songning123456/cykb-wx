@@ -63,10 +63,21 @@
                    let obj = {
                        authorOrTitle: e.detail.value
                    };
+                   this.searchHistory = this.searchHistory.filter(item => item.authorOrTitle !== e.detail.value);
                    this.searchHistory.unshift(obj);
                    uni.setStorageSync('searchHistory', this.searchHistory);
                    uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'searchResult', authorOrTitle: e.detail.value})});
                }
+            },
+            fastSearchBtn(novels) {
+                let obj = {
+                    authorOrTitle: novels.title + '    ' + novels.author,
+                    novels: novels
+                };
+                this.searchHistory = this.searchHistory.filter(item => item.authorOrTitle !== (novels.title + '    ' + novels.author));
+                this.searchHistory.unshift(obj);
+                uni.setStorageSync('searchHistory', this.searchHistory);
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)});
             },
             queryHistoryBtn(history) {
                 let src = uni.getStorageSync('searchHistory');
@@ -79,22 +90,14 @@
                             result.push(item);
                         }
                     });
+                    this.searchHistory = result;
                     uni.setStorageSync('searchHistory', result);
                 }
                 if (history.novels) {
-                    uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + history.novels})
+                    uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(history.novels)})
                 } else {
                     uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'searchResult', authorOrTitle: history.authorOrTitle})});
                 }
-            },
-            fastSearchBtn(novels) {
-                let obj = {
-                    authorOrTitle: novels.title + '    ' + novels.author,
-                    novels: novels
-                };
-                this.searchHistory.unshift(obj);
-                uni.setStorageSync('searchHistory', this.searchHistory);
-                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)});
             },
             fastQueryBooks(authorOrTitle) {
                 if (authorOrTitle) {

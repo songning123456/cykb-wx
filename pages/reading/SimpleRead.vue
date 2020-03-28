@@ -80,9 +80,9 @@
 </template>
 
 <script>
-    import UniIcon from '../../components/UniIcon'
-    import UniTag from '../../components/UniTag'
-    import request from '../../util/request'
+    import UniIcon from '../../components/UniIcon';
+    import UniTag from '../../components/UniTag';
+    import request from '../../util/request';
 
     export default {
         name: 'SimpleRead',
@@ -139,44 +139,44 @@
                 nodes: '',
                 errorNode: '<div class="node-title">未知</div><div class="node-content">加载出错了!!!</div>',
                 scrollTop: 0
-            }
+            };
         },
         onLoad (options) {
-            this.novels = JSON.parse(options.novels)
-            uni.setNavigationBarTitle({ title: this.novels.title })
+            this.novels = JSON.parse(options.novels);
+            uni.setNavigationBarTitle({ title: this.novels.title });
             if (uni.getStorageSync('skin')) {
-                this.skin = uni.getStorageSync('skin')
+                this.skin = uni.getStorageSync('skin');
             }
-            this.setSkin()
-            this.topBtn()
-            this.loadChapterInfoBtn()
+            this.setSkin();
+            this.topBtn();
+            this.loadChapterInfoBtn();
         },
         methods: {
             loadChapterInfoBtn () {
-                uni.showLoading({ title: 'loading...', mask: true })
-                let params
-                let url
+                uni.showLoading({ title: 'loading...', mask: true });
+                let params;
+                let url;
                 if (uni.getStorageSync(this.novels.novelsId + ':scrollInfo')) {
-                    this.storageInfo = uni.getStorageSync(this.novels.novelsId + ':scrollInfo')
-                    params = { novelsId: this.novels.novelsId, chaptersId: this.storageInfo.chaptersId }
-                    url = '/chapters/readMore'
+                    this.storageInfo = uni.getStorageSync(this.novels.novelsId + ':scrollInfo');
+                    params = { novelsId: this.novels.novelsId, chaptersId: this.storageInfo.chaptersId };
+                    url = '/chapters/readMore';
                 } else {
-                    params = { novelsId: this.novels.novelsId }
-                    url = '/chapters/firstChapter'
+                    params = { novelsId: this.novels.novelsId };
+                    url = '/chapters/firstChapter';
                 }
                 request.get(url, params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.chapterInfo = data.data[0]
-                        this.directory = data.listExt
-                        this.modifyNode('first')
+                        this.chapterInfo = data.data[0];
+                        this.directory = data.listExt;
+                        this.modifyNode('first');
                     } else {
                         this.nodes = this.errorNode;
                     }
                 }).catch(() => {
                     this.nodes = this.errorNode;
                 }).finally(() => {
-                    uni.hideLoading()
-                })
+                    uni.hideLoading();
+                });
             },
             topBtn () {
                 // 如果 已经登陆， 则在已经加入书架的前提下更新阅读时间
@@ -186,65 +186,65 @@
                             uniqueId: this.$store.state.userInfo.uniqueId,
                             novelsId: this.novels.novelsId
                         }
-                    }
-                    request.post('/relation/topBookcase', params).catch(() => {})
+                    };
+                    request.post('/relation/topBookcase', params).catch(() => {});
                 }
             },
             queryNewChapter (chaptersId) {
-                let params = { novelsId: '', chaptersId: chaptersId }
-                uni.showLoading({ title: 'loading...', mask: true })
+                let params = { novelsId: '', chaptersId: chaptersId };
+                uni.showLoading({ title: 'loading...', mask: true });
                 request.get('/chapters/readMore', params).then(data => {
                     if (data.status === 200 && data.data.length) {
-                        this.chapterInfo = data.data[0]
-                        this.modifyNode()
+                        this.chapterInfo = data.data[0];
+                        this.modifyNode();
                     }
                 }).finally(() => {
-                    uni.hideLoading()
-                })
+                    uni.hideLoading();
+                });
             },
             readMore (type) {
-                let index = this.convertChapterIndex(this.chapterInfo.chaptersId)
+                let index = this.convertChapterIndex(this.chapterInfo.chaptersId);
                 if (type === 'previous') {
                     if (index > 0) {
-                        this.queryNewChapter(this.directory[--index].chaptersId)
+                        this.queryNewChapter(this.directory[--index].chaptersId);
                     } else {
-                        uni.showToast({ title: '已到顶了!', duration: 1000, icon: 'none'})
+                        uni.showToast({ title: '已到顶了!', duration: 1000, icon: 'none' });
                     }
                 } else {
                     if (index < this.directory.length - 1) {
-                        this.queryNewChapter(this.directory[++index].chaptersId)
+                        this.queryNewChapter(this.directory[++index].chaptersId);
                     } else {
-                        uni.showToast({ title: '已到底了!', duration: 1000, icon: 'none'})
+                        uni.showToast({ title: '已到底了!', duration: 1000, icon: 'none' });
                     }
                 }
             },
             convertChapterIndex (chaptersId) {
-                let result = 0
+                let result = 0;
                 for (let i = 0, len = this.directory.length; i < len; i++) {
                     if (this.directory[i].chaptersId === chaptersId) {
-                        result = i
-                        break
+                        result = i;
+                        break;
                     }
                 }
-                return result
+                return result;
             },
             modifyNode (type) {
-                this.nodes = `<div class="node-title">${this.chapterInfo.chapter}</div><div class="node-content">${this.chapterInfo.content}</div>`
-                this.scrollTop = Math.random()
+                this.nodes = `<div class="node-title">${this.chapterInfo.chapter}</div><div class="node-content">${this.chapterInfo.content}</div>`;
+                this.scrollTop = Math.random();
                 this.$nextTick(() => {
                     if (type === 'first' && this.storageInfo && this.storageInfo.scrollTop) {
-                        this.scrollTop = this.storageInfo.scrollTop
+                        this.scrollTop = this.storageInfo.scrollTop;
                     } else {
-                        this.scrollTop = 0
+                        this.scrollTop = 0;
                     }
-                })
+                });
             },
             //点击中间
             clickCenter () {
-                this.isShowMask = !this.isShowMask
+                this.isShowMask = !this.isShowMask;
             },
             scrollOn (e) {
-                this.setScrollInfo(e.detail.scrollTop)
+                this.setScrollInfo(e.detail.scrollTop);
             },
             setScrollInfo (scrollTop) {
                 try {
@@ -253,8 +253,8 @@
                         chaptersId: this.chapterInfo.chaptersId,
                         novelsId: this.novels.novelsId,
                         scrollTop: scrollTop
-                    }
-                    uni.setStorageSync(this.novels.novelsId + ':scrollInfo', storage)
+                    };
+                    uni.setStorageSync(this.novels.novelsId + ':scrollInfo', storage);
                 } catch (e) {
                     // error
                 }
@@ -262,48 +262,48 @@
             directoryBtn () {
                 uni.navigateTo({
                     url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.chapterInfo.chaptersId
-                })
+                });
             },
             //滑块设置字体间距或大小
             sliderChange (e, type) {
                 if (type === 'fontSize') {
-                    this.skin.fontSize = e.detail.value
+                    this.skin.fontSize = e.detail.value;
                 } else {
-                    this.skin.lineHeight = e.detail.value
+                    this.skin.lineHeight = e.detail.value;
                 }
                 uni.setStorage({
                     key: 'skin',
                     data: this.skin
-                })
+                });
             },
             setSkin () {
-                let titleFontColor = '#000000'
+                let titleFontColor = '#000000';
                 if (this.skin.pageBgColor === '#333b3d') {
-                    titleFontColor = '#ffffff'
+                    titleFontColor = '#ffffff';
                 }
                 uni.setNavigationBarColor({
                     // 字体颜色 仅支持 #ffffff 和 #000000
                     frontColor: titleFontColor,
                     backgroundColor: this.skin.pageBgColor,
-                })
+                });
                 uni.setBackgroundColor({
                     backgroundColor: this.skin.pageBgColor
-                })
+                });
             },
             //修改背景颜色
             changeBackground (index) {
-                this.skin.currentSkinIndex = index
-                this.skin.pageBgColor = this.colorArr[index].pageBgColor//背景颜色
-                this.skin.fontColor = this.colorArr[index].fontColor//字体颜色
-                this.skin.maskBgColor = this.colorArr[index].maskBgColor//遮罩背景色
-                this.setSkin()
+                this.skin.currentSkinIndex = index;
+                this.skin.pageBgColor = this.colorArr[index].pageBgColor;//背景颜色
+                this.skin.fontColor = this.colorArr[index].fontColor;//字体颜色
+                this.skin.maskBgColor = this.colorArr[index].maskBgColor;//遮罩背景色
+                this.setSkin();
                 uni.setStorage({
                     key: 'skin',
                     data: this.skin
-                })
+                });
             },
         }
-    }
+    };
 </script>
 
 <style scoped lang="scss">
