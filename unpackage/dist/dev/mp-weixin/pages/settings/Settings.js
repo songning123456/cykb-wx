@@ -274,7 +274,7 @@ var _default = { name: 'Settings', data: function data() {return { settings: [{ 
         key: 'sortType',
         data: e.detail.value });
 
-      var value = 1;
+      var value = 0.7;
       if (this.isDark) {
         value = 0.3;
       }

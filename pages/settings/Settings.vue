@@ -139,7 +139,7 @@
                     key: 'sortType',
                     data: e.detail.value
                 });
-                let value = 1;
+                let value = 0.7;
                 if (this.isDark) {
                     value = 0.3;
                 }
