@@ -127,17 +127,6 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var m0 = _vm.convertCategory(_vm.novels.sex, _vm.novels.category)
-  var m1 = _vm.convertSex(_vm.novels.sex)
-  _vm.$mp.data = Object.assign(
-    {},
-    {
-      $root: {
-        m0: m0,
-        m1: m1
-      }
-    }
-  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -234,7 +223,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
-var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -296,24 +284,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', sex: 'male', category: '' }, authorBooks: [], showMore: true };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);this.querySameAuthor();}, methods: { convertSex: function convertSex(sex) {return _common.default.getSex(sex);}, convertCategory: function convertCategory(sex, category) {return _category.default[sex][category];}, changeShowMore: function changeShowMore() {this.showMore = !this.showMore;}, querySameAuthor: function querySameAuthor() {var _this = this;var params = { condition: { author: this.novels.author } };_request.default.post('/novels/sameAuthor', params).then(function (data) {if (data.status === 200 && data.total > 0) {_this.authorBooks = data.data.filter(function (item) {return item.title !== _this.novels.title;});}});}, SimilarBookBtn: function SimilarBookBtn(novels) {uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + novels });}, addBookcase: function addBookcase() {if (this.$store.state.userInfo) {var params = { condition: { novelsId: this.novels.novelsId, uniqueId: this.$store.state.userInfo.uniqueId } };uni.showLoading({ title: 'loading...', mask: true });_request.default.post('/relation/isExist', params).then(function (data) {// 200 存在
-          if (data.status === 200) {setTimeout(function () {uni.hideLoading();uni.showToast({ title: '书架已存在此书', duration: 1000, icon: 'none' });
-            }, 1000);
-          } else {
-            _request.default.post('/relation/insertBookcase', params).then(function (data) {
-              uni.hideLoading();
-              if (data.status === 200) {
-                uni.showToast({ title: '已添加至书架', duration: 1000 });
-              }
-            }).catch(function () {
-              uni.hideLoading();
-            });
-          }
-        }).catch(function () {
-          uni.hideLoading();
-        });
-      } else {
-        uni.navigateTo({ url: '/pages/login/Login?navigatePage=back' });
+var _default = { name: 'BookDetail', data: function data() {return { novels: { coverUrl: '', title: '', author: '', category: '' }, authorBooks: [], showMore: true };}, onLoad: function onLoad(option) {this.novels = JSON.parse(option.novels);this.querySameAuthor();}, methods: { changeShowMore: function changeShowMore() {this.showMore = !this.showMore;}, querySameAuthor: function querySameAuthor() {var _this = this;var params = { condition: { author: this.novels.author } };_request.default.post('/novels/sameAuthor', params).then(function (data) {if (data.status === 200 && data.total > 0) {_this.authorBooks = data.data.filter(function (item) {return item.title !== _this.novels.title;});}});}, SimilarBookBtn: function SimilarBookBtn(novels) {uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + novels });}, addBookcase: function addBookcase() {if (this.$store.state.userInfo) {var params = { condition: { novelsId: this.novels.novelsId, uniqueId: this.$store.state.userInfo.uniqueId } };uni.showLoading({ title: 'loading...', mask: true });_request.default.post('/relation/insertBookcase', params).then(function (data) {uni.hideLoading();if (data.status === 200) {uni.showToast({ title: '已添加至书架', duration: 1000 });} else if (data.status === 201) {uni.showToast({ title: '书架已存在此书', duration: 1000, icon: 'none' });}}).catch(function () {uni.hideLoading();});} else {uni.navigateTo({ url: '/pages/login/Login?navigatePage=back' });
       }
     },
     startReading: function startReading() {

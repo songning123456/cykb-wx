@@ -142,6 +142,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -150,8 +151,8 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-var _default = { name: "Login", data: function data() {return { operateType: '' };},
-  onLoad: function onLoad(option) {
+//
+var _default = { name: 'Login', data: function data() {return { operateType: '' };}, onLoad: function onLoad(option) {
     if (option.navigatePage === 'back') {
       this.operateType = 'back';
     }

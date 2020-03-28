@@ -1,17 +1,9 @@
 <template>
     <view class="classify">
-        <scroll-view scroll-x class="nav">
-            <view class="flex text-center">
-                <view class="cu-item flex-sub" :class="{'text-red cur': item.sex===tabCur}"
-                      v-for="(item,index) in sexTabs" :key="index" @tap="tabSelect" :data-sex="item.sex">
-                    {{convertSex(item.sex)}}
-                </view>
-            </view>
-        </scroll-view>
         <view class="cu-list grid col-3">
-            <view class="cu-item" v-for="(item,index) in result" :key="index" @tap="searchBtn(item.category)">
-                <view class="cu-avatar lg radius" :class="'category-' +tabCur + '-' + item.category"></view>
-                <view class="classify-margin text-black text-df">{{convertCategory(item.category)}}</view>
+            <view class="cu-item" v-for="(item,index) in result" :key="index" @tap="searchBtn(item.sourceName)">
+                <view class="cu-avatar lg radius" :class='"classify-" + convertName(item.sourceName)'></view>
+                <view class="classify-margin text-black text-df">{{item.sourceName}}</view>
                 <view class="text-gray text-sm">{{convertTotal(item.total)}}</view>
             </view>
         </view>
@@ -19,61 +11,41 @@
 </template>
 
 <script>
-    import Category from '../../util/category';
     import request from '../../util/request';
     import common from '../../util/common';
 
     export default {
         name: 'Classify',
-        data() {
+        data () {
             return {
-                tabCur: 'male',
-                sexTabs: [
-                    {
-                        icon: 'cuIcon-male text-blue',
-                        sex: 'male'
-                    },
-                    {
-                        icon: 'cuIcon-female text-pink',
-                        sex: 'female'
-                    }
-                ],
                 result: [],
                 firstEnter: true
             };
         },
-        onLoad() {
-            this.queryClassify();
+        onLoad () {
+            this.queryClassifyCount();
         },
-        onTabItemTap() {
+        onTabItemTap () {
             if (!this.firstEnter) {
-                this.queryClassify();
+                this.queryClassifyCount();
             }
         },
         methods: {
-            tabSelect(e) {
-                this.tabCur = e.currentTarget.dataset.sex;
-                this.queryClassify();
-            },
-            convertCategory(arg0) {
-                return Category[this.tabCur][arg0];
-            },
-            convertSex(sex) {
-                return common.getSex(sex);
-            },
-            convertTotal(arg0) {
+            convertTotal (arg0) {
                 let result = arg0;
                 (result || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
                 result = '共' + result + '部';
                 return result;
             },
-            queryClassify() {
-                let params = {
-                    condition: {
-                        sex: this.tabCur
-                    }
-                };
-                request.post('/novels/classify', params).then(data => {
+            convertName(sourceName) {
+                let result = '';
+                if (sourceName === '笔趣阁') {
+                    result = 'biquge'
+                }
+                return result;
+            },
+            queryClassifyCount () {
+                request.get('/novels/classifyCount', {}).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.result = data.data;
                     }
@@ -83,8 +55,10 @@
                     }
                 });
             },
-            searchBtn(category) {
-                uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'classify', sex: this.tabCur, category: category})});
+            searchBtn (sourceName) {
+                uni.navigateTo({
+                    url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName })
+                });
             }
         }
     };

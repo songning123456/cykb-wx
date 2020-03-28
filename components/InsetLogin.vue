@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import request from '../util/request'
+    import request from '../util/request';
 
     export default {
         name: 'InsetLogin',
@@ -23,7 +23,7 @@
                                 uni.showLoading({
                                     title: '登陆中',
                                     mask: true
-                                })
+                                });
                                 let params = {
                                     condition: {
                                         code: response2.code,
@@ -31,49 +31,49 @@
                                         nickName: response3.userInfo.nickName,
                                         gender: response3.userInfo.gender
                                     }
-                                }
+                                };
                                 request.post('/users/weixin/getUsersInfo', params).then(data => {
-                                    uni.hideLoading()
+                                    uni.hideLoading();
                                     if (data.status === 200) {
                                         uni.setStorage({
                                             key: 'userInfo',
                                             data: data.data[0]
-                                        })
-                                        this.$store.commit('SET_USERINFO', data.data[0])
+                                        });
+                                        this.$store.commit('SET_USERINFO', data.data[0]);
                                     } else {
-                                        console.error('获取用户信息失败1')
+                                        console.error('获取用户信息失败1');
                                         uni.showToast({
                                             title: '获取用户信息失败',
                                             duration: 1000,
                                             icon: 'none'
-                                        })
+                                        });
                                     }
                                 }).catch(e => {
-                                    uni.hideLoading()
-                                    console.error('获取用户信息失败2')
+                                    uni.hideLoading();
+                                    console.error('获取用户信息失败2');
                                     uni.showToast({
                                         title: '获取用户信息失败',
                                         duration: 1000,
                                         icon: 'none'
-                                    })
-                                })
+                                    });
+                                });
                             },
                             fail: reject3 => {
                                 // doNothing...
                             }
-                        })
+                        });
                     },
                     fail: response2 => {
                         uni.showToast({
                             title: '登录失败',
                             duration: 1000,
                             icon: 'none'
-                        })
+                        });
                     }
-                })
+                });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>

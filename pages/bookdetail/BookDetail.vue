@@ -8,10 +8,9 @@
                         <view class="margin-top-xs text-gray text-df">{{novels.title}}</view>
                         <view class="margin-top-xs">
                             <view class="cu-tag bg-red light sm round">{{novels.author}}</view>
-                            <view class="cu-tag bg-green light sm round">{{convertCategory(novels.sex,
-                                novels.category)}}
+                            <view class="cu-tag bg-green light sm round">{{novels.category || '未知'}}
                             </view>
-                            <view class="cu-tag bg-yellow light sm round">{{convertSex(novels.sex)}}</view>
+                            <view class="cu-tag bg-yellow light sm round">{{novels.sourceName}}</view>
                         </view>
                     </view>
                 </view>
@@ -36,7 +35,8 @@
                 <view class="cu-item" @click="changeShowMore">
                     <view class="content">作者还写过</view>
                     <view class="action text-gray" :class="{'rotate-90': showMore}">
-                        <text class="lg text-gray cuIcon-right"></text></view>
+                        <text class="lg text-gray cuIcon-right"></text>
+                    </view>
                 </view>
                 <scroll-view scroll-x="true" scroll-y="true" class="author-books margin-bottom-sm" v-show="showMore">
                     <block v-for="(item, index) in authorBooks" :key="index">
@@ -60,9 +60,8 @@
 </template>
 
 <script>
-    import common from '../../util/common'
-    import Category from '../../util/category'
-    import request from '../../util/request'
+    import common from '../../util/common';
+    import request from '../../util/request';
 
     export default {
         name: 'BookDetail',
@@ -72,25 +71,18 @@
                     coverUrl: '',
                     title: '',
                     author: '',
-                    sex: 'male',
                     category: ''
                 },
                 authorBooks: [],
                 showMore: true
-            }
+            };
         },
         onLoad (option) {
             this.novels = JSON.parse(option.novels);
-            this.querySameAuthor()
+            this.querySameAuthor();
         },
         methods: {
-            convertSex (sex) {
-                return common.getSex(sex)
-            },
-            convertCategory (sex, category) {
-                return Category[sex][category]
-            },
-            changeShowMore() {
+            changeShowMore () {
                 this.showMore = !this.showMore;
             },
             querySameAuthor () {
@@ -98,56 +90,46 @@
                     condition: {
                         author: this.novels.author
                     }
-                }
+                };
                 request.post('/novels/sameAuthor', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        this.authorBooks = data.data.filter(item => item.title !== this.novels.title)
+                        this.authorBooks = data.data.filter(item => item.title !== this.novels.title);
                     }
-                })
+                });
             },
             SimilarBookBtn (novels) {
                 uni.navigateTo({
                     url: '/pages/bookdetail/BookDetail?novels=' + novels
-                })
+                });
             },
-            addBookcase() {
+            addBookcase () {
                 if (this.$store.state.userInfo) {
                     let params = {
                         condition: {
                             novelsId: this.novels.novelsId,
                             uniqueId: this.$store.state.userInfo.uniqueId
                         }
-                    }
+                    };
                     uni.showLoading({ title: 'loading...', mask: true });
-                    request.post('/relation/isExist', params).then(data => {
-                        // 200 存在
+                    request.post('/relation/insertBookcase', params).then(data => {
+                        uni.hideLoading();
                         if (data.status === 200) {
-                            setTimeout(() => {
-                                uni.hideLoading();
-                                uni.showToast({ title: '书架已存在此书', duration: 1000, icon: 'none'})
-                            }, 1000);
-                        } else {
-                            request.post('/relation/insertBookcase', params).then(data => {
-                                uni.hideLoading();
-                                if (data.status === 200) {
-                                    uni.showToast({ title: '已添加至书架', duration: 1000})
-                                }
-                            }).catch(() => {
-                                uni.hideLoading();
-                            })
+                            uni.showToast({ title: '已添加至书架', duration: 1000 });
+                        } else if (data.status === 201) {
+                            uni.showToast({ title: '书架已存在此书', duration: 1000, icon: 'none' });
                         }
                     }).catch(() => {
                         uni.hideLoading();
                     });
                 } else {
-                    uni.navigateTo({ url: '/pages/login/Login?navigatePage=back'})
+                    uni.navigateTo({ url: '/pages/login/Login?navigatePage=back' });
                 }
             },
-            startReading() {
-                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(this.novels)})
+            startReading () {
+                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(this.novels) });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -168,14 +150,14 @@
                     .image {
                         width: 100%;
                         height: 100%;
-                        padding: 30upx;
+                        padding: 30rpx;
                         box-sizing: border-box;
                         margin: unset;
 
                         .image-size {
-                            width: 165upx;
-                            height: 220upx;
-                            border-radius: 6upx;
+                            width: 165rpx;
+                            height: 220rpx;
+                            border-radius: 6rpx;
                         }
 
                         .cu-tag {
@@ -188,20 +170,20 @@
             .author-books {
                 white-space: nowrap; // 滚动必须加的属性
                 width: 100%;
-                padding: 20upx;
+                padding: 20rpx;
                 margin: 0 auto;
 
                 .author-book {
                     width: 24%;
-                    margin-right: 20upx;
+                    margin-right: 20rpx;
                     display: inline-block;
                     vertical-align: top;
 
                     .avatar-img {
                         display: inline-block;
-                        height: 220upx;
-                        width: 165upx;
-                        border-radius: 6upx;
+                        height: 220rpx;
+                        width: 165rpx;
+                        border-radius: 6rpx;
                         position: relative;
 
                         .uni-image {

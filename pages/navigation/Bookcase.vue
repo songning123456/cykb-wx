@@ -12,7 +12,7 @@
                     <view class="text-grey text-sm">{{item.author || '暂无'}}</view>
                     <view class="text-gray text-xs text-cut">
                         <text class="margin-right-xs">{{convertDate(item.updateTime)}} ·</text>
-                        <text>{{item.latestChapter || '暂无'}}</text>
+                        <text>{{item.chapter || '暂无'}}</text>
                     </view>
                 </view>
                 <view class="move" :class="{'move-no-top':sortType === '更新时间'}">
@@ -51,11 +51,11 @@
 </template>
 
 <script>
-    import InsetLogin from '../../components/InsetLogin'
-    import request from '../../util/request'
-    import convertDate from '../../util/convertDate'
+    import InsetLogin from '../../components/InsetLogin';
+    import request from '../../util/request';
+    import convertDate from '../../util/convertDate';
 
-    let currentDate = new Date()
+    let currentDate = new Date();
 
     export default {
         name: 'Bookcase',
@@ -69,67 +69,67 @@
                 result: [],
                 deleteModal: false,
                 toDeleteInfo: {}
-            }
+            };
         },
         computed: {
             userInfo () {
-                return this.$store.state.userInfo
+                return this.$store.state.userInfo;
             },
             sortType () {
-                return this.$store.state.sortType
+                return this.$store.state.sortType;
             }
         },
         onLoad () {
             if (this.userInfo) {
-                uni.startPullDownRefresh()
+                uni.startPullDownRefresh();
             }
         },
         watch: {
             // 主要用于 一开始未登录，后来登录；重新加载数据
             userInfo (newVal, oldVal) {
                 if (newVal && !oldVal) {
-                    uni.startPullDownRefresh()
+                    uni.startPullDownRefresh();
                 }
             },
             sortType (newVal, oldVal) {
-                this.queryBookcase()
+                this.queryBookcase();
             }
         },
         onPullDownRefresh () {
             if (this.userInfo) {
-                this.queryBookcase()
+                this.queryBookcase();
             } else {
-                uni.stopPullDownRefresh()//得到数据后停止下拉刷新
+                uni.stopPullDownRefresh();//得到数据后停止下拉刷新
             }
         },
         methods: {
             // ListTouch触摸开始
             touchStart (e) {
-                this.listTouchStart = e.touches[0].pageX
+                this.listTouchStart = e.touches[0].pageX;
             },
             // ListTouch计算方向
             touchMove (e) {
-                this.listTouchDirection = e.touches[0].pageX - this.listTouchStart > 0 ? 'right' : 'left'
+                this.listTouchDirection = e.touches[0].pageX - this.listTouchStart > 0 ? 'right' : 'left';
             },
             // ListTouch计算滚动
             touchEnd (e) {
                 if (this.listTouchDirection === 'left') {
-                    this.modalName = e.currentTarget.dataset.target
+                    this.modalName = e.currentTarget.dataset.target;
                 } else {
-                    this.modalName = null
+                    this.modalName = null;
                 }
-                this.listTouchDirection = null
+                this.listTouchDirection = null;
             },
-            startReading(item) {
-                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(item)})
+            startReading (item) {
+                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(item) });
             },
             navChange () {
                 uni.switchTab({
                     url: '/pages/navigation/Classify',
-                })
+                });
             },
             convertDate (updateTime) {
-                return convertDate.convertZh(currentDate, updateTime)
+                return convertDate.convertZh(currentDate, updateTime);
             },
             queryBookcase () {
                 let params = {
@@ -137,14 +137,14 @@
                         uniqueId: this.userInfo.uniqueId,
                         sortType: this.sortType
                     }
-                }
+                };
                 request.post('/relation/bookcase', params).then(data => {
                     if (data.status === 200 && data.total > 0) {
-                        this.result = data.data
+                        this.result = data.data;
                     }
                 }).finally(() => {
-                    uni.stopPullDownRefresh()//得到数据后停止下拉刷新
-                })
+                    uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+                });
             },
             topBtn (novelsId) {
                 let params = {
@@ -152,61 +152,61 @@
                         uniqueId: this.userInfo.uniqueId,
                         novelsId: novelsId
                     }
-                }
+                };
                 uni.showLoading({
                     title: 'loading...',
                     mask: true
-                })
+                });
                 request.post('/relation/topBookcase', params).then(data => {
                     if (data.status === 200) {
-                        let temp = []
+                        let temp = [];
                         this.result.forEach(item => {
                             if (item.novelsId === novelsId) {
-                                temp.unshift(item)
+                                temp.unshift(item);
                             } else {
-                                temp.push(item)
+                                temp.push(item);
                             }
-                        })
-                        this.result = temp
+                        });
+                        this.result = temp;
                     }
                 }).finally(() => {
-                    uni.hideLoading()
-                })
+                    uni.hideLoading();
+                });
             },
             deleteBtn (novelsId, index) {
                 this.deleteModal = true;
                 this.toDeleteInfo = {
                     novelsId: novelsId,
                     index: index
-                }
+                };
             },
-            hideDeleteModalBtn() {
+            hideDeleteModalBtn () {
                 this.deleteModal = false;
                 this.toDeleteInfo = {};
             },
-            sureDeleteBtn() {
+            sureDeleteBtn () {
                 this.deleteModal = false;
                 let params = {
                     condition: {
                         uniqueId: this.userInfo.uniqueId,
                         novelsId: this.toDeleteInfo.novelsId
                     }
-                }
+                };
                 uni.showLoading({
                     title: '删除中',
                     mask: true
-                })
+                });
                 request.post('/relation/deleteBookcase', params).then(data => {
                     if (data.status === 200) {
-                        this.result.splice(this.toDeleteInfo.index, 1)
+                        this.result.splice(this.toDeleteInfo.index, 1);
                     }
                 }).finally(() => {
                     uni.hideLoading();
                     this.toDeleteInfo = {};
-                })
+                });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -221,22 +221,22 @@
                 background: unset;
 
                 .image-size {
-                    width: 105upx;
+                    width: 105rpx;
                 }
 
                 .cu-avatar {
                     float: left;
-                    left: 15upx;
+                    left: 15rpx;
                 }
 
                 .content {
                     float: left;
-                    left: 135upx;
-                    width: calc(100% - 140upx - 20upx);
+                    left: 135rpx;
+                    width: calc(100% - 140rpx - 20rpx);
                 }
 
                 .move-no-top {
-                    width: 140upx;
+                    width: 140rpx;
                 }
             }
 

@@ -10,8 +10,8 @@
                             <view class="text-content">{{convertIntroduction(item.introduction)}}</view>
                             <view>
                                 <view class="cu-tag bg-red light sm round">{{item.author}}</view>
-                                <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex, item.category)}}</view>
-                                <view class="cu-tag bg-yellow light sm round">{{convertSex(item.sex)}}</view>
+                                <view class="cu-tag bg-green light sm round">{{item.category || '未知'}}</view>
+                                <view class="cu-tag bg-yellow light sm round">{{item.sourceName}}</view>
                             </view>
                         </view>
                     </view>
@@ -24,7 +24,6 @@
 <script>
     import request from '../../util/request';
     import common from '../../util/common';
-    import Category from '../../util/category';
 
     export default {
         name: 'SearchResult',
@@ -42,39 +41,36 @@
             this.loadType = response.type;
             if (response.type === 'classify') {
                 this.loadParams = {
-                    sex: response.sex,
-                    category: response.category
+                    sourceName: response.sourceName
                 };
-                uni.setNavigationBarTitle({title: Category[response.sex][response.category]});
-            } else if (response.type === 'nativeSearch') {
+                uni.setNavigationBarTitle({title: response.sourceName});
+            } else if (response.type === 'searchResult') {
+                try {
+                    let pages = getCurrentPages();
+                    let prevPage = pages[pages.length - 2];  //上一个页面
+                    prevPage.$vm.clearBtn();
+                }catch (e) {
+                    console.error(e);
+                }
                 this.loadParams = {
                     authorOrTitle: response.authorOrTitle
                 };
-                uni.setNavigationBarTitle({title: '本站搜索'});
-            } else if (response.type === 'ecdemicSearch') {
-                this.loadParams = {
-                    authorOrTitle: response.authorOrTitle,
-                    source: response.source
-                };
-                uni.setNavigationBarTitle({title: '全网搜索'});
+                uni.setNavigationBarTitle({title: '搜索结果'});
             }
             uni.startPullDownRefresh();
         },
         onReachBottom() {
             if (this.loadType === 'classify') {
                 this.queryConstantResult('more', '/novels/classifyResult');
-            } else if (this.loadType === 'nativeSearch') {
-                this.queryConstantResult('more', '/novels/nativeSearch');
+            } else if (this.loadType === 'searchResult') {
+                this.queryConstantResult('more', '/novels/searchResult');
             }
         },
         onPullDownRefresh() {
             if (this.loadType === 'classify') {
                 this.queryConstantResult('first', '/novels/classifyResult');
-            } else if (this.loadType === 'nativeSearch') {
-                this.queryConstantResult('first', '/novels/nativeSearch');
-            } else if (this.loadType === 'ecdemicSearch') {
-                // 全网搜索一次性全部请求完
-                this.queryEcdemicResult();
+            } else if (this.loadType === 'searchResult') {
+                this.queryConstantResult('first', '/novels/searchResult');
             }
         },
         methods: {
@@ -107,26 +103,8 @@
                     }
                 });
             },
-            queryEcdemicResult() {
-                let params = {
-                    condition: this.loadParams
-                };
-                request.post('/novels/ecdemicSearch', params).then(data => {
-                    if (data.status === 200) {
-                        this.result = data.data;
-                    }
-                }).finally(() => {
-                    uni.stopPullDownRefresh();//得到数据后停止下拉刷新
-                });
-            },
             bookDetailBtn (novels) {
                 uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) })
-            },
-            convertSex(sex) {
-                return common.getSex(sex);
-            },
-            convertCategory(sex, category) {
-                return Category[sex][category];
             },
             convertIntroduction(introduction) {
                 return common.getIntroduction(introduction);

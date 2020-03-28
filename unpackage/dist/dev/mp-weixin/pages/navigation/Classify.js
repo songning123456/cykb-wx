@@ -100,21 +100,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l0 = _vm.__map(_vm.sexTabs, function(item, index) {
-    var m0 = _vm.convertSex(item.sex)
+  var l0 = _vm.__map(_vm.result, function(item, index) {
+    var m0 = _vm.convertName(item.sourceName)
+    var m1 = _vm.convertTotal(item.total)
     return {
       $orig: _vm.__get_orig(item),
-      m0: m0
-    }
-  })
-
-  var l1 = _vm.__map(_vm.result, function(item, index) {
-    var m1 = _vm.convertCategory(item.category)
-    var m2 = _vm.convertTotal(item.total)
-    return {
-      $orig: _vm.__get_orig(item),
-      m1: m1,
-      m2: m2
+      m0: m0,
+      m1: m1
     }
   })
 
@@ -122,8 +114,7 @@ var render = function() {
     {},
     {
       $root: {
-        l0: l0,
-        l1: l1
+        l0: l0
       }
     }
   )
@@ -173,15 +164,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
@@ -195,47 +177,28 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = { name: 'Classify', data: function data() {return { tabCur: 'male', sexTabs: [{ icon: 'cuIcon-male text-blue', sex: 'male' }, { icon: 'cuIcon-female text-pink', sex: 'female' }], result: [], firstEnter: true };},
-  onLoad: function onLoad() {
-    this.queryClassify();
-  },
+var _default = { name: 'Classify', data: function data() {return { result: [], firstEnter: true };}, onLoad: function onLoad() {this.queryClassifyCount();},
   onTabItemTap: function onTabItemTap() {
     if (!this.firstEnter) {
-      this.queryClassify();
+      this.queryClassifyCount();
     }
   },
   methods: {
-    tabSelect: function tabSelect(e) {
-      this.tabCur = e.currentTarget.dataset.sex;
-      this.queryClassify();
-    },
-    convertCategory: function convertCategory(arg0) {
-      return _category.default[this.tabCur][arg0];
-    },
-    convertSex: function convertSex(sex) {
-      return _common.default.getSex(sex);
-    },
     convertTotal: function convertTotal(arg0) {
       var result = arg0;
       (result || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
       result = '共' + result + '部';
       return result;
     },
-    queryClassify: function queryClassify() {var _this = this;
-      var params = {
-        condition: {
-          sex: this.tabCur } };
-
-
-      _request.default.post('/novels/classify', params).then(function (data) {
+    convertName: function convertName(sourceName) {
+      var result = '';
+      if (sourceName === '笔趣阁') {
+        result = 'biquge';
+      }
+      return result;
+    },
+    queryClassifyCount: function queryClassifyCount() {var _this = this;
+      _request.default.get('/novels/classifyCount', {}).then(function (data) {
         if (data.status === 200 && data.total > 0) {
           _this.result = data.data;
         }
@@ -245,8 +208,10 @@ var _default = { name: 'Classify', data: function data() {return { tabCur: 'male
         }
       });
     },
-    searchBtn: function searchBtn(category) {
-      uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sex: this.tabCur, category: category }) });
+    searchBtn: function searchBtn(sourceName) {
+      uni.navigateTo({
+        url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName }) });
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

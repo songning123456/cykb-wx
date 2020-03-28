@@ -28,8 +28,8 @@
 </template>
 
 <script>
-    import request from '../../util/request'
-    import regular from '../../util/regular'
+    import request from '../../util/request';
+    import regular from '../../util/regular';
 
     export default {
         name: 'Comment',
@@ -44,7 +44,7 @@
                     contact: ''
                 },
                 loading: false
-            }
+            };
         },
         methods: {
             submitBtn () {
@@ -53,55 +53,55 @@
                         title: this.display.content,
                         icon: 'none',
                         duration: 2000
-                    })
-                    return
+                    });
+                    return;
                 }
                 if (!this.form.contact) {
                     uni.showToast({
                         title: this.display.contact,
                         icon: 'none',
                         duration: 2000
-                    })
-                    return
+                    });
+                    return;
                 }
                 if (!regular.wx.test(this.form.contact) && !regular.qq.test(this.form.contact) && !regular.phone.test(this.form.contact)) {
                     uni.showToast({
                         title: '请留下正确联系方式',
                         icon: 'none',
                         duration: 2000
-                    })
-                    return
+                    });
+                    return;
                 }
-                this.loading = true
+                this.loading = true;
                 let params = {
                     condition: {
                         content: this.form.content,
                         contact: this.form.contact
                     }
-                }
+                };
                 request.post('/comments/publishComment', params).then(data => {
                     if (data.status === 200) {
                         uni.showToast({
                             title: '意见反馈成功',
                             duration: 2000
-                        })
+                        });
                         this.form = {
                             content: '',
                             contact: ''
-                        }
+                        };
                     }
                 }).finally(() => {
-                    this.loading = false
-                })
+                    this.loading = false;
+                });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
     .comment {
         .cu-form-group {
-            margin: 1upx 30upx;
+            margin: 1rpx 30rpx;
             background: unset;
             border: 0.08px solid #cccccc;
         }
@@ -114,7 +114,7 @@
             justify-content: center;
 
             button {
-                width: 300upx;
+                width: 300rpx;
             }
         }
     }

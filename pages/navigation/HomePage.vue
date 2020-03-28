@@ -1,7 +1,8 @@
 <template>
     <view class="home-page">
         <view class="cu-list full-size">
-            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index" @tap="bookDetailBtn(item)">
+            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index"
+                  @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
                         <uni-image class="image-size" :url="item.coverUrl"></uni-image>
@@ -10,8 +11,9 @@
                             <view class="text-content">{{convertIntroduction(item.introduction)}}</view>
                             <view>
                                 <view class="cu-tag bg-red light sm round">{{item.author}}</view>
-                                <view class="cu-tag bg-green light sm round">{{convertCategory(item.sex, item.category)}}</view>
-                                <view class="cu-tag bg-yellow light sm round">{{convertSex(item.sex)}}</view>
+                                <view class="cu-tag bg-green light sm round">{{item.category || '未知'}}
+                                </view>
+                                <view class="cu-tag bg-yellow light sm round">{{item.sourceName}}</view>
                             </view>
                         </view>
                     </view>
@@ -22,9 +24,8 @@
 </template>
 
 <script>
-    import request from '../../util/request'
-    import common from '../../util/common'
-    import Category from '../../util/category'
+    import request from '../../util/request';
+    import common from '../../util/common';
 
     export default {
         name: 'HomePage',
@@ -33,61 +34,55 @@
                 pageSize: 20,
                 pageResult: [],
                 result: []
-            }
+            };
         },
         onLoad () {
-            uni.startPullDownRefresh()
+            uni.startPullDownRefresh();
         },
         onReachBottom () {
-            this.queryHomePage('more')
+            this.queryHomePage('more');
         },
         onPullDownRefresh () {
-            this.queryHomePage('first')
+            this.queryHomePage('first');
         },
         methods: {
             queryHomePage (type) {
-                let params = Object.create(null)
-                params.pageRecordNum = this.pageSize
+                let params = Object.create(null);
+                params.pageRecordNum = this.pageSize;
                 if (type === 'first') {
-                    params.recordStartNo = 0
+                    params.recordStartNo = 0;
                 } else {
                     if (this.pageResult.length > 0) {
-                        params.condition = Object.create(null)
-                        params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime
+                        params.condition = Object.create(null);
+                        params.condition.createTime = this.pageResult[this.pageResult.length - 1].createTime;
                     } else {
-                        return
+                        return;
                     }
                 }
                 request.post('/novels/homePage', params).then(data => {
                     if (data.status === 200) {
-                        this.pageResult = data.data
+                        this.pageResult = data.data;
                         if (type === 'first') {
-                            this.result = data.data
+                            this.result = data.data;
                         } else {
-                            this.result = this.result.concat(data.data)
+                            this.result = this.result.concat(data.data);
                         }
                     }
                 }).finally(() => {
                     if (type === 'first') {
-                        uni.stopPullDownRefresh()//得到数据后停止下拉刷新
+                        uni.stopPullDownRefresh();//得到数据后停止下拉刷新
                     }
-                })
-            },
-            convertSex (sex) {
-                return common.getSex(sex)
-            },
-            convertCategory (sex, category) {
-                return Category[sex][category]
+                });
             },
             convertIntroduction (introduction) {
-                return common.getIntroduction(introduction)
+                return common.getIntroduction(introduction);
             },
             bookDetailBtn (novels) {
-                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) })
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
             }
         }
 
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -96,27 +91,27 @@
             overflow: auto;
 
             .cu-card {
-                padding-bottom: 10upx;
+                padding-bottom: 10rpx;
 
                 .cu-item {
                     padding: unset;
                     background: unset;
 
                     .content {
-                        padding: 0 15upx;
+                        padding: 0 15rpx;
 
                         .image-size {
-                            width: 180upx;
-                            margin-top: 18upx;
+                            width: 180rpx;
+                            margin-top: 18rpx;
                             height: 8em;
-                            margin-right: 20upx;
-                            border-radius: 6upx;
+                            margin-right: 20rpx;
+                            border-radius: 6rpx;
                         }
 
                         .title {
                             padding: unset;
-                            height: 60upx;
-                            line-height: 72upx;
+                            height: 60rpx;
+                            line-height: 72rpx;
                         }
                     }
                 }

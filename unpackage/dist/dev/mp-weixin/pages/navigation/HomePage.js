@@ -115,13 +115,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   var l0 = _vm.__map(_vm.result, function(item, index) {
     var m0 = _vm.convertIntroduction(item.introduction)
-    var m1 = _vm.convertCategory(item.sex, item.category)
-    var m2 = _vm.convertSex(item.sex)
     return {
       $orig: _vm.__get_orig(item),
-      m0: m0,
-      m1: m1,
-      m2: m2
+      m0: m0
     }
   })
 
@@ -188,9 +184,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
-var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));
-var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/category */ 25));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
 //
@@ -213,9 +210,9 @@ var _category = _interopRequireDefault(__webpack_require__(/*! ../../util/catego
 //
 //
 //
-var _default = { name: 'HomePage', data: function data() {return { pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;var params = Object.create(null);params.pageRecordNum = this.pageSize;
-      if (type === 'first') {
-        params.recordStartNo = 0;
+//
+//
+var _default = { name: 'HomePage', data: function data() {return { pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;var params = Object.create(null);params.pageRecordNum = this.pageSize;if (type === 'first') {params.recordStartNo = 0;
       } else {
         if (this.pageResult.length > 0) {
           params.condition = Object.create(null);
@@ -238,12 +235,6 @@ var _default = { name: 'HomePage', data: function data() {return { pageSize: 20,
           uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
         }
       });
-    },
-    convertSex: function convertSex(sex) {
-      return _common.default.getSex(sex);
-    },
-    convertCategory: function convertCategory(sex, category) {
-      return _category.default[sex][category];
     },
     convertIntroduction: function convertIntroduction(introduction) {
       return _common.default.getIntroduction(introduction);

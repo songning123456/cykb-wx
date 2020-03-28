@@ -168,47 +168,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
@@ -243,70 +202,9 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = { name: 'Search', data: function data() {return { searchText: '', tabCur: 'native', nativeSearchHistory: [], ecdemicSearchHistory: [], fastResult: [], debounceTimeout: null, webTabs: [{ key: 'native', value: '本站搜索' }, { key: 'ecdemic', value: '全网搜索' }], tipInfo: { 'native': '搜索已录入在本站的书籍，搜索更快', 'ecdemic': '海量全网搜索(自定义资源路径)' }, sourceModal: false, sourceBox: [{ value: 'biquge', name: '笔趣阁', checked: true, hot: false }, { value: 'qidian', name: '起点', checked: false, hot: false }, { value: 'chuangshi', name: '创世', checked: false, hot: false }, { value: 'meiwen', name: '美文', checked: false, hot: true }] };}, onLoad: function onLoad() {this.nativeSearchHistory = uni.getStorageSync('nativeSearchHistory') || [];this.ecdemicSearchHistory = uni.getStorageSync('ecdemicSearchHistory') || [];}, methods: { tabSelect: function tabSelect(e) {this.tabCur = e.currentTarget.dataset.web;if (this.tabCur === 'native') {this.nativeSearchHistory = uni.getStorageSync('nativeSearchHistory') || [];} else {this.ecdemicSearchHistory = uni.getStorageSync('ecdemicSearchHistory') || [];}}, inputBtn: function inputBtn(e) {var _this = this;if (this.tabCur === 'native') {if (this.debounceTimeout) {clearTimeout(this.debounceTimeout);this.debounceTimeout = null;}this.debounceTimeout = setTimeout(function () {_this.fastQueryBooks(e.detail.value);
-        }, 1000);
-      }
-    },
-    confirmBtn: function confirmBtn(e) {var _this2 = this;
-      if (e.detail.value) {
-        var obj = {
-          authorOrTitle: e.detail.value };
-
-        if (this.tabCur === 'native') {
-          this.nativeSearchHistory.unshift(obj);
-          uni.setStorageSync('nativeSearchHistory', this.nativeSearchHistory);
-          uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'nativeSearch', authorOrTitle: e.detail.value }) });
-        } else if (this.tabCur === 'ecdemic') {
-          this.ecdemicSearchHistory.unshift(obj);
-          uni.setStorageSync('ecdemicSearchHistory', this.ecdemicSearchHistory);
-          uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'ecdemicSearch', authorOrTitle: e.detail.value, source: [] }) });
-        }
-        setTimeout(function () {_this2.clearBtn();}, 1500);
-      }
-    },
+var _default = { name: 'Search', data: function data() {return { searchText: '', searchHistory: [], fastResult: [], debounceTimeout: null };}, onLoad: function onLoad() {this.searchHistory = uni.getStorageSync('searchHistory') || [];}, methods: { inputBtn: function inputBtn(e) {var _this = this;if (this.debounceTimeout) {clearTimeout(this.debounceTimeout);this.debounceTimeout = null;}this.debounceTimeout = setTimeout(function () {_this.fastQueryBooks(e.detail.value);}, 1000);}, confirmBtn: function confirmBtn(e) {if (e.detail.value) {var obj = { authorOrTitle: e.detail.value };this.searchHistory.unshift(obj);uni.setStorageSync('searchHistory', this.searchHistory);uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: e.detail.value }) });}},
     queryHistoryBtn: function queryHistoryBtn(history) {
-      var src = uni.getStorageSync(this.tabCur + 'SearchHistory');
+      var src = uni.getStorageSync('searchHistory');
       if (src && src.length > 0) {
         var result = [];
         src.forEach(function (item) {
@@ -316,36 +214,31 @@ var _default = { name: 'Search', data: function data() {return { searchText: '',
             result.push(item);
           }
         });
-        uni.setStorageSync(this.tabCur + 'SearchHistory', result);
+        uni.setStorageSync('searchHistory', result);
       }
-      if (this.tabCur === 'native') {
-        if (history.novels) {
-          uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + history.novels });
-        } else {
-          uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'nativeSearch', authorOrTitle: history.authorOrTitle }) });
-        }
+      if (history.novels) {
+        uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + history.novels });
       } else {
-        uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'ecdemicSearch', authorOrTitle: history.authorOrTitle, source: [] }) });
+        uni.navigateTo({ url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'searchResult', authorOrTitle: history.authorOrTitle }) });
       }
     },
-    fastSearchBtn: function fastSearchBtn(novels) {var _this3 = this;
+    fastSearchBtn: function fastSearchBtn(novels) {
       var obj = {
         authorOrTitle: novels.title + '    ' + novels.author,
         novels: novels };
 
-      this.nativeSearchHistory.unshift(obj);
-      uni.setStorageSync('nativeSearchHistory', this.nativeSearchHistory);
+      this.searchHistory.unshift(obj);
+      uni.setStorageSync('searchHistory', this.searchHistory);
       uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
-      setTimeout(function () {_this3.clearBtn();}, 1500);
     },
-    fastQueryBooks: function fastQueryBooks(authorOrTitle) {var _this4 = this;
+    fastQueryBooks: function fastQueryBooks(authorOrTitle) {var _this2 = this;
       if (authorOrTitle) {
         var params = {
           authorOrTitle: authorOrTitle };
 
         _request.default.get('/novels/fastSearch', params).then(function (data) {
           if (data.status === 200 && data.data.length > 0) {
-            _this4.fastResult = data.data;
+            _this2.fastResult = data.data;
           }
         });
       }
@@ -354,32 +247,9 @@ var _default = { name: 'Search', data: function data() {return { searchText: '',
       this.searchText = '';
       this.fastResult = [];
     },
-    hideSourceModal: function hideSourceModal() {
-      this.sourceModal = false;
-    },
-    openSourceModal: function openSourceModal() {
-      this.sourceModal = true;
-    },
-    ChooseCheckbox: function ChooseCheckbox(e) {
-      var items = this.sourceBox;
-      var current = e.currentTarget.dataset.value;
-      for (var i = 0, lenI = items.length; i < lenI; ++i) {
-        if (items[i].value === current) {
-          if (items[i].checked && this.sourceBox.filter(function (item) {return item.checked;}).length === 1) {
-            return;
-          }
-          items[i].checked = !items[i].checked;
-          break;
-        }
-      }
-    },
     deleteSearchHistoryBtn: function deleteSearchHistoryBtn() {
-      if (this.tabCur === 'native') {
-        this.nativeSearchHistory = [];
-      } else {
-        this.ecdemicSearchHistory = [];
-      }
-      uni.removeStorageSync(this.tabCur + 'SearchHistory');
+      this.searchHistory = [];
+      uni.removeStorageSync('searchHistory');
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
