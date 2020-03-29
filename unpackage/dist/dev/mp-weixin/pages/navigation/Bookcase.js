@@ -210,7 +210,7 @@ var currentDate = new Date();var _default =
       return this.$store.state.sortType;
     } },
 
-  onLoad: function onLoad() {
+  onShow: function onShow() {
     if (this.userInfo) {
       uni.startPullDownRefresh();
     }

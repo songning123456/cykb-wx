@@ -59,7 +59,7 @@
                 return this.$store.state.sortType;
             }
         },
-        onLoad () {
+        onShow() {
             if (this.userInfo) {
                 uni.startPullDownRefresh();
             }
