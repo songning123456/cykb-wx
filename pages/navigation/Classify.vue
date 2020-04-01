@@ -41,6 +41,10 @@
                 let result = '';
                 if (sourceName === '笔趣阁') {
                     result = 'biquge'
+                } else if (sourceName === '147小说') {
+                    result = '147xiaoshuo'
+                } else if (sourceName === '天天书吧') {
+                    result = 'tiantianshuba'
                 }
                 return result;
             },

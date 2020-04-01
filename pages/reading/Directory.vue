@@ -10,7 +10,9 @@
         </scroll-view>
         <view class="fill"></view>
         <view class="cu-list menu">
-            <view class="cu-item arrow" :class="{'chosen-item': item.chaptersId === currentChapterId}" v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style' hover-stay-time='600' @tap="jumpChapterBtn(item.chaptersId)">
+            <view class="cu-item arrow" :class="{'chosen-item': item.chaptersId === currentChapterId}"
+                  v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style'
+                  hover-stay-time='600' @tap="jumpChapterBtn(item.chaptersId)">
                 <view class="content">
                     <text :class="item.chaptersId === currentChapterId ? 'cuIcon-locationfill text-red' : 'cuIcon-location text-grey'"></text>
                     <text class="text-grey">{{item.chapter}}</text>
@@ -23,19 +25,19 @@
 <script>
     export default {
         name: 'Directory',
-        data() {
+        data () {
             return {
                 directoryList: [],
                 currentChapterId: '',
                 tabCur: 'positive',
                 halfHeight: 400,
                 sortTabs: [
-                    {key: 'positive', value: '正序'},
-                    {key: 'reverse', value: '倒序'}
+                    { key: 'positive', value: '正序' },
+                    { key: 'reverse', value: '倒序' }
                 ]
-            }
+            };
         },
-        onLoad(option) {
+        onLoad (option) {
             this.directoryList = JSON.parse(option.directory);
             this.currentChapterId = option.currentChapterId;
             if (this.directoryList && this.directoryList.length && this.currentChapterId) {
@@ -45,41 +47,43 @@
                     this.halfHeight = 400;
                     uni.getSystemInfo({
                         success: function (e) {
-                            uni.setStorageSync('phoneInfo', e)
+                            uni.setStorageSync('phoneInfo', e);
                         }
-                    })
+                    });
                 }
                 this.scrollCenter();
             }
         },
         methods: {
-            jumpChapterBtn(chaptersId) {
-                let pages = getCurrentPages();
-                let prevPage = pages[pages.length - 2];  //上一个页面
-                prevPage.$vm.queryNewChapter(chaptersId, 'insert');
+            jumpChapterBtn (chaptersId) {
+                if (this.currentChapterId !== chaptersId) {
+                    let pages = getCurrentPages();
+                    let prevPage = pages[pages.length - 2];  //上一个页面
+                    prevPage.$vm.queryNewChapter(chaptersId, 'insert');
+                }
                 uni.navigateBack({
                     delta: 1
                 });
             },
-            tabSelect(e) {
+            tabSelect (e) {
                 if (this.tabCur !== e.currentTarget.dataset.sort) {
-                    this.tabCur = e.currentTarget.dataset.sort
-                    this.directoryList.reverse()
-                    this.scrollCenter()
+                    this.tabCur = e.currentTarget.dataset.sort;
+                    this.directoryList.reverse();
+                    this.scrollCenter();
                 }
             },
-            scrollCenter() {
-                uni.createSelectorQuery().select(".directory").boundingClientRect(data=>{
-                    uni.createSelectorQuery().select(".chosen-item").boundingClientRect((res)=>{
+            scrollCenter () {
+                uni.createSelectorQuery().select('.directory').boundingClientRect(data => {
+                    uni.createSelectorQuery().select('.chosen-item').boundingClientRect((res) => {
                         uni.pageScrollTo({
-                            duration:0,
-                            scrollTop:res.top - data.top - this.halfHeight
-                        })
-                    }).exec()
+                            duration: 0,
+                            scrollTop: res.top - data.top - this.halfHeight
+                        });
+                    }).exec();
                 }).exec();
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -95,6 +99,7 @@
             height: 94upx;
             width: 100%;
         }
+
         .cu-item {
             background: unset;
         }

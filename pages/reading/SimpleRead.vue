@@ -4,7 +4,7 @@
                      :scroll-top="scrollTop" class="scroll-content">
             <view class="padding flex flex-direction text-bold letter-space">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
-                        @tap="readMore('previous')">上一章
+                        @tap.stop="readMore('previous')">上一章
                 </button>
             </view>
             <view class="read-content"
@@ -17,7 +17,7 @@
             </view>
             <view class="padding flex flex-direction text-bold letter-space">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
-                        @tap="readMore('next')">下一章
+                        @tap.stop="readMore('next')">下一章
                 </button>
             </view>
         </scroll-view>
