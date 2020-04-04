@@ -29,7 +29,7 @@
   padding: 0 16rpx;
 }
 .reading .scroll-content .read-content.data-v-4d20be70 {
-    min-height: 1000rpx;
+    min-height: 1100rpx;
 }
 .reading .load-again.data-v-4d20be70 {
   position: absolute;
@@ -196,6 +196,7 @@
   margin-bottom: 100rpx;
 }
 .reading.data-v-4d20be70 .node-content {
+  margin-bottom: 100rpx;
   margin-bottom: 100rpx;
 }
 .reading .letter-space.data-v-4d20be70 {

@@ -335,6 +335,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request
     queryNewChapter: function queryNewChapter(chaptersId) {var _this2 = this;
       var params = { novelsId: '', chaptersId: chaptersId };
       uni.showLoading({ title: 'loading...', mask: true });
+      this.nodes = '';
       _request.default.get('/chapters/readMore', params).then(function (data) {
         if (data.status === 200 && data.data.length) {
           _this2.chapterInfo = data.data[0];

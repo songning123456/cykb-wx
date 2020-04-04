@@ -193,6 +193,7 @@
             queryNewChapter (chaptersId) {
                 let params = { novelsId: '', chaptersId: chaptersId };
                 uni.showLoading({ title: 'loading...', mask: true });
+                this.nodes = '';
                 request.get('/chapters/readMore', params).then(data => {
                     if (data.status === 200 && data.data.length) {
                         this.chapterInfo = data.data[0];
@@ -314,7 +315,7 @@
             padding: 0 16rpx;
 
             .read-content {
-                min-height: 1000rpx;
+                min-height: 1100rpx;
             }
         }
 
@@ -476,6 +477,7 @@
         }
 
         /deep/ .node-content {
+            margin-bottom: 100rpx;
             margin-bottom: 100rpx;
         }
 
