@@ -249,6 +249,17 @@ var _default = { name: 'Settings', data: function data() {return { settings: [{ 
                   _this.$store.commit('SET_SORTTYPE', '最近阅读');
                   _this.$store.commit('SET_ISDARK', false);
                   uni.showToast({ title: '清理完成', duration: 1000 });
+                  // 系统信息
+                  uni.getSystemInfo({
+                    success: function success(e) {
+                      uni.setStorageSync('phoneInfo', e);
+                    } });
+
+                  uni.getScreenBrightness({
+                    success: function success(res) {
+                      uni.setStorageSync('screenBrightness', res.value);
+                    } });
+
                 } catch (e) {
                   console.error(e);
                 }

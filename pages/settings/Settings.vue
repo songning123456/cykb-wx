@@ -116,6 +116,17 @@
                                         this.$store.commit('SET_SORTTYPE', '最近阅读');
                                         this.$store.commit('SET_ISDARK', false);
                                         uni.showToast({ title: '清理完成', duration: 1000 });
+                                        // 系统信息
+                                        uni.getSystemInfo({
+                                            success: function (e) {
+                                                uni.setStorageSync('phoneInfo', e);
+                                            }
+                                        });
+                                        uni.getScreenBrightness({
+                                            success: function (res) {
+                                                uni.setStorageSync('screenBrightness', res.value);
+                                            }
+                                        });
                                     } catch (e) {
                                         console.error(e);
                                     }
