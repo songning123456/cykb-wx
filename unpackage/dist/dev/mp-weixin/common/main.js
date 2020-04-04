@@ -126,6 +126,11 @@ __webpack_require__.r(__webpack_exports__);
         uni.setStorageSync('phoneInfo', e);
       } });
 
+    uni.getScreenBrightness({
+      success: function success(res) {
+        uni.setStorageSync('screenBrightness', res.value);
+      } });
+
     // 提醒用户更新版本
     var updateManager = uni.getUpdateManager();
     updateManager.onCheckForUpdate(function (res) {

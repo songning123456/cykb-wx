@@ -21,7 +21,15 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
+			"current": -1,
+			"list": []
+		},
+		"gamePlugin": {
 			"current": -1,
 			"list": []
 		},
@@ -29,9 +37,16 @@
 			"current": 2,
 			"list": [
 				{
-					"name": "test",
 					"id": 0,
-					"pathName": "pages/navigation/Search"
+					"name": "test",
+					"pathName": "pages/navigation/Search",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "pages/settings/Settings",
+					"pathName": "pages/settings/Settings",
+					"scene": null
 				}
 			]
 		}

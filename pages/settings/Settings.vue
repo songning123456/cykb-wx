@@ -77,7 +77,7 @@
             sortType () {
                 return this.$store.state.sortType;
             },
-            isDark() {
+            isDark () {
                 return this.$store.state.isDark;
             },
         },
@@ -136,12 +136,15 @@
             nightModeBtn (e) {
                 this.$store.commit('SET_ISDARK', e.detail.value);
                 uni.setStorage({
-                    key: 'sortType',
+                    key: 'isDark',
                     data: e.detail.value
                 });
-                let value = 0.7;
+                let value = uni.getStorageSync('screenBrightness') || 0.5;
                 if (this.isDark) {
-                    value = 0.3;
+                    value = value - 0.3;
+                    if (value < 0) {
+                        value = 0;
+                    }
                 }
                 uni.setScreenBrightness({ value: value });
             },

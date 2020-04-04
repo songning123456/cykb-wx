@@ -1,8 +1,8 @@
 let request = {};
 let host = 'https://wx.simple-blog.xyz/cykb';
-if (process.env.NODE_ENV === 'development') {
-    host = 'https://dev.simple-blog.xyz/cykb';
-}
+// if (process.env.NODE_ENV === 'development') {
+//     host = 'https://dev.simple-blog.xyz/cykb';
+// }
 request.post = function (url, params) {
     return new Promise((resolve, reject) => {
         uni.request({

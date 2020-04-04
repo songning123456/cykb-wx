@@ -269,12 +269,15 @@ var _default = { name: 'Settings', data: function data() {return { settings: [{ 
     nightModeBtn: function nightModeBtn(e) {
       this.$store.commit('SET_ISDARK', e.detail.value);
       uni.setStorage({
-        key: 'sortType',
+        key: 'isDark',
         data: e.detail.value });
 
-      var value = 0.7;
+      var value = uni.getStorageSync('screenBrightness') || 0.5;
       if (this.isDark) {
-        value = 0.3;
+        value = value - 0.3;
+        if (value < 0) {
+          value = 0;
+        }
       }
       uni.setScreenBrightness({ value: value });
     },

@@ -28,6 +28,11 @@
                     uni.setStorageSync('phoneInfo', e);
                 }
             });
+            uni.getScreenBrightness({
+                success: function (res) {
+                    uni.setStorageSync('screenBrightness', res.value);
+                }
+            });
             // 提醒用户更新版本
             const updateManager = uni.getUpdateManager();
             updateManager.onCheckForUpdate(function(res) {
