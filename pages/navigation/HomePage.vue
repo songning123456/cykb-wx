@@ -31,7 +31,7 @@
         name: 'HomePage',
         data () {
             return {
-                pageSize: 20,
+                pageSize: 100,
                 pageResult: [],
                 result: []
             };

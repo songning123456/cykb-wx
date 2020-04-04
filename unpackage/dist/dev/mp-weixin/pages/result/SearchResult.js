@@ -195,7 +195,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'SearchResult', data: function data() {return { loadParams: null, loadType: '', pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad(option) {var response = JSON.parse(option.params);this.loadType = response.type;if (response.type === 'classify') {this.loadParams = { sourceName: response.sourceName };uni.setNavigationBarTitle({ title: response.sourceName });} else if (response.type === 'searchResult') {this.loadParams = { authorOrTitle: response.authorOrTitle };
+var _default = { name: 'SearchResult', data: function data() {return { loadParams: null, loadType: '', pageSize: 100, pageResult: [], result: [] };}, onLoad: function onLoad(option) {var response = JSON.parse(option.params);this.loadType = response.type;if (response.type === 'classify') {this.loadParams = { sourceName: response.sourceName };uni.setNavigationBarTitle({ title: response.sourceName });} else if (response.type === 'searchResult') {this.loadParams = { authorOrTitle: response.authorOrTitle };
 
       uni.setNavigationBarTitle({ title: '搜索结果' });
     }

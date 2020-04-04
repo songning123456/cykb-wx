@@ -210,7 +210,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'HomePage', data: function data() {return { pageSize: 20, pageResult: [], result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;var params = Object.create(null);params.pageRecordNum = this.pageSize;if (type === 'first') {params.recordStartNo = 0;
+var _default = { name: 'HomePage', data: function data() {return { pageSize: 100, pageResult: [], result: [] };}, onLoad: function onLoad() {uni.startPullDownRefresh();}, onReachBottom: function onReachBottom() {this.queryHomePage('more');}, onPullDownRefresh: function onPullDownRefresh() {this.queryHomePage('first');}, methods: { queryHomePage: function queryHomePage(type) {var _this = this;var params = Object.create(null);params.pageRecordNum = this.pageSize;if (type === 'first') {params.recordStartNo = 0;
       } else {
         if (this.pageResult.length > 0) {
           params.condition = Object.create(null);

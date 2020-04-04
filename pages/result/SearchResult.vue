@@ -31,7 +31,7 @@
             return {
                 loadParams: null,
                 loadType: '',
-                pageSize: 20,
+                pageSize: 100,
                 pageResult: [],
                 result: []
             };
