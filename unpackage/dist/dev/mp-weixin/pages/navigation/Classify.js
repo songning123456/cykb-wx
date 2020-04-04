@@ -196,6 +196,10 @@ var _default = { name: 'Classify', data: function data() {return { result: [], f
         result = '147xiaoshuo';
       } else if (sourceName === '天天书吧') {
         result = 'tiantianshuba';
+      } else if (sourceName === '飞库小说') {
+        result = 'feikuxiaoshuo';
+      } else if (sourceName === '趣书吧') {
+        result = 'qushuba';
       }
       return result;
     },

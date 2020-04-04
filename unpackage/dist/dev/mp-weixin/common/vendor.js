@@ -8852,9 +8852,8 @@ internalMixin(Vue);
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var request = {};
 var host = 'https://wx.simple-blog.xyz/cykb';
-// if (process.env.NODE_ENV === 'development') {
-//     host = 'https://dev.simple-blog.xyz/cykb';
-// }
+// host = 'https://dev.simple-blog.xyz/cykb';
+
 request.post = function (url, params) {
   return new Promise(function (resolve, reject) {
     uni.request({
