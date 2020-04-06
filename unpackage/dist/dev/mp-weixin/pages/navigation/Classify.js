@@ -175,7 +175,8 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'Classify', data: function data() {return { result: [], firstEnter: true };}, onLoad: function onLoad() {this.queryClassifyCount();},
+var _default = { name: 'Classify', data: function data() {return { result: [], categoryResult: {}, firstEnter: true };}, onLoad: function onLoad() {this.queryClassifyCount();
+  },
   onTabItemTap: function onTabItemTap() {
     if (!this.firstEnter) {
       this.queryClassifyCount();
@@ -207,6 +208,7 @@ var _default = { name: 'Classify', data: function data() {return { result: [], f
       _request.default.get('/novels/classifyCount', {}).then(function (data) {
         if (data.status === 200 && data.total > 0) {
           _this.result = data.data;
+          _this.categoryResult = data.dataExt;
         }
       }).finally(function () {
         if (_this.firstEnter) {
@@ -216,7 +218,7 @@ var _default = { name: 'Classify', data: function data() {return { result: [], f
     },
     searchBtn: function searchBtn(sourceName) {
       uni.navigateTo({
-        url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName }) });
+        url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName, categoryInfo: this.categoryResult[sourceName] }) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

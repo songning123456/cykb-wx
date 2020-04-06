@@ -171,6 +171,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! ../../util/request */ 23));
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common */ 24));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
@@ -195,10 +204,16 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../util/common *
 //
 //
 //
-var _default = { name: 'SearchResult', data: function data() {return { loadParams: null, loadType: '', pageSize: 100, pageResult: [], result: [] };}, onLoad: function onLoad(option) {var response = JSON.parse(option.params);this.loadType = response.type;if (response.type === 'classify') {this.loadParams = { sourceName: response.sourceName };uni.setNavigationBarTitle({ title: response.sourceName });} else if (response.type === 'searchResult') {this.loadParams = { authorOrTitle: response.authorOrTitle };
-
-      uni.setNavigationBarTitle({ title: '搜索结果' });
-    }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { name: 'SearchResult', data: function data() {return { loadParams: null, loadType: '', pageSize: 100, pageResult: [], result: [], scrollLeft: 0, tabCur: '', categoryInfo: [] };}, onLoad: function onLoad(option) {var response = JSON.parse(option.params);this.loadType = response.type;if (response.type === 'classify') {this.categoryInfo = response.categoryInfo;this.tabCur = response.categoryInfo[0].category;this.loadParams = { sourceName: response.sourceName, category: response.categoryInfo[0].category };uni.setNavigationBarTitle({ title: response.sourceName });} else if (response.type === 'searchResult') {this.loadParams = { authorOrTitle: response.authorOrTitle };uni.setNavigationBarTitle({ title: '搜索结果' });}
     uni.startPullDownRefresh();
   },
   onReachBottom: function onReachBottom() {
@@ -216,6 +231,13 @@ var _default = { name: 'SearchResult', data: function data() {return { loadParam
     }
   },
   methods: {
+    tabSelect: function tabSelect(e) {
+      this.tabCur = e.currentTarget.dataset.id;
+      this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+      this.loadParams.category = e.currentTarget.dataset.id;
+      uni.showLoading({ title: 'loading...', mask: true });
+      this.queryConstantResult('first', '/novels/classifyResult');
+    },
     queryConstantResult: function queryConstantResult(firstOrMore, url) {var _this = this;
       var params = {
         pageRecordNum: this.pageSize,
@@ -242,6 +264,7 @@ var _default = { name: 'SearchResult', data: function data() {return { loadParam
       }).finally(function () {
         if (firstOrMore === 'first') {
           uni.stopPullDownRefresh(); //得到数据后停止下拉刷新
+          uni.hideLoading();
         }
       });
     },

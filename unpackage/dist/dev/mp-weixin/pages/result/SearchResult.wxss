@@ -24,6 +24,16 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.search-result .search-classify.data-v-b4e2daac {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  background-color: white;
+}
+.search-result .search-fill.data-v-b4e2daac {
+  width: 100%;
+  height: 90rpx;
+}
 .search-result .cu-list.data-v-b4e2daac {
   overflow: auto;
 }

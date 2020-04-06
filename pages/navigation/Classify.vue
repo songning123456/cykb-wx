@@ -19,6 +19,7 @@
         data () {
             return {
                 result: [],
+                categoryResult: {},
                 firstEnter: true
             };
         },
@@ -56,6 +57,7 @@
                 request.get('/novels/classifyCount', {}).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.result = data.data;
+                        this.categoryResult = data.dataExt;
                     }
                 }).finally(() => {
                     if (this.firstEnter) {
@@ -65,7 +67,7 @@
             },
             searchBtn (sourceName) {
                 uni.navigateTo({
-                    url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName })
+                    url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName, categoryInfo: this.categoryResult[sourceName]})
                 });
             }
         }

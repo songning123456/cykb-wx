@@ -1,7 +1,16 @@
 <template>
     <view class="search-result">
+        <scroll-view v-if="loadType === 'classify'" scroll-x class="nav search-classify" scroll-with-animation
+                     :scroll-left="scrollLeft">
+            <view class="cu-item" :class="{'text-red cur': item.category === tabCur}" v-for="(item,index) in categoryInfo"
+                  :key="index" @tap="tabSelect" :data-id="item.category">
+                {{item.category + ' (共' + item.categoryTotal + '本)'}}
+            </view>
+        </scroll-view>
+        <view v-if="loadType === 'classify'" class="search-fill"></view>
         <view class="cu-list full-size">
-            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index" @tap="bookDetailBtn(item)">
+            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index"
+                  @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
                         <uni-image class="image-size" :url="item.coverUrl"></uni-image>
@@ -27,39 +36,45 @@
 
     export default {
         name: 'SearchResult',
-        data() {
+        data () {
             return {
                 loadParams: null,
                 loadType: '',
                 pageSize: 100,
                 pageResult: [],
-                result: []
+                result: [],
+                scrollLeft: 0,
+                tabCur: '',
+                categoryInfo: []
             };
         },
-        onLoad(option) {
+        onLoad (option) {
             let response = JSON.parse(option.params);
             this.loadType = response.type;
             if (response.type === 'classify') {
+                this.categoryInfo = response.categoryInfo;
+                this.tabCur = response.categoryInfo[0].category;
                 this.loadParams = {
-                    sourceName: response.sourceName
+                    sourceName: response.sourceName,
+                    category: response.categoryInfo[0].category
                 };
-                uni.setNavigationBarTitle({title: response.sourceName});
+                uni.setNavigationBarTitle({ title: response.sourceName });
             } else if (response.type === 'searchResult') {
                 this.loadParams = {
                     authorOrTitle: response.authorOrTitle
                 };
-                uni.setNavigationBarTitle({title: '搜索结果'});
+                uni.setNavigationBarTitle({ title: '搜索结果' });
             }
             uni.startPullDownRefresh();
         },
-        onReachBottom() {
+        onReachBottom () {
             if (this.loadType === 'classify') {
                 this.queryConstantResult('more', '/novels/classifyResult');
             } else if (this.loadType === 'searchResult') {
                 this.queryConstantResult('more', '/novels/searchResult');
             }
         },
-        onPullDownRefresh() {
+        onPullDownRefresh () {
             if (this.loadType === 'classify') {
                 this.queryConstantResult('first', '/novels/classifyResult');
             } else if (this.loadType === 'searchResult') {
@@ -67,7 +82,14 @@
             }
         },
         methods: {
-            queryConstantResult(firstOrMore, url) {
+            tabSelect (e) {
+                this.tabCur = e.currentTarget.dataset.id;
+                this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+                this.loadParams.category = e.currentTarget.dataset.id;
+                uni.showLoading({ title: 'loading...', mask: true });
+                this.queryConstantResult('first', '/novels/classifyResult');
+            },
+            queryConstantResult (firstOrMore, url) {
                 let params = {
                     pageRecordNum: this.pageSize,
                     condition: this.loadParams
@@ -93,13 +115,14 @@
                 }).finally(() => {
                     if (firstOrMore === 'first') {
                         uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+                        uni.hideLoading();
                     }
                 });
             },
             bookDetailBtn (novels) {
-                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) })
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
             },
-            convertIntroduction(introduction) {
+            convertIntroduction (introduction) {
                 return common.getIntroduction(introduction);
             }
         }
@@ -108,31 +131,44 @@
 
 <style lang="scss" scoped>
     .search-result {
+
+        .search-classify {
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            background-color: white;
+        }
+
+        .search-fill {
+            width: 100%;
+            height: 90rpx;
+        }
+
         .cu-list {
             overflow: auto;
 
             .cu-card {
-                padding-bottom: 10upx;
+                padding-bottom: 10rpx;
 
                 .cu-item {
                     padding: unset;
                     background: unset;
 
                     .content {
-                        padding: 0 15upx;
+                        padding: 0 15rpx;
 
                         .image-size {
-                            width: 180upx;
-                            margin-top: 18upx;
+                            width: 180rpx;
+                            margin-top: 18rpx;
                             height: 8em;
-                            margin-right: 20upx;
-                            border-radius: 6upx;
+                            margin-right: 20rpx;
+                            border-radius: 6rpx;
                         }
 
                         .title {
                             padding: unset;
-                            height: 60upx;
-                            line-height: 72upx;
+                            height: 60rpx;
+                            line-height: 72rpx;
                         }
                     }
                 }
