@@ -4,7 +4,7 @@
       "path": "pages/navigation/HomePage",
       "style": {
         "navigationBarTitleText": "首页",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "enablePullDownRefresh": true
       }
     },
@@ -12,7 +12,7 @@
       "path": "pages/navigation/Classify",
       "style": {
         "navigationBarTitleText": "分类",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -20,7 +20,7 @@
       "path": "pages/navigation/Search",
       "style": {
         "navigationBarTitleText": "搜索",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -28,7 +28,7 @@
       "path": "pages/navigation/Bookcase",
       "style": {
         "navigationBarTitleText": "书架",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "enablePullDownRefresh": true
       }
     },
@@ -36,7 +36,7 @@
       "path": "pages/navigation/My",
       "style": {
         "navigationBarTitleText": "我的",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -44,7 +44,7 @@
       "path": "pages/comment/Comment",
       "style": {
         "navigationBarTitleText": "意见反馈",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -52,7 +52,7 @@
       "path": "pages/login/Login",
       "style": {
         "navigationBarTitleText": "登录",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -60,7 +60,7 @@
       "path": "pages/result/SearchResult",
       "style": {
         "navigationBarTitleText": "",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "enablePullDownRefresh": true
       }
     },
@@ -68,7 +68,7 @@
       "path": "pages/settings/Settings",
       "style": {
         "navigationBarTitleText": "设置",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -76,7 +76,7 @@
       "path": "pages/bookdetail/BookDetail",
       "style": {
         "navigationBarTitleText": "书籍详情",
-        "navigationBarBackgroundColor": "#e54d42",
+        "navigationBarBackgroundColor": "#ffffff",
         "disableScroll": true
       }
     },
@@ -84,35 +84,35 @@
       "path": "pages/reading/Reading",
       "style": {
         "navigationBarTitleText": "",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#ffffff"
       }
     },
     {
       "path": "pages/reading/SimpleRead",
       "style": {
         "navigationBarTitleText": "",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#ffffff"
       }
     },
     {
       "path": "pages/reading/Directory",
       "style": {
         "navigationBarTitleText": "目录",
-        "navigationBarBackgroundColor": "#e54d42"
+        "navigationBarBackgroundColor": "#ffffff"
       }
     }
   ],
   "globalStyle": {
-    "navigationBarTextStyle": "#ffffff",
+    "navigationBarTextStyle": "black",
     "navigationBarTitleText": "畅游看吧",
-    "navigationBarBackgroundColor": "#f7f6f2",
+    "navigationBarBackgroundColor": "#ffffff",
     "backgroundColor": "#f7f6f2"
   },
   "tabBar": {
     "color": "#aaaaaa",
     "selectedColor": "#e54d42",
     "borderStyle": "black",
-    "backgroundColor": "#f7f6f2",
+    "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/navigation/HomePage",
