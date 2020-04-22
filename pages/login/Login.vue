@@ -92,7 +92,7 @@
 <style lang="scss" scoped>
     .login {
         .cu-btn {
-            width: 400upx;
+            width: 400rpx;
             position: absolute;
             top: 85%;
             left: 50%;
