@@ -11,6 +11,22 @@
             </view>
         </view>
         <view class="cu-card case no-card history-card" v-if="!fastResult.length">
+            <view class="cu-bar solid-bottom" v-if="ourSearchResult.length">
+                <view class="action">
+                    <text class="cuIcon-attention text-red"></text>
+                    大家都在搜
+                </view>
+            </view>
+            <scroll-view scroll-x="true" class="our-searches margin-bottom-sm" v-if="ourSearchResult.length">
+                <block v-for="(item, index) in ourSearchResult" :key="index">
+                    <view class="our-search" @tap="ourSearchDetailBtn(item)">
+                        <view class="avatar-img">
+                            <custom-image :url="item.coverUrl || 'http://'"></custom-image>
+                        </view>
+                        <view class="text-cut text-center">{{item.title || '未知书名'}}</view>
+                    </view>
+                </block>
+            </scroll-view>
             <view class="cu-bar solid-bottom">
                 <view class="action"><text class="cuIcon-time text-red"></text>搜索历史</view>
                 <view class="action"><text class="cuIcon-delete" @tap="deleteSearchHistoryBtn"></text></view>
@@ -46,8 +62,12 @@
                 searchText: '',
                 searchHistory: [],
                 fastResult: [],
-                debounceTimeout: null
+                debounceTimeout: null,
+                ourSearchResult: []
             };
+        },
+        created() {
+            this.ourSearchQueryBtn();
         },
         onLoad() {
             this.searchHistory = uni.getStorageSync('searchHistory') || [];
@@ -73,7 +93,8 @@
                    this.searchHistory = this.searchHistory.filter(item => item.authorOrTitle !== e.detail.value);
                    this.searchHistory.unshift(obj);
                    uni.setStorageSync('searchHistory', this.searchHistory);
-                   uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'searchResult', authorOrTitle: e.detail.value})});
+                   this.$store.commit('SET_NAVIGATEPARAMS', {params: { type: 'searchResult', authorOrTitle: e.detail.value }});
+                   uni.navigateTo({url: '/pages/result/SearchResult'});
                }
             },
             fastSearchBtn(novels) {
@@ -131,6 +152,17 @@
             deleteSearchHistoryBtn() {
                 this.searchHistory = [];
                 uni.removeStorageSync('searchHistory');
+            },
+            ourSearchQueryBtn() {
+                request.get('/relation/ourSearch', {}).then(data => {
+                    if (data.status === 200 && data.total > 0) {
+                        this.ourSearchResult = data.data;
+                    }
+                })
+            },
+            ourSearchDetailBtn (novels) {
+                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail'});
             }
         }
     };
@@ -165,6 +197,33 @@
         }
 
         .history-card {
+
+            .our-searches {
+                white-space: nowrap; // 滚动必须加的属性
+                width: 100%;
+                padding: 20rpx;
+                margin: 0 auto;
+
+                .our-search {
+                    width: 24%;
+                    margin-right: 20rpx;
+                    display: inline-block;
+                    vertical-align: top;
+
+                    .avatar-img {
+                        display: inline-block;
+                        height: 220rpx;
+                        width: 165rpx;
+                        border-radius: 6rpx;
+                        position: relative;
+
+                        .custom-image {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+            }
 
             .solid-top::after {
                 border-top: unset;

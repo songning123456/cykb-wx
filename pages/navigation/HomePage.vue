@@ -13,7 +13,6 @@
                                 <view class="cu-tag bg-red light sm round">{{item.author || '未知作者'}}</view>
                                 <view class="cu-tag bg-green light sm round">{{item.category || '未知类别'}}
                                 </view>
-                                <view class="cu-tag bg-yellow light sm round">{{item.sourceName || '未知来源'}}</view>
                             </view>
                         </view>
                     </view>

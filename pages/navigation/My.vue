@@ -152,7 +152,13 @@
 <style lang="scss" scoped>
     .my {
 
+        .cu-card {
+            .image {
+                margin: 30rpx;
+            }
+        }
         .cu-list {
+            margin-top: 30rpx;
             button {
                 text-align: unset;
             }

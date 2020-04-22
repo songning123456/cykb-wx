@@ -10,7 +10,6 @@
                             <view class="cu-tag bg-red light sm round">{{novels.author || '未知作者'}}</view>
                             <view class="cu-tag bg-green light sm round">{{novels.category || '未知类别'}}
                             </view>
-                            <view class="cu-tag bg-yellow light sm round">{{novels.sourceName || '未知来源'}}</view>
                         </view>
                     </view>
                 </view>
@@ -50,7 +49,7 @@
                 </scroll-view>
             </view>
         </view>
-        <view class="bottom-bar bg-white">
+        <view class="bottom-bar">
             <view class="btn-group cu-bar tabbar">
                 <button class="cu-btn text-red line-red shadow" @tap="addBookcase">加入书架</button>
                 <button class="cu-btn bg-red shadow-blur" @tap="startReading">开始阅读</button>
@@ -206,6 +205,7 @@
         .bottom-bar {
             bottom: 0;
             position: fixed;
+            background-color: rgb(247, 246, 242);
             width: 100%;
             z-index: 10;
             border-top: 1px solid rgba(0, 0, 0, 0.33);

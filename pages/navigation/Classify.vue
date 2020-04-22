@@ -58,6 +58,10 @@
                     result = 'dushi';
                 } else if (category === '现代') {
                     result = 'xiandai';
+                } else if (category === '科幻') {
+                    result = 'kehuan';
+                }else if (category === '网游') {
+                    result = 'wangyou';
                 }
                 return result;
             },
