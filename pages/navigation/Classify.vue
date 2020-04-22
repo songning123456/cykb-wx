@@ -1,9 +1,9 @@
 <template>
     <view class="classify">
         <view class="cu-list grid col-3">
-            <view class="cu-item" v-for="(item,index) in result" :key="index" @tap="searchBtn(item.sourceName)">
-                <view class="cu-avatar lg radius" :class='"classify-" + convertName(item.sourceName)'></view>
-                <view class="classify-margin text-black text-df">{{item.sourceName}}</view>
+            <view class="cu-item" v-for="(item,index) in result" :key="index" @tap="searchBtn(item.category)">
+                <view class="cu-avatar lg radius" :class='"classify-" + convertName(item.category)'></view>
+                <view class="classify-margin text-black text-df">{{item.category}}</view>
                 <view class="text-gray text-sm">{{convertTotal(item.total)}}</view>
             </view>
         </view>
@@ -18,7 +18,6 @@
         data () {
             return {
                 result: [],
-                categoryResult: {},
                 firstEnter: true
             };
         },
@@ -37,26 +36,35 @@
                 result = '共' + result + '部';
                 return result;
             },
-            convertName(sourceName) {
+            convertName (category) {
                 let result = '';
-                if (sourceName === '笔趣阁') {
-                    result = 'biquge'
-                } else if (sourceName === '147小说') {
-                    result = '147xiaoshuo'
-                } else if (sourceName === '天天书吧') {
-                    result = 'tiantianshuba'
-                } else if (sourceName === '飞库小说') {
-                    result = 'feikuxiaoshuo'
-                } else if (sourceName === '趣书吧') {
-                    result = 'qushuba'
+                if (category === '青春') {
+                    result = 'qingchun';
+                } else if (category === '古代') {
+                    result = 'gudai';
+                } else if (category === '幻想') {
+                    result = 'huanxiang';
+                } else if (category === '次元') {
+                    result = 'ciyuan';
+                } else if (category === '言情') {
+                    result = 'yanqing';
+                } else if (category === '修真') {
+                    result = 'xiuzhen';
+                } else if (category === '玄幻') {
+                    result = 'xuanhuan';
+                } else if (category === '穿越') {
+                    result = 'chuanyue';
+                } else if (category === '都市') {
+                    result = 'dushi';
+                } else if (category === '现代') {
+                    result = 'xiandai';
                 }
                 return result;
             },
             queryClassifyCount () {
-                request.get('/novels/classifyCount', {}).then(data => {
+                request.get('/novels/countByCategory', {}).then(data => {
                     if (data.status === 200 && data.total > 0) {
                         this.result = data.data;
-                        this.categoryResult = data.dataExt;
                     }
                 }).finally(() => {
                     if (this.firstEnter) {
@@ -64,12 +72,13 @@
                     }
                 });
             },
-            searchBtn (sourceName) {
-                uni.setStorageSync('navigateParams', {params: {
+            searchBtn (category) {
+                uni.setStorageSync('navigateParams', {
+                    params: {
                         type: 'classify',
-                        sourceName: sourceName,
-                        categoryInfo: this.categoryResult[sourceName]
-                    }});
+                        category: category
+                    }
+                });
                 uni.navigateTo({ url: '/pages/result/SearchResult' });
             }
         }

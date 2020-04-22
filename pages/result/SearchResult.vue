@@ -1,16 +1,7 @@
 <template>
     <view class="search-result">
-        <scroll-view v-if="loadType === 'classify'" scroll-x class="nav search-classify" scroll-with-animation
-                     :scroll-left="scrollLeft">
-            <view class="cu-item" :class="{'text-red cur': item.category === tabCur}" v-for="(item,index) in categoryInfo"
-                  :key="index" @tap="tabSelect" :data-id="item.category">
-                {{item.category + ' (共' + item.categoryTotal + '本)'}}
-            </view>
-        </scroll-view>
-        <view v-if="loadType === 'classify'" class="search-fill"></view>
         <view class="cu-list full-size">
-            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index"
-                  @tap="bookDetailBtn(item)">
+            <view class="cu-card article no-card" v-for="(item, index) in result" :key="index" @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
                         <custom-image class="image-size" :url="item.coverUrl"></custom-image>
@@ -42,22 +33,17 @@
                 pageSize: 100,
                 pageResult: [],
                 result: [],
-                scrollLeft: 0,
-                tabCur: '',
-                categoryInfo: []
+                scrollLeft: 0
             };
         },
         onLoad () {
             let response = uni.getStorageSync('navigateParams').params;
             this.loadType = response.type;
             if (response.type === 'classify') {
-                this.categoryInfo = response.categoryInfo;
-                this.tabCur = response.categoryInfo[0].category;
                 this.loadParams = {
-                    sourceName: response.sourceName,
-                    category: response.categoryInfo[0].category
+                    category: response.category
                 };
-                uni.setNavigationBarTitle({ title: response.sourceName });
+                uni.setNavigationBarTitle({ title: response.category });
             } else if (response.type === 'searchResult') {
                 this.loadParams = {
                     authorOrTitle: response.authorOrTitle
@@ -68,26 +54,19 @@
         },
         onReachBottom () {
             if (this.loadType === 'classify') {
-                this.queryConstantResult('more', '/novels/classifyResult');
+                this.queryConstantResult('more', '/novels/categoryResult');
             } else if (this.loadType === 'searchResult') {
                 this.queryConstantResult('more', '/novels/searchResult');
             }
         },
         onPullDownRefresh () {
             if (this.loadType === 'classify') {
-                this.queryConstantResult('first', '/novels/classifyResult');
+                this.queryConstantResult('first', '/novels/categoryResult');
             } else if (this.loadType === 'searchResult') {
                 this.queryConstantResult('first', '/novels/searchResult');
             }
         },
         methods: {
-            tabSelect (e) {
-                this.tabCur = e.currentTarget.dataset.id;
-                this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
-                this.loadParams.category = e.currentTarget.dataset.id;
-                uni.showLoading({ title: 'loading...', mask: true });
-                this.queryConstantResult('first', '/novels/classifyResult');
-            },
             queryConstantResult (firstOrMore, url) {
                 let params = {
                     pageRecordNum: this.pageSize,
@@ -128,18 +107,6 @@
 
 <style lang="scss" scoped>
     .search-result {
-
-        .search-classify {
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            background-color: white;
-        }
-
-        .search-fill {
-            width: 100%;
-            height: 90rpx;
-        }
 
         .cu-list {
             overflow: auto;
