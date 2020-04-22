@@ -52,10 +52,6 @@
                                 request.post('/users/weixin/getUsersInfo', params).then(data => {
                                     uni.hideLoading();
                                     if (data.status === 200) {
-                                        uni.setStorage({
-                                            key: 'userInfo',
-                                            data: data.data[0]
-                                        });
                                         this.$store.commit('SET_USERINFO', data.data[0]);
                                         this.endOperation();
                                     } else {
