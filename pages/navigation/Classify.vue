@@ -65,7 +65,7 @@
                 });
             },
             searchBtn (sourceName) {
-                this.$store.commit('SET_NAVIGATEPARAMS', {params: {
+                uni.setStorageSync('navigateParams', {params: {
                         type: 'classify',
                         sourceName: sourceName,
                         categoryInfo: this.categoryResult[sourceName]

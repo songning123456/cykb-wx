@@ -25,11 +25,6 @@ const store = new Vuex.Store({
             state.navigateParams = navigateParams;
             uni.setStorageSync('navigateParams', navigateParams);
         }
-    },
-    getters: {
-        GET_NAVIGATEPARAMS: (state) => {
-            return state.navigateParams || uni.getStorageSync('navigateParams');
-        }
     }
 });
 export default store;

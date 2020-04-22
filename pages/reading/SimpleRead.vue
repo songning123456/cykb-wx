@@ -2,7 +2,7 @@
     <view class="reading full-screen" :style="{background: skin.pageBgColor}" @click="clickCenter">
         <scroll-view scroll-y="true" @scroll="scrollOn"
                      :scroll-top="scrollTop" class="scroll-content">
-            <view class="padding flex flex-direction text-bold letter-space">
+            <view class="padding flex flex-direction text-bold letter-space previous-chapter">
                 <button :style="[{color: skin.fontColor}]" class="cu-btn line-black margin-tb-sm lg shadow"
                         @tap.stop="readMore('previous')">上一章
                 </button>
@@ -41,8 +41,9 @@
             </view>
         </view>
         <!-- 遮罩层上部分 -->
-        <view class="mask-top" :style="{top:isShowMask?0:-100+'rpx','background':skin.maskBgColor}">
-            <view class="mask-title" :style="'color:' + skin.fontColor">{{chapterInfo.chapter || '未知'}}
+        <view class="mask-top" :style="{top:isShowMask?0:-1 * maskTopHeight +'rpx','background':skin.maskBgColor, height: maskTopHeight + 'rpx'}">
+            <text class="cuIcon-back" @tap="backBtn"></text>
+            <view class="mask-title text-cut" :style="'color:' + skin.fontColor">{{chapterInfo.chapter || '未知'}}
             </view>
         </view>
         <!-- 遮罩层下部分 -->
@@ -138,11 +139,23 @@
                 directory: [],
                 nodes: '',
                 errorNode: '<div class="node-title">未知</div><div class="node-content">加载出错了!!!</div>',
-                scrollTop: 0
+                scrollTop: 0,
+                maskTopHeight: 100
             };
         },
+        created() {
+            let systemInfo = uni.getStorageSync('systemInfo');
+            if (systemInfo && systemInfo.statusBarHeight) {
+                let capsule = wx.getMenuButtonBoundingClientRect();
+                if (capsule) {
+                   this.maskTopHeight = (capsule.bottom + capsule.top - systemInfo.statusBarHeight) * 2;
+                } else {
+                    this.maskTopHeight = (e.statusBarHeight + 50) * 2;
+                }
+            }
+        },
         onLoad () {
-            this.novels = this.$store.getters.GET_NAVIGATEPARAMS.novels;
+            this.novels = uni.getStorageSync('navigateParams').novels;
             if (uni.getStorageSync('skin')) {
                 this.skin = uni.getStorageSync('skin');
             }
@@ -151,6 +164,9 @@
             this.loadChapterInfoBtn();
         },
         methods: {
+            backBtn() {
+                uni.navigateBack({delta: 1});
+            },
             loadChapterInfoBtn () {
                 uni.showLoading({ title: 'loading...', mask: true });
                 let params;
@@ -265,7 +281,7 @@
                 }
             },
             directoryBtn () {
-                this.$store.commit('SET_NAVIGATEPARAMS', {directory: this.directory, currentChapterId: this.chapterInfo.chaptersId});
+                uni.setStorageSync('navigateParams', {directory: this.directory, currentChapterId: this.chapterInfo.chaptersId});
                 uni.navigateTo({ url: '/pages/reading/Directory' });
             },
             //滑块设置字体间距或大小
@@ -311,8 +327,12 @@
             height: 100%;
             padding: 0 16rpx;
 
+            .previous-chapter {
+                padding-top: 65rpx;
+            }
+
             .read-content {
-                min-height: 1250rpx;
+                min-height: 1500rpx;
             }
         }
 
@@ -394,17 +414,30 @@
 
         .mask-top {
             position: fixed;
-            height: 40rpx;
             transition: all 0.2s;
             width: 100%;
             z-index: 1000;
             margin: auto;
             border-radius: 0 0 4px 4px;
 
+            .cuIcon-back {
+                position: absolute;
+                bottom: 0;
+                font-size: 36rpx;
+                left: 36rpx;
+                transform: translate(-50%, -50%);
+                font-weight: bold;
+            }
+
             .mask-title {
-                letter-spacing: 2px;
-                line-height: 20px;
+                letter-spacing: 4rpx;
                 text-align: center;
+                position: absolute;
+                bottom: 0;
+                font-size: 32rpx;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                width: 360rpx;
             }
         }
 

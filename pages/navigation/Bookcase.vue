@@ -73,7 +73,7 @@
         },
         methods: {
             startReading (item) {
-                this.$store.commit('SET_NAVIGATEPARAMS', {novels: item});
+                uni.setStorageSync('navigateParams', {novels: item});
                 uni.navigateTo({ url: '/pages/reading/SimpleRead' });
             },
             navChange () {

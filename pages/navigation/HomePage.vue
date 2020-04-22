@@ -25,7 +25,6 @@
 
 <script>
     import request from '../../util/request';
-    import common from '../../util/common';
 
     export default {
         name: 'HomePage',
@@ -75,7 +74,7 @@
                 });
             },
             bookDetailBtn (novels) {
-                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.setStorageSync('navigateParams', {novels: novels});
                 uni.navigateTo({ url: '/pages/bookdetail/BookDetail'});
             }
         }

@@ -48,7 +48,7 @@
             };
         },
         onLoad () {
-            let response = this.$store.getters.GET_NAVIGATEPARAMS.params;
+            let response = uni.getStorageSync('navigateParams').params;
             this.loadType = response.type;
             if (response.type === 'classify') {
                 this.categoryInfo = response.categoryInfo;
@@ -119,7 +119,7 @@
                 });
             },
             bookDetailBtn (novels) {
-                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.setStorageSync('navigateParams', {novels: novels});
                 uni.navigateTo({ url: '/pages/bookdetail/BookDetail'});
             }
         }

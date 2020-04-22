@@ -84,7 +84,7 @@
                 this.searchHistory = this.searchHistory.filter(item => item.authorOrTitle !== (novels.title + '    ' + novels.author));
                 this.searchHistory.unshift(obj);
                 uni.setStorageSync('searchHistory', this.searchHistory);
-                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.setStorageSync('navigateParams', {novels: novels});
                 uni.navigateTo({url: '/pages/bookdetail/BookDetail'});
             },
             queryHistoryBtn(history) {
@@ -102,10 +102,10 @@
                     uni.setStorageSync('searchHistory', result);
                 }
                 if (history.novels) {
-                    this.$store.commit('SET_NAVIGATEPARAMS', {novels: history.novels});
+                    uni.setStorageSync('navigateParams', {novels: history.novels});
                     uni.navigateTo({url: '/pages/bookdetail/BookDetail' });
                 } else {
-                    this.$store.commit('SET_NAVIGATEPARAMS', {params: {
+                    uni.setStorageSync('navigateParams', {params: {
                             type: 'searchResult',
                             authorOrTitle: history.authorOrTitle
                         }});

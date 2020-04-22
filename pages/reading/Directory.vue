@@ -1,14 +1,5 @@
 <template>
     <view class="directory">
-        <scroll-view scroll-x class="nav">
-            <view class="flex text-center">
-                <view class="cu-item flex-sub" :class="{'text-red cur': item.key===tabCur}"
-                      v-for="(item,index) in sortTabs" :key="index" @tap="tabSelect" :data-sort="item.key">
-                    {{item.value}}
-                </view>
-            </view>
-        </scroll-view>
-        <view class="fill"></view>
         <view class="cu-list menu">
             <view class="cu-item arrow" :class="{'chosen-item': item.chaptersId === currentChapterId}"
                   v-for="(item, index) in directoryList" :key="index" @tap="jumpChapterBtn(item.chaptersId)">
@@ -36,9 +27,10 @@
                 ]
             };
         },
-        onLoad (option) {
-            this.directoryList = JSON.parse(option.directory);
-            this.currentChapterId = option.currentChapterId;
+        onLoad () {
+            let response = uni.getStorageSync('navigateParams');
+            this.directoryList = response.directory;
+            this.currentChapterId = response.currentChapterId;
             if (this.directoryList && this.directoryList.length && this.currentChapterId) {
                 if (uni.getStorageSync('systemInfo') && uni.getStorageSync('systemInfo').windowHeight) {
                     this.halfHeight = uni.getStorageSync('systemInfo').windowHeight / 2;
@@ -62,13 +54,6 @@
                 }
                 uni.navigateBack({delta: 1});
             },
-            tabSelect (e) {
-                if (this.tabCur !== e.currentTarget.dataset.sort) {
-                    this.tabCur = e.currentTarget.dataset.sort;
-                    this.directoryList.reverse();
-                    this.scrollCenter();
-                }
-            },
             scrollCenter () {
                 uni.createSelectorQuery().select('.directory').boundingClientRect(data => {
                     uni.createSelectorQuery().select('.chosen-item').boundingClientRect((res) => {
@@ -85,17 +70,6 @@
 
 <style lang="scss" scoped>
     .directory {
-
-        .nav {
-            position: fixed;
-            background: #f7f6f2;
-            z-index: 2;
-        }
-
-        .fill {
-            height: 94rpx;
-            width: 100%;
-        }
 
         .cu-item {
             background: unset;

@@ -17,7 +17,7 @@
             };
         },
         onLoad () {
-            if (this.$store.getters.GET_NAVIGATEPARAMS.navigatePage === 'back') {
+            if (uni.getStorageSync('navigateParams').navigatePage === 'back') {
                 this.operateType = 'back';
             }
         },
