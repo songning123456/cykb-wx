@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "书架",
-  "navigationBarBackgroundColor": "#e54d42",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "inset-login": "/components/InsetLogin"
-  }
-}
