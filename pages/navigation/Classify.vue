@@ -12,7 +12,6 @@
 
 <script>
     import request from '../../util/request';
-    import common from '../../util/common';
 
     export default {
         name: 'Classify',
@@ -66,9 +65,12 @@
                 });
             },
             searchBtn (sourceName) {
-                uni.navigateTo({
-                    url: '/pages/result/SearchResult?params=' + JSON.stringify({ type: 'classify', sourceName: sourceName, categoryInfo: this.categoryResult[sourceName]})
-                });
+                this.$store.commit('SET_NAVIGATEPARAMS', {params: {
+                        type: 'classify',
+                        sourceName: sourceName,
+                        categoryInfo: this.categoryResult[sourceName]
+                    }});
+                uni.navigateTo({ url: '/pages/result/SearchResult' });
             }
         }
     };
@@ -83,7 +85,7 @@
 
             .cu-avatar {
                 margin: auto;
-                width: 78upx;
+                width: 78rpx;
             }
 
             .classify-margin {

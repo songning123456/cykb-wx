@@ -11,9 +11,8 @@
         <view class="fill"></view>
         <view class="cu-list menu">
             <view class="cu-item arrow" :class="{'chosen-item': item.chaptersId === currentChapterId}"
-                  v-for="(item, index) in directoryList" :key="index" hover-class='hover-class-style'
-                  hover-stay-time='600' @tap="jumpChapterBtn(item.chaptersId)">
-                <view class="content">
+                  v-for="(item, index) in directoryList" :key="index" @tap="jumpChapterBtn(item.chaptersId)">
+                <view class="content text-cut">
                     <text :class="item.chaptersId === currentChapterId ? 'cuIcon-locationfill text-red' : 'cuIcon-location text-grey'"></text>
                     <text class="text-grey">{{item.chapter}}</text>
                 </view>
@@ -41,13 +40,13 @@
             this.directoryList = JSON.parse(option.directory);
             this.currentChapterId = option.currentChapterId;
             if (this.directoryList && this.directoryList.length && this.currentChapterId) {
-                if (uni.getStorageSync('phoneInfo') && uni.getStorageSync('phoneInfo').windowHeight) {
-                    this.halfHeight = uni.getStorageSync('phoneInfo').windowHeight / 2;
+                if (uni.getStorageSync('systemInfo') && uni.getStorageSync('systemInfo').windowHeight) {
+                    this.halfHeight = uni.getStorageSync('systemInfo').windowHeight / 2;
                 } else {
                     this.halfHeight = 400;
                     uni.getSystemInfo({
                         success: function (e) {
-                            uni.setStorageSync('phoneInfo', e);
+                            uni.setStorageSync('systemInfo', e);
                         }
                     });
                 }
@@ -61,9 +60,7 @@
                     let prevPage = pages[pages.length - 2];  //上一个页面
                     prevPage.$vm.queryNewChapter(chaptersId, 'insert');
                 }
-                uni.navigateBack({
-                    delta: 1
-                });
+                uni.navigateBack({delta: 1});
             },
             tabSelect (e) {
                 if (this.tabCur !== e.currentTarget.dataset.sort) {
@@ -96,17 +93,12 @@
         }
 
         .fill {
-            height: 94upx;
+            height: 94rpx;
             width: 100%;
         }
 
         .cu-item {
             background: unset;
         }
-    }
-
-    .hover-class-style {
-        opacity: 0.9;
-        background: #f7f7f7 !important;
     }
 </style>

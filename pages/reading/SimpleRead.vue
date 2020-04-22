@@ -141,9 +141,8 @@
                 scrollTop: 0
             };
         },
-        onLoad (options) {
-            this.novels = JSON.parse(options.novels);
-            uni.setNavigationBarTitle({ title: this.novels.title });
+        onLoad () {
+            this.novels = this.$store.getters.GET_NAVIGATEPARAMS.novels;
             if (uni.getStorageSync('skin')) {
                 this.skin = uni.getStorageSync('skin');
             }
@@ -261,9 +260,8 @@
                 }
             },
             directoryBtn () {
-                uni.navigateTo({
-                    url: '/pages/reading/Directory?directory=' + JSON.stringify(this.directory) + '&currentChapterId=' + this.chapterInfo.chaptersId
-                });
+                this.$store.commit('SET_NAVIGATEPARAMS', {directory: this.directory, currentChapterId: this.chapterInfo.chaptersId});
+                uni.navigateTo({ url: '/pages/reading/Directory' });
             },
             //滑块设置字体间距或大小
             sliderChange (e, type) {
@@ -272,10 +270,7 @@
                 } else {
                     this.skin.lineHeight = e.detail.value;
                 }
-                uni.setStorage({
-                    key: 'skin',
-                    data: this.skin
-                });
+                uni.setStorageSync('skin', this.skin);
             },
             setSkin () {
                 let titleFontColor = '#000000';
@@ -298,10 +293,7 @@
                 this.skin.fontColor = this.colorArr[index].fontColor;//字体颜色
                 this.skin.maskBgColor = this.colorArr[index].maskBgColor;//遮罩背景色
                 this.setSkin();
-                uni.setStorage({
-                    key: 'skin',
-                    data: this.skin
-                });
+                uni.setStorageSync('skin', this.skin);
             },
         }
     };
@@ -315,7 +307,7 @@
             padding: 0 16rpx;
 
             .read-content {
-                min-height: 1100rpx;
+                min-height: 1250rpx;
             }
         }
 
@@ -477,7 +469,6 @@
         }
 
         /deep/ .node-content {
-            margin-bottom: 100rpx;
             margin-bottom: 100rpx;
         }
 

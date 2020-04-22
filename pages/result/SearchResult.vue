@@ -16,7 +16,7 @@
                         <uni-image class="image-size" :url="item.coverUrl"></uni-image>
                         <view class="desc">
                             <view class="title text-cut text-shadow">{{item.title}}</view>
-                            <view class="text-content">{{convertIntroduction(item.introduction)}}</view>
+                            <view class="text-content">{{item.introduction || '暂无简介...'}}</view>
                             <view>
                                 <view class="cu-tag bg-red light sm round">{{item.author}}</view>
                                 <view class="cu-tag bg-green light sm round">{{item.category || '未知'}}</view>
@@ -32,7 +32,6 @@
 
 <script>
     import request from '../../util/request';
-    import common from '../../util/common';
 
     export default {
         name: 'SearchResult',
@@ -48,8 +47,8 @@
                 categoryInfo: []
             };
         },
-        onLoad (option) {
-            let response = JSON.parse(option.params);
+        onLoad () {
+            let response = this.$store.getters.GET_NAVIGATEPARAMS.params;
             this.loadType = response.type;
             if (response.type === 'classify') {
                 this.categoryInfo = response.categoryInfo;
@@ -120,10 +119,8 @@
                 });
             },
             bookDetailBtn (novels) {
-                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels) });
-            },
-            convertIntroduction (introduction) {
-                return common.getIntroduction(introduction);
+                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail'});
             }
         }
     };

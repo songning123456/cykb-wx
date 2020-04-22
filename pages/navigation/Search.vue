@@ -18,8 +18,8 @@
             <view class="cu-list menu text-left solid-top" >
                 <view class="cu-item" v-for="(item, index) in searchHistory" :key="index" @tap="queryHistoryBtn(item)">
                     <view class="content" v-if="item.novels">
-                        <text class="text-grey">{{item.novels.title}}</text>
-                        <text class="padding-left-xl text-gray">{{item.novels.author}}</text>
+                        <text class="text-grey">{{item.novels.title || '未知书名'}}</text>
+                        <text class="padding-left-xl text-gray">{{item.novels.author || '未知作者'}}</text>
                     </view>
                     <view class="content" v-else><text class="text-grey">{{item.authorOrTitle}}</text></view>
                 </view>
@@ -28,8 +28,8 @@
         <view class="cu-list menu text-left solid-top fast-result" v-if="fastResult.length">
             <view class="cu-item" v-for="(item, index) in fastResult" :key="index" @tap="fastSearchBtn(item)">
                 <view class="content">
-                    <text class="text-grey">{{item.title}}</text>
-                    <text class="padding-left-xl text-gray">{{item.author}}</text>
+                    <text class="text-grey">{{item.title || '未知书名'}}</text>
+                    <text class="padding-left-xl text-gray">{{item.author || '未知作者'}}</text>
                 </view>
             </view>
         </view>
@@ -84,7 +84,8 @@
                 this.searchHistory = this.searchHistory.filter(item => item.authorOrTitle !== (novels.title + '    ' + novels.author));
                 this.searchHistory.unshift(obj);
                 uni.setStorageSync('searchHistory', this.searchHistory);
-                uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(novels)});
+                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.navigateTo({url: '/pages/bookdetail/BookDetail'});
             },
             queryHistoryBtn(history) {
                 let src = uni.getStorageSync('searchHistory');
@@ -101,9 +102,14 @@
                     uni.setStorageSync('searchHistory', result);
                 }
                 if (history.novels) {
-                    uni.navigateTo({ url: '/pages/bookdetail/BookDetail?novels=' + JSON.stringify(history.novels)})
+                    this.$store.commit('SET_NAVIGATEPARAMS', {novels: history.novels});
+                    uni.navigateTo({url: '/pages/bookdetail/BookDetail' });
                 } else {
-                    uni.navigateTo({url: '/pages/result/SearchResult?params=' + JSON.stringify({type: 'searchResult', authorOrTitle: history.authorOrTitle})});
+                    this.$store.commit('SET_NAVIGATEPARAMS', {params: {
+                            type: 'searchResult',
+                            authorOrTitle: history.authorOrTitle
+                        }});
+                    uni.navigateTo({ url: '/pages/result/SearchResult'});
                 }
             },
             fastQueryBooks(authorOrTitle) {

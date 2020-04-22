@@ -4,13 +4,13 @@
             <view class="cu-card case no-card margin-bottom-sm">
                 <view class="cu-item shadow">
                     <view class="image text-center">
-                        <uni-image class="cu-avatar image-size" :url="novels.coverUrl"></uni-image>
-                        <view class="margin-top-xs text-gray text-df">{{novels.title}}</view>
+                        <uni-image class="cu-avatar image-size" :url="novels.coverUrl || 'http://'"></uni-image>
+                        <view class="margin-top-xs text-gray text-df">{{novels.title || '未知书名'}}</view>
                         <view class="margin-top-xs">
-                            <view class="cu-tag bg-red light sm round">{{novels.author}}</view>
-                            <view class="cu-tag bg-green light sm round">{{novels.category || '未知'}}
+                            <view class="cu-tag bg-red light sm round">{{novels.author || '未知作者'}}</view>
+                            <view class="cu-tag bg-green light sm round">{{novels.category || '未知类别'}}
                             </view>
-                            <view class="cu-tag bg-yellow light sm round">{{novels.sourceName}}</view>
+                            <view class="cu-tag bg-yellow light sm round">{{novels.sourceName || '未知来源'}}</view>
                         </view>
                     </view>
                 </view>
@@ -20,7 +20,7 @@
                     <text>简介</text>
                 </view>
                 <view class="content padding introduction">
-                    {{novels.introduction}}
+                    {{novels.introduction || '暂无简介...'}}
                 </view>
             </view>
             <view class="cu-list menu">
@@ -29,7 +29,7 @@
                         <text class="text-black">最新章节</text>
                     </view>
                     <view class="action text-cut">
-                        {{novels.latestChapter}}
+                        {{novels.latestChapter || '未知章节'}}
                     </view>
                 </view>
                 <view class="cu-item" @click="changeShowMore">
@@ -44,7 +44,7 @@
                             <view class="avatar-img">
                                 <uni-image :url="item.coverUrl" class="uni-image"></uni-image>
                             </view>
-                            <view class="text-cut text-center">{{item.title}}</view>
+                            <view class="text-cut text-center">{{item.title || '未知书名'}}</view>
                         </view>
                     </block>
                 </scroll-view>
@@ -60,7 +60,6 @@
 </template>
 
 <script>
-    import common from '../../util/common';
     import request from '../../util/request';
 
     export default {
@@ -77,8 +76,8 @@
                 showMore: true
             };
         },
-        onLoad (option) {
-            this.novels = JSON.parse(option.novels);
+        onLoad () {
+            this.novels = this.$store.getters.GET_NAVIGATEPARAMS.novels;
             this.querySameAuthor();
         },
         methods: {
@@ -98,11 +97,18 @@
                 });
             },
             SimilarBookBtn (novels) {
-                uni.navigateTo({
-                    url: '/pages/bookdetail/BookDetail?novels=' + novels
-                });
+                this.$store.commit('SET_NAVIGATEPARAMS', {novels: novels});
+                uni.navigateTo({ url: '/pages/bookdetail/BookDetail'});
             },
             addBookcase () {
+                if (!(this.novels && this.novels.novelsId)) {
+                    uni.showToast({
+                        title: '不可加入书架',
+                        image: '/static/image/error.png',
+                        duration: 2000
+                    });
+                    return;
+                }
                 if (this.$store.state.userInfo) {
                     let params = {
                         condition: {
@@ -122,11 +128,13 @@
                         uni.hideLoading();
                     });
                 } else {
-                    uni.navigateTo({ url: '/pages/login/Login?navigatePage=back' });
+                    this.$store.commit('SET_NAVIGATEPARAMS', {navigatePage: 'back'});
+                    uni.navigateTo({ url: '/pages/login/Login'});
                 }
             },
             startReading () {
-                uni.navigateTo({ url: '/pages/reading/SimpleRead?novels=' + JSON.stringify(this.novels) });
+                this.$store.commit('SET_NAVIGATEPARAMS', {novels: this.novels});
+                uni.navigateTo({ url: '/pages/reading/SimpleRead'});
             }
         }
     };
@@ -199,7 +207,8 @@
             bottom: 0;
             position: fixed;
             width: 100%;
-            border-top: 1px solid grey;
+            z-index: 10;
+            border-top: 1px solid rgba(0, 0, 0, 0.33);
         }
     }
 

@@ -3,14 +3,14 @@
         <view class="cu-card case no-card">
             <view class="cu-item shadow">
                 <view class="image text-center">
-                    <view class="cu-avatar round xl" :style='avatarClazz' :class="{'no-login-avatar': !UserInfo}">
-                        <view v-if='UserInfo' class="cu-tag badge" :class="sexClazz"></view>
+                    <view class="cu-avatar round xl" :style='avatarClazz' :class="{'no-login-avatar': !userInfoCom}">
+                        <view v-if='userInfoCom' class="cu-tag badge" :class="sexClazz"></view>
                         <button v-else class="cu-btn round line-gray sm" open-type="getUserInfo"
                                 @getuserinfo="wxBtn" withCredentials="true">
                             点击登陆
                         </button>
                     </view>
-                    <view class="margin-top-xs text-gray">{{UserInfo.nickName ? UserInfo.nickName : '未知'}}</view>
+                    <view class="margin-top-xs text-gray">{{userInfoCom.nickName ? userInfoCom.nickName : '未知'}}</view>
                 </view>
             </view>
         </view>
@@ -58,7 +58,7 @@
             };
         },
         computed: {
-            UserInfo () {
+            userInfoCom () {
                 return this.$store.state.userInfo;
             },
             sexClazz () {
@@ -84,14 +84,10 @@
             tapBtn (type) {
                 switch (type) {
                     case 'comment':
-                        uni.navigateTo({
-                            url: '/pages/comment/Comment'
-                        });
+                        uni.navigateTo({url: '/pages/comment/Comment'});
                         break;
                     case 'settings':
-                        uni.navigateTo({
-                            url: '/pages/settings/Settings'
-                        });
+                        uni.navigateTo({url: '/pages/settings/Settings'});
                         break;
                 }
             },
@@ -117,11 +113,6 @@
                                 request.post('/users/weixin/getUsersInfo', params).then(data => {
                                     uni.hideLoading();
                                     if (data.status === 200) {
-                                        let result = JSON.stringify(data.data[0]);
-                                        uni.setStorage({
-                                            key: 'userInfo',
-                                            data: result
-                                        });
                                         this.$store.commit('SET_USERINFO', data.data[0]);
                                         this.$emit('userInfo', data.data[0]);
                                     } else {
@@ -146,7 +137,6 @@
                         });
                     },
                     fail: response2 => {
-                        debugger;
                         uni.showToast({
                             title: '登录失败',
                             duration: 1000,

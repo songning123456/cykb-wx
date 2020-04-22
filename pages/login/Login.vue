@@ -18,16 +18,16 @@
             };
         },
         onLoad (option) {
-            if (option.navigatePage === 'back') {
+            if (this.$store.getters.GET_NAVIGATEPARAMS.navigatePage === 'back') {
                 this.operateType = 'back';
             }
         },
         methods: {
             endOperation () {
                 if (this.operateType === 'back') {
-                    uni.navigateBack({  //uni.navigateTo跳转的返回，默认1为返回上一级
-                        delta: 1
-                    });
+                    if (this.operateType === 'back') {
+                        uni.navigateBack({delta: 1});
+                    }
                 }
             },
             loginWx () {
@@ -59,7 +59,6 @@
                                         this.$store.commit('SET_USERINFO', data.data[0]);
                                         this.endOperation();
                                     } else {
-                                        console.error('获取用户信息失败1');
                                         uni.showToast({
                                             title: '获取用户信息失败',
                                             duration: 1000,

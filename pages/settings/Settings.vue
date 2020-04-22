@@ -41,25 +41,6 @@
         name: 'Settings',
         data () {
             return {
-                settings: [
-                    {
-                        icon: 'arrow',
-                        title: '退出登录',
-                        type: 'exit'
-                    }, {
-                        icon: 'text',
-                        title: '书架排序',
-                        type: 'sort'
-                    }, {
-                        icon: 'switch',
-                        title: '夜间模式',
-                        type: 'nightMode'
-                    }, {
-                        icon: 'arrow',
-                        title: '清理缓存',
-                        type: 'storage'
-                    }
-                ],
                 sortModal: false,
                 sorts: [
                     {
@@ -80,23 +61,44 @@
             isDark () {
                 return this.$store.state.isDark;
             },
+            settings () {
+                let icons = [{
+                    icon: 'arrow',
+                    title: '退出登录',
+                    type: 'exit'
+                }, {
+                    icon: 'text',
+                    title: '书架排序',
+                    type: 'sort'
+                }];
+                let result = [
+                    {
+                        icon: 'arrow',
+                        title: '书籍缓存',
+                        type: 'storage'
+                    },
+                    {
+                        icon: 'switch',
+                        title: '夜间模式',
+                        type: 'nightMode'
+                    }
+                ];
+                if (this.$store.state.userInfo) {
+                    result.unshift(...icons);
+                }
+                return result;
+            }
         },
         methods: {
             settingBtn (type) {
                 switch (type) {
                     case 'exit':
-                        uni.showLoading({
-                            title: '注销中',
-                            mask: true
-                        });
                         try {
-                            uni.removeStorageSync('userInfo');
                             this.$store.commit('SET_USERINFO', null);
+                            this.$store.commit('SET_SORTTYPE', '最近阅读');
+                            uni.showToast({ title: '注销成功', duration: 1000 });
                         } catch (e) {
-                            console.error(e);
-                        } finally {
-                            common.sleep(500);
-                            uni.hideLoading();
+                            uni.showToast({ image: '/static/image/error.png', title: '注销失败', duration: 1000 });
                         }
                         break;
                     case 'sort':
@@ -105,51 +107,16 @@
                     case 'nightMode':
                         break;
                     case 'storage':
-                        uni.showModal({
-                            title: '提示',
-                            content: '确定清空 阅读记录,登录信息?',
-                            success: res => {
-                                if (res.confirm) {
-                                    try {
-                                        uni.clearStorageSync();
-                                        this.$store.commit('SET_USERINFO', null);
-                                        this.$store.commit('SET_SORTTYPE', '最近阅读');
-                                        this.$store.commit('SET_ISDARK', false);
-                                        uni.showToast({ title: '清理完成', duration: 1000 });
-                                        // 系统信息
-                                        uni.getSystemInfo({
-                                            success: function (e) {
-                                                uni.setStorageSync('phoneInfo', e);
-                                            }
-                                        });
-                                        uni.getScreenBrightness({
-                                            success: function (res) {
-                                                uni.setStorageSync('screenBrightness', res.value);
-                                            }
-                                        });
-                                    } catch (e) {
-                                        console.error(e);
-                                    }
-                                }
-                            }
-                        });
+                        uni.navigateTo({ url: '/pages/cache/NovelsCache'});
                         break;
                 }
             },
             sortBtn (e) {
                 this.$store.commit('SET_SORTTYPE', e.currentTarget.dataset.sort);
-                uni.setStorage({
-                    key: 'sortType',
-                    data: e.currentTarget.dataset.sort
-                });
                 this.sortModal = false;
             },
             nightModeBtn (e) {
                 this.$store.commit('SET_ISDARK', e.detail.value);
-                uni.setStorage({
-                    key: 'isDark',
-                    data: e.detail.value
-                });
                 let value = uni.getStorageSync('screenBrightness') || 0.5;
                 if (this.isDark) {
                     value = value - 0.3;

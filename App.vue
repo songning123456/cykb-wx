@@ -6,6 +6,9 @@
                 key: 'userInfo',
                 success: data => {
                     this.$store.commit('SET_USERINFO', data.data);
+                },
+                fail: e => {
+                    this.$store.commit('SET_USERINFO', null);
                 }
             });
             // 排序方式
@@ -13,6 +16,9 @@
                 key: 'sortType',
                 success: data => {
                     this.$store.commit('SET_SORTTYPE', data.data);
+                },
+                fail: e => {
+                    this.$store.commit('SET_SORTTYPE', '最近阅读');
                 }
             });
             // 暗黑模式
@@ -20,12 +26,15 @@
                 key: 'isDark',
                 success: data => {
                     this.$store.commit('SET_ISDARK', data.data);
+                },
+                fail: e => {
+                    this.$store.commit('SET_ISDARK', false);
                 }
             });
             // 系统信息
             uni.getSystemInfo({
                 success: function (e) {
-                    uni.setStorageSync('phoneInfo', e);
+                    uni.setStorageSync('systemInfo', e);
                 }
             });
             uni.getScreenBrightness({
@@ -35,15 +44,15 @@
             });
             // 提醒用户更新版本
             const updateManager = uni.getUpdateManager();
-            updateManager.onCheckForUpdate(function(res) {
+            updateManager.onCheckForUpdate(function (res) {
                 // 请求完新版本信息的回调
                 if (res.hasUpdate) {
-                    updateManager.onUpdateReady(function(res2) {
+                    updateManager.onUpdateReady(function (res2) {
                         uni.showModal({
                             title: '更新提示',
                             content: '发现新版本，是否重启应用?',
-                            cancelColor:'#eeeeee',
-                            confirmColor:'#FF0000',
+                            cancelColor: '#eeeeee',
+                            confirmColor: '#FF0000',
                             success(res2) {
                                 if (res2.confirm) {
                                     // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
@@ -54,7 +63,7 @@
                     });
                 }
             });
-            updateManager.onUpdateFailed(function(res) {
+            updateManager.onUpdateFailed(function (res) {
                 // 新的版本下载失败
                 uni.showModal({
                     title: '提示',
