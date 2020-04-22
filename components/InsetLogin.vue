@@ -35,13 +35,8 @@
                                 request.post('/users/weixin/getUsersInfo', params).then(data => {
                                     uni.hideLoading();
                                     if (data.status === 200) {
-                                        uni.setStorage({
-                                            key: 'userInfo',
-                                            data: data.data[0]
-                                        });
                                         this.$store.commit('SET_USERINFO', data.data[0]);
                                     } else {
-                                        console.error('获取用户信息失败1');
                                         uni.showToast({
                                             title: '获取用户信息失败',
                                             duration: 1000,
@@ -50,7 +45,6 @@
                                     }
                                 }).catch(e => {
                                     uni.hideLoading();
-                                    console.error('获取用户信息失败2');
                                     uni.showToast({
                                         title: '获取用户信息失败',
                                         duration: 1000,
@@ -82,7 +76,7 @@
         height: 100%;
 
         .cu-btn {
-            width: 400upx;
+            width: 400rpx;
             position: absolute;
             top: 85%;
             left: 50%;

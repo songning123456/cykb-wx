@@ -4,7 +4,7 @@
             <view class="cu-card case no-card margin-bottom-sm">
                 <view class="cu-item shadow">
                     <view class="image text-center">
-                        <uni-image class="cu-avatar image-size" :url="novels.coverUrl || 'http://'"></uni-image>
+                        <custom-image class="cu-avatar image-size" :url="novels.coverUrl || 'http://'"></custom-image>
                         <view class="margin-top-xs text-gray text-df">{{novels.title || '未知书名'}}</view>
                         <view class="margin-top-xs">
                             <view class="cu-tag bg-red light sm round">{{novels.author || '未知作者'}}</view>
@@ -42,7 +42,7 @@
                     <block v-for="(item, index) in authorBooks" :key="index">
                         <view class="author-book" @tap="SimilarBookBtn(item)">
                             <view class="avatar-img">
-                                <uni-image :url="item.coverUrl" class="uni-image"></uni-image>
+                                <custom-image :url="item.coverUrl" class="uni-image"></custom-image>
                             </view>
                             <view class="text-cut text-center">{{item.title || '未知书名'}}</view>
                         </view>
@@ -194,7 +194,7 @@
                         border-radius: 6rpx;
                         position: relative;
 
-                        .uni-image {
+                        .custom-image {
                             width: 100%;
                             height: 100%;
                         }

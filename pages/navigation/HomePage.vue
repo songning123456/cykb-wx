@@ -5,7 +5,7 @@
                   @tap="bookDetailBtn(item)">
                 <view class="cu-item shadow">
                     <view class="content">
-                        <uni-image class="image-size" :url="item.coverUrl || 'http://'"></uni-image>
+                        <custom-image class="image-size" :url="item.coverUrl || 'http://'"></custom-image>
                         <view class="desc">
                             <view class="title text-cut text-shadow">{{item.title || '未知书名'}}</view>
                             <view class="text-content">{{item.introduction || '暂无简介...'}}</view>

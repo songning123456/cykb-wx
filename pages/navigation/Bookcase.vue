@@ -3,7 +3,7 @@
         <view v-if="userInfo" class="cu-list full-size menu-avatar">
             <view class="cu-item"
                   v-for="(item,index) in result" :key="index" @tap="startReading(item)">
-                <uni-image :url="item.coverUrl || 'http://'" class="image-size cu-avatar radius xl"></uni-image>
+                <custom-image :url="item.coverUrl || 'http://'" class="image-size cu-avatar radius xl"></custom-image>
                 <view class="content">
                     <view class="text-black text-df">{{item.title || '未知书名'}}</view>
                     <view class="text-grey text-sm">{{item.author || '未知作者'}}</view>
