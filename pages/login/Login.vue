@@ -1,7 +1,6 @@
 <template>
     <view class="login full-screen login-image">
-        <button class="cu-btn block bg-red margin-tb-sm lg" open-type="getUserInfo" @getuserinfo="loginWx"
-                withCredentials="true">
+        <button class="cu-btn block bg-red margin-tb-sm lg" open-type="getUserInfo" @getuserinfo="loginWxBtn" withCredentials="true">
             一键登录
         </button>
     </view>
@@ -17,7 +16,7 @@
                 operateType: ''
             };
         },
-        onLoad (option) {
+        onLoad () {
             if (this.$store.getters.GET_NAVIGATEPARAMS.navigatePage === 'back') {
                 this.operateType = 'back';
             }
@@ -30,7 +29,7 @@
                     }
                 }
             },
-            loginWx () {
+            loginWxBtn () {
                 uni.login({
                     success: response2 => {
                         // 获取用户信息
@@ -58,16 +57,15 @@
                                         uni.showToast({
                                             title: '获取用户信息失败',
                                             duration: 1000,
-                                            icon: 'none'
+                                            image: '/static/image/error.png'
                                         });
                                     }
                                 }).catch(e => {
                                     uni.hideLoading();
-                                    console.error('获取用户信息失败2');
                                     uni.showToast({
                                         title: '获取用户信息失败',
                                         duration: 1000,
-                                        icon: 'none'
+                                        image: '/static/image/error.png'
                                     });
                                 });
                             },
@@ -80,7 +78,7 @@
                         uni.showToast({
                             title: '登录失败',
                             duration: 1000,
-                            icon: 'none'
+                            image: '/static/image/error.png'
                         });
                     }
                 });

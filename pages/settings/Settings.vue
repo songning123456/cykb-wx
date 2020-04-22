@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import common from '../../util/common';
 
     export default {
         name: 'Settings',

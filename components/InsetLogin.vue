@@ -1,7 +1,6 @@
 <template>
     <view class="inset-login login-image full-size">
-        <button class="cu-btn block bg-red margin-tb-sm lg" open-type="getUserInfo" @getuserinfo="loginWx"
-                withCredentials="true">
+        <button class="cu-btn block bg-red margin-tb-sm lg" open-type="getUserInfo" @getuserinfo="loginWxBtn" withCredentials="true">
             一键登录
         </button>
     </view>
@@ -13,7 +12,7 @@
     export default {
         name: 'InsetLogin',
         methods: {
-            loginWx () {
+            loginWxBtn () {
                 uni.login({
                     success: response2 => {
                         // 获取用户信息
@@ -40,7 +39,7 @@
                                         uni.showToast({
                                             title: '获取用户信息失败',
                                             duration: 1000,
-                                            icon: 'none'
+                                            image: '/static/image/error.png'
                                         });
                                     }
                                 }).catch(e => {
@@ -48,7 +47,7 @@
                                     uni.showToast({
                                         title: '获取用户信息失败',
                                         duration: 1000,
-                                        icon: 'none'
+                                        image: '/static/image/error.png'
                                     });
                                 });
                             },
@@ -61,7 +60,7 @@
                         uni.showToast({
                             title: '登录失败',
                             duration: 1000,
-                            icon: 'none'
+                            image: '/static/image/error.png'
                         });
                     }
                 });

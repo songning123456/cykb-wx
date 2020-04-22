@@ -83,8 +83,7 @@
     {
       "path": "pages/reading/SimpleRead",
       "style": {
-        "navigationBarTitleText": "",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationStyle": "custom"
       }
     },
     {
@@ -152,12 +151,5 @@
         "text": "我的"
       }
     ]
-  },
-  "condition": {
-    "current": 2,
-    "list": [{
-      "name": "test",
-      "path": "pages/navigation/Search"
-    }]
   }
 }
