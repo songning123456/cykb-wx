@@ -23,7 +23,7 @@
                 </view>
             </view>
             <view class="cu-list menu">
-                <view class="cu-item">
+                <view class="cu-item text-cut">
                     <view class="content">
                         <text class="text-black">最新章节</text>
                     </view>

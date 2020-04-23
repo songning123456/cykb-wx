@@ -13,7 +13,6 @@
                             <view class="cu-tag bg-red light sm round">{{item.author || '未知作者'}}</view>
                             <view class="cu-tag bg-green light sm round">{{item.category || '未知类别'}}
                             </view>
-                            <view class="cu-tag bg-yellow light sm round">{{item.sourceName || '未知来源'}}</view>
                         </view>
                     </view>
                     <view class="action delete-icon">
@@ -22,6 +21,12 @@
                     </view>
                 </view>
             </scroll-view>
+            <view class="bottom-bar">
+                <view class="btn-group cu-bar tabbar">
+                    <button class="cu-btn text-red line-red shadow" @tap="allOrZeroBtn">{{cacheList.length === deleteList.length ? '取消全选' : '全选'}}</button>
+                    <button class="cu-btn bg-red shadow-blur" @tap="sureDeleteBtn">删除</button>
+                </view>
+            </view>
         </view>
         <custom-empty v-else></custom-empty>
     </view>
@@ -47,24 +52,6 @@
                 }
             }
         },
-        onNavigationBarButtonTap() {
-            if (this.deleteList.length) {
-                uni.showModal({
-                    title: '提示',
-                    content: '确定清空缓存?',
-                    success: res => {
-                        if (res.confirm) {
-                           for (let novelsId of this.deleteList) {
-                               uni.removeStorageSync(novelsId + ':scrollInfo');
-                           }
-                           this.cacheList = this.cacheList.filter(item => !this.deleteList.includes(item.novelsId));
-                           this.deleteList = [];
-                        } else if (res.cancel) {
-                            this.deleteList = [];
-                        }
-                    }});
-            }
-        },
         methods: {
             addDelBtn(novelsId) {
                 if (this.deleteList.includes(novelsId)) {
@@ -72,6 +59,35 @@
                     this.deleteList.splice(index, 1);
                 } else {
                     this.deleteList.push(novelsId);
+                }
+            },
+            allOrZeroBtn() {
+                if (this.deleteList.length === this.cacheList.length) {
+                    this.deleteList = [];
+                } else {
+                    this.cacheList.forEach(item => {
+                        if (!this.deleteList.includes(item.novelsId)) {
+                            this.deleteList.push(item.novelsId);
+                        }
+                    })
+                }
+            },
+            sureDeleteBtn() {
+                if (this.deleteList.length) {
+                    uni.showModal({
+                        title: '提示',
+                        content: '确定清空缓存?',
+                        success: res => {
+                            if (res.confirm) {
+                                for (let novelsId of this.deleteList) {
+                                    uni.removeStorageSync(novelsId + ':scrollInfo');
+                                }
+                                this.cacheList = this.cacheList.filter(item => !this.deleteList.includes(item.novelsId));
+                                this.deleteList = [];
+                            } else if (res.cancel) {
+                                this.deleteList = [];
+                            }
+                        }});
                 }
             }
         }
@@ -114,20 +130,16 @@
                 .delete-icon {
                     position: absolute;
                     right: 2%;
-
-                    /deep/ uni-radio::before, uni-checkbox::before {
-                        color: #f7f6f2 !important;
-                    }
-
-                    /deep/ uni-radio .uni-radio-input {
-                        background-color: unset;
-                    }
-
-                    /deep/ uni-radio:not([disabled]) .uni-radio-input:hover {
-                        border-color: #d1d1d1;
-                    }
                 }
             }
+        }
+        .bottom-bar {
+            bottom: 0;
+            position: fixed;
+            background-color: rgb(247, 246, 242);
+            width: 100%;
+            z-index: 10;
+            border-top: 1px solid rgba(0, 0, 0, 0.33);
         }
     }
 </style>
