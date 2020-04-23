@@ -77,7 +77,8 @@
             },
             navChange () {
                 if (this.result.length) {
-                    uni.navigateTo({ url: '/pages/bookmanage/BookManage', });
+                    uni.setStorageSync('navigateParams', {novelsList: this.result});
+                    uni.navigateTo({ url: '/pages/bookmanage/BookManage'});
                 }
             },
             convertDate (updateTime) {
@@ -132,14 +133,6 @@
                     left: 135rpx;
                     width: calc(100% - 140rpx - 20rpx);
                 }
-
-                .move-no-top {
-                    width: 140rpx;
-                }
-            }
-
-            .move-no-top-cur {
-                transform: translateX(-140rpx);
             }
         }
     }
