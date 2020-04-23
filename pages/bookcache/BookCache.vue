@@ -1,5 +1,5 @@
 <template>
-    <view class="novels-cache full-size">
+    <view class="book-cache full-size">
         <view class="cu-list full-size menu-avatar" v-if="cacheList.length">
             <scroll-view scroll-y="true" style="height: 100%;">
                 <view class="cu-item" v-for="(item,index) in cacheList" :key="index">
@@ -35,7 +35,7 @@
 <script>
     import CustomEmpty from '../../components/CustomEmpty';
     export default {
-        name: 'NovelsCache',
+        name: 'BookCache',
         components: { CustomEmpty },
         data() {
             return {
@@ -95,7 +95,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .novels-cache {
+    .book-cache {
         .cu-list {
             overflow-y: auto;
 

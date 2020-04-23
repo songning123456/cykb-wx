@@ -16,7 +16,7 @@
             <view class="cu-item">
                 <view class="cu-avatar radius lg add-image"></view>
                 <view class="content">
-                    <view class="text-black text-bold" @tap="navChange">收藏小说</view>
+                    <view class="text-black text-bold" @tap="navChange">书架管理</view>
                 </view>
             </view>
         </view>
@@ -36,7 +36,6 @@
         components: { InsetLogin },
         data () {
             return {
-                // 假数据
                 result: []
             };
         },
@@ -77,9 +76,9 @@
                 uni.navigateTo({ url: '/pages/reading/SimpleRead' });
             },
             navChange () {
-                uni.switchTab({
-                    url: '/pages/navigation/Classify',
-                });
+                if (this.result.length) {
+                    uni.navigateTo({ url: '/pages/bookmanage/BookManage', });
+                }
             },
             convertDate (updateTime) {
                 return convertDate.convertZh(currentDate, updateTime);

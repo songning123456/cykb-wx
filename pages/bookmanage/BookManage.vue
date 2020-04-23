@@ -1,5 +1,5 @@
 <template>
-    <view class="book-manage"></view>
+    <view class="book-manage full-size"></view>
 </template>
 
 <script>

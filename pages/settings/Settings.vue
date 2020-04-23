@@ -106,7 +106,7 @@
                     case 'nightMode':
                         break;
                     case 'storage':
-                        uni.navigateTo({ url: '/pages/cache/NovelsCache'});
+                        uni.navigateTo({ url: '/pages/bookcache/BookCache'});
                         break;
                 }
             },

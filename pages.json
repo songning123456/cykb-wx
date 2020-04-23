@@ -94,7 +94,7 @@
       }
     },
     {
-      "path": "pages/cache/NovelsCache",
+      "path": "pages/bookcache/BookCache",
       "style": {
         "navigationBarTitleText": "书籍缓存",
         "navigationBarBackgroundColor": "#ffffff"
