@@ -64,7 +64,7 @@
             }
         },
         onPullDownRefresh () {
-            if (this.userInfo) {
+            if (!!this.userInfo) {
                 this.queryBookcase();
             } else {
                 uni.stopPullDownRefresh();//得到数据后停止下拉刷新

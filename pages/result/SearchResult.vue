@@ -32,7 +32,8 @@
                 pageSize: 100,
                 pageResult: [],
                 result: [],
-                scrollLeft: 0
+                scrollLeft: 0,
+                scrollBottomStatus: false
             };
         },
         onLoad () {
@@ -52,6 +53,11 @@
             uni.startPullDownRefresh();
         },
         onReachBottom () {
+            if (this.scrollBottomStatus) {
+                return;
+            } else {
+                this.scrollBottomStatus = true;
+            }
             if (this.loadType === 'classify') {
                 this.queryConstantResult('more', '/novels/categoryResult');
             } else if (this.loadType === 'searchResult') {
@@ -93,6 +99,9 @@
                     if (firstOrMore === 'first') {
                         uni.stopPullDownRefresh();//得到数据后停止下拉刷新
                         uni.hideLoading();
+                    }
+                    if (this.scrollBottomStatus) {
+                        this.scrollBottomStatus = false;
                     }
                 });
             },

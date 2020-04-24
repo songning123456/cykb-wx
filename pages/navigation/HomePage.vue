@@ -31,13 +31,19 @@
             return {
                 pageSize: 100,
                 pageResult: [],
-                result: []
+                result: [],
+                scrollBottomStatus: false
             };
         },
         onLoad () {
             uni.startPullDownRefresh();
         },
         onReachBottom () {
+            if (this.scrollBottomStatus) {
+                return;
+            } else {
+                this.scrollBottomStatus = true;
+            }
             this.queryHomePage('more');
         },
         onPullDownRefresh () {
@@ -69,6 +75,9 @@
                 }).finally(() => {
                     if (type === 'first') {
                         uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+                    }
+                    if (this.scrollBottomStatus) {
+                        this.scrollBottomStatus = false;
                     }
                 });
             },
