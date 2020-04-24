@@ -21,14 +21,14 @@
                     </view>
                 </view>
             </scroll-view>
-            <view class="bottom-bar">
-                <view class="btn-group cu-bar tabbar">
-                    <button class="cu-btn text-red line-red shadow" @tap="allOrZeroBtn">{{cacheList.length === deleteList.length ? '取消全选' : '全选'}}</button>
-                    <button class="cu-btn bg-red shadow-blur" @tap="sureDeleteBtn">删除</button>
-                </view>
+        </view>
+        <view class="bottom-bar" v-if="cacheList.length">
+            <view class="btn-group cu-bar tabbar">
+                <button class="cu-btn text-red line-red shadow" @tap="allOrZeroBtn">{{cacheList.length === deleteList.length ? '取消全选' : '全选'}}</button>
+                <button class="cu-btn bg-red shadow-blur" @tap="sureDeleteBtn">删除</button>
             </view>
         </view>
-        <custom-empty v-else></custom-empty>
+        <custom-empty v-if="!cacheList.length"></custom-empty>
     </view>
 </template>
 
@@ -97,7 +97,7 @@
 <style lang="scss" scoped>
     .book-cache {
         .cu-list {
-            overflow-y: auto;
+            height: calc(100% - calc(100upx + env(safe-area-inset-bottom) / 2) - 1px);
 
             .cu-item {
                 justify-content: unset;

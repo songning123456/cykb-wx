@@ -27,7 +27,7 @@
                     <view class="content">
                         <text class="text-black">最新章节</text>
                     </view>
-                    <view class="action text-cut">
+                    <view class="action text-cut" style="width: 75%">
                         {{novels.latestChapter || '未知章节'}}
                     </view>
                 </view>
