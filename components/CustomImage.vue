@@ -22,12 +22,12 @@
         data () {
             return {
                 imageSrc: ''
-            }
+            };
         },
         watch: {
             url: {
-                handler(newVal, oldVal) {
-                    this.imageSrc = newVal
+                handler (newVal, oldVal) {
+                    this.imageSrc = newVal;
                 },
                 immediate: true
             }
@@ -35,11 +35,11 @@
         methods: {
             imageLoad () {},
             imageErr () {
-                this.url && (this.imageSrc = this.defaultImage)
-                this.$forceUpdate()
+                this.url && (this.imageSrc = this.defaultImage);
+                this.$forceUpdate();
             }
         }
-    }
+    };
 </script>
 
 <style scoped>

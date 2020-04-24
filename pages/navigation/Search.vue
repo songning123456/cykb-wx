@@ -66,14 +66,12 @@
                 ourSearchResult: []
             };
         },
-        created() {
-            this.ourSearchQueryBtn();
-        },
         onLoad() {
             this.searchHistory = uni.getStorageSync('searchHistory') || [];
         },
         onShow() {
             this.clearBtn();
+            this.ourSearchQueryBtn();
         },
         methods: {
             inputBtn(e) {

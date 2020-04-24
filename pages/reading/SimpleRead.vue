@@ -42,7 +42,7 @@
         </view>
         <!-- 遮罩层上部分 -->
         <view class="mask-top" :style="{top:isShowMask?0:-1 * maskTopHeight +'rpx','background':skin.maskBgColor, height: maskTopHeight + 'rpx'}">
-            <text class="cuIcon-back" @tap="backBtn"></text>
+            <text class="cuIcon-back" @tap="backBtn" :style="'color:' + skin.fontColor"></text>
             <view class="mask-title text-cut" :style="'color:' + skin.fontColor">{{chapterInfo.chapter || '未知'}}
             </view>
         </view>
