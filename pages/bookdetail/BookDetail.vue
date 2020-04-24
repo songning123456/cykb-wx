@@ -112,7 +112,7 @@
                     let params = {
                         condition: {
                             novelsId: this.novels.novelsId,
-                            uniqueId: this.$store.state.userInfo.uniqueId
+                            usersId: this.$store.state.userInfo.usersId
                         }
                     };
                     uni.showLoading({ title: 'loading...', mask: true });

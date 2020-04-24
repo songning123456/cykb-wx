@@ -198,7 +198,7 @@
                 if (this.$store.state.userInfo) {
                     let params = {
                         condition: {
-                            uniqueId: this.$store.state.userInfo.uniqueId,
+                            usersId: this.$store.state.userInfo.usersId,
                             novelsId: this.novels.novelsId
                         }
                     };

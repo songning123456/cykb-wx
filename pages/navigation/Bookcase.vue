@@ -85,12 +85,12 @@
                 return convertDate.convertZh(currentDate, updateTime);
             },
             queryBookcase () {
-                if (!(this.userInfo && this.userInfo.uniqueId)) {
+                if (!(this.userInfo && this.userInfo.usersId)) {
                     return;
                 }
                 let params = {
                     condition: {
-                        uniqueId: this.userInfo.uniqueId,
+                        usersId: this.userInfo.usersId,
                         sortType: this.sortType
                     }
                 };
