@@ -21,17 +21,23 @@
         },
         data () {
             return {
-                imageSrc: ''
+                imageSrc: '',
+                errorImgList: [
+                    '/css/nocover.jpg',
+                    'http://www.xbiquge.la/files/article/image/7/7004/7004s.jpg',
+                    'http://www.xbiquge.la/files/article/image/3/3758/3758s.jpg',
+                    'http://www.xbiquge.la/files/article/image/6/6818/6818s.jpg',
+                    'http://www.xbiquge.la/files/article/image/6/6971/6971s.jpg',
+                    'http://www.xbiquge.la/files/article/image/2/2699/2699s.jpg',
+                    'http://www.xbiquge.la/files/article/image/2/2208/2208s.jpg',
+                    'http://www.xbiquge.la/files/article/image/10/10512/10512s.jpg'
+                ]
             };
         },
         watch: {
             url: {
                 handler (newVal, oldVal) {
-                    if (newVal === '/css/nocover.jpg') {
-                        // 处理147小说图片特殊情况
-                        this.imageSrc = this.defaultImage;
-                    } else if (newVal === 'http://www.xbiquge.la/files/article/image/7/7004/7004s.jpg') {
-                        // 处理笔趣阁小说图片特殊情况
+                    if (this.errorImgList.includes(newVal)) {
                         this.imageSrc = this.defaultImage;
                     } else {
                         this.imageSrc = newVal;

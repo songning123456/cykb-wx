@@ -5,7 +5,8 @@ let delList = [
     '&amp;',
     'amp;',
     'ldquo;',
-    'rdquo;'
+    'rdquo;',
+    'javascript:share'
 ];
 
 introDel.getIntro = function (originIntro) {
