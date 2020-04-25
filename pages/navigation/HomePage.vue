@@ -19,20 +19,24 @@
                 </view>
             </view>
         </view>
+        <back-top :show-btn="showBackTop" @backTop="backTopBtn"></back-top>
     </view>
 </template>
 
 <script>
     import request from '../../util/request';
+    import BackTop from '../../components/BackTop';
 
     export default {
         name: 'HomePage',
+        components: { BackTop },
         data () {
             return {
                 pageSize: 100,
                 pageResult: [],
                 result: [],
-                scrollBottomStatus: false
+                scrollBottomStatus: false,
+                showBackTop: false
             };
         },
         onLoad () {
@@ -49,7 +53,20 @@
         onPullDownRefresh () {
             this.queryHomePage('first');
         },
+        onPageScroll(object) {
+            if (object.scrollTop > 5000) {
+                this.showBackTop = true;
+            } else if (object.scrollTop < 5000) {
+                this.showBackTop = false;
+            }
+        },
         methods: {
+            backTopBtn() {
+                uni.pageScrollTo({
+                    scrollTop: 0,
+                    duration: 1000
+                });
+            },
             queryHomePage (type) {
                 let params = Object.create(null);
                 params.pageRecordNum = this.pageSize;
