@@ -1,7 +1,11 @@
 let introDel = {};
 
 let delList = [
-    '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...'
+    '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...',
+    '&amp;',
+    'amp;',
+    'ldquo;',
+    'rdquo;'
 ];
 
 introDel.getIntro = function (originIntro) {
