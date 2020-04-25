@@ -70,7 +70,7 @@
                     });
                 } else {
                     uni.pageScrollTo({
-                        scrollTop: this.directoryList.length * 50,
+                        scrollTop: this.directoryList.length * 50 + 1000000,
                         duration: 1000
                     });
                 }
