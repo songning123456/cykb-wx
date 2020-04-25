@@ -28,6 +28,10 @@
             url: {
                 handler (newVal, oldVal) {
                     if (newVal === '/css/nocover.jpg') {
+                        // 处理147小说图片特殊情况
+                        this.imageSrc = this.defaultImage;
+                    } else if (newVal === 'http://www.xbiquge.la/files/article/image/7/7004/7004s.jpg') {
+                        // 处理笔趣阁小说图片特殊情况
                         this.imageSrc = this.defaultImage;
                     } else {
                         this.imageSrc = newVal;
