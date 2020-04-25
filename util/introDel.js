@@ -5,7 +5,6 @@ let delList = [
 ];
 
 introDel.getIntro = function (originIntro) {
-    debugger;
     if (originIntro) {
         let result = originIntro;
         for (let item of delList) {
