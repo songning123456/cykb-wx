@@ -47,7 +47,7 @@
             </view>
         </view>
         <!-- 遮罩层下部分 -->
-        <view class="mask-bottom" :style="{bottom:isShowMask?0:-300+'rpx','background':skin.maskBgColor}">
+        <view class="mask-bottom" :style="{bottom:isShowMask?0:-300+'rpx','background':skin.maskBgColor}" @tap.stop="">
             <view class="v1">
                 <view class="slider-warp" :style="[{color: skin.fontColor}]">
                     字体：
@@ -64,7 +64,7 @@
             </view>
             <view class="v2">
                 <view v-for="(item, index) in colorArr" :key="index" class="v2-circle"
-                      :style="'background-color:' + item.pageBgColor" @click="changeBackground(index)">
+                      :style="'background-color:' + item.pageBgColor" @tap="changeBackground(index)">
                     <text class="cuIcon-check text-red" v-show="skin.currentSkinIndex===index"></text>
                 </view>
             </view>
