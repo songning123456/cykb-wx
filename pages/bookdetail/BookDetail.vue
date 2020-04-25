@@ -19,7 +19,7 @@
                     <text>简介</text>
                 </view>
                 <view class="content padding introduction">
-                    {{novels.introduction || '暂无简介...'}}
+                    {{getIntro(novels.introduction)}}
                 </view>
             </view>
             <view class="cu-list menu">
@@ -60,6 +60,7 @@
 
 <script>
     import request from '../../util/request';
+    import introDel from '../../util/introDel';
 
     export default {
         name: 'BookDetail',
@@ -82,6 +83,9 @@
         methods: {
             changeShowMore () {
                 this.showMore = !this.showMore;
+            },
+            getIntro(val) {
+                return introDel.getIntro(val);
             },
             querySameAuthor () {
                 let params = {
