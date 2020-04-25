@@ -26,7 +26,11 @@
         },
         methods: {
             tapIcon (e) {
-                this.$emit('backTop');
+                if (this.direction) {
+                    this.$emit('backTop', 'top');
+                } else {
+                    this.$emit('backTop', 'bottom');
+                }
             }
         }
     };

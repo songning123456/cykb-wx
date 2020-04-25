@@ -9,12 +9,15 @@
                 </view>
             </view>
         </view>
+        <back-top :direction="direction" @backTop="backTopBtn"></back-top>
     </view>
 </template>
 
 <script>
+    import BackTop from '../../components/BackTop';
     export default {
         name: 'Directory',
+        components: { BackTop },
         data () {
             return {
                 directoryList: [],
@@ -24,7 +27,8 @@
                 sortTabs: [
                     { key: 'positive', value: '正序' },
                     { key: 'reverse', value: '倒序' }
-                ]
+                ],
+                direction: false
             };
         },
         onLoad () {
@@ -45,6 +49,10 @@
                 this.scrollCenter();
             }
         },
+        onPageScroll(object) {
+            let allHeight = this.directoryList.length * 50;
+            this.direction = object.scrollTop > allHeight / 2;
+        },
         methods: {
             jumpChapterBtn (chaptersId) {
                 if (this.currentChapterId !== chaptersId) {
@@ -53,6 +61,19 @@
                     prevPage.$vm.queryNewChapter(chaptersId, 'insert');
                 }
                 uni.navigateBack({delta: 1});
+            },
+            backTopBtn(type) {
+                if (type === 'top') {
+                    uni.pageScrollTo({
+                        scrollTop: 0,
+                        duration: 1000
+                    });
+                } else {
+                    uni.pageScrollTo({
+                        scrollTop: this.directoryList.length * 50,
+                        duration: 1000
+                    });
+                }
             },
             scrollCenter () {
                 uni.createSelectorQuery().select('.directory').boundingClientRect(data => {
