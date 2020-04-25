@@ -27,7 +27,11 @@
         watch: {
             url: {
                 handler (newVal, oldVal) {
-                    this.imageSrc = newVal;
+                    if (newVal === '/css/nocover.jpg') {
+                        this.imageSrc = this.defaultImage;
+                    } else {
+                        this.imageSrc = newVal;
+                    }
                 },
                 immediate: true
             }
