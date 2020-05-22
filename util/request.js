@@ -1,6 +1,5 @@
 let request = {};
-let host = 'https://wx.simple-blog.xyz/cykb';
-// host = 'https://dev.simple-blog.xyz/cykb';
+let host = 'https://wx.sonin.cn/cykb';
 
 request.post = function (url, params) {
     return new Promise((resolve, reject) => {
